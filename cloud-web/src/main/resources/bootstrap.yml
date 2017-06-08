@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: cloud-web
+  cloud:
+    config:
+      uri: http://cloud-config:8888
+encrypt:
+  failOnError: false
+    
