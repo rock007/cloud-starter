@@ -12,8 +12,9 @@
 		<module>cloud-discovery</module>
 		<module>cloud-gateway</module>
 		<module>cloud-web</module>
-    <module>cloud-sso</module>
-  </modules>
+    	<module>cloud-sso</module>
+      	<module>cloud-authserver</module>
+    </modules>
 	<parent>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-parent</artifactId>
