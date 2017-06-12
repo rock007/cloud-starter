@@ -5,13 +5,22 @@ server:
 spring.mvc.view.prefix: /WEB-INF/jsp/
 spring.mvc.view.suffix: .jsp
 
-       
+
+
+spring:
+  application:
+    name: cloud-web
+    
+           
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://discovery:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
+      
   instance:
-    preferIpAddress: true
+     preferIpAddress: true
+    
+    
 
 ribbon:
   eureka:

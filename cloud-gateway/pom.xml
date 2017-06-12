@@ -13,7 +13,7 @@
   <packaging>jar</packaging>
   <url>http://maven.apache.org</url>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <start-class>org.cloud.gateway.GatewayApplication</start-class>
   </properties>
   <dependencies>
    

@@ -10,8 +10,9 @@
   <artifactId>cloud-discovery</artifactId>
   <name>cloud-discovery</name>
   <url>http://maven.apache.org</url>
+  <packaging>jar</packaging>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+       <start-class>org.cloud.discovery.DiscoveryApplication</start-class>
   </properties>
   <dependencies>
     <dependency>
