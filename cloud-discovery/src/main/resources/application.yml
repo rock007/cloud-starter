@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: discovery
-
+  
 eureka:
   instance:
     hostname: localhost
@@ -13,6 +13,6 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-
-
-##spring.cloud.config.discovery.enabled: true
+      
+      
+spring.cloud.config.discovery.enabled: false      

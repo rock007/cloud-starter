@@ -34,7 +34,9 @@ spring:
       
 security:
   user:
+    name: demo
     password: password
+ ### role  : nnn
   ignored:  /css/**,/js/**,/favicon.ico,/webjars/**,/
 
 logging:

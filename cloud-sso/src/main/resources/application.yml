@@ -3,16 +3,18 @@ server:
   port: 9999
 
 security:
-  user:
-    password: user
-  ignored: /,/favicon.ico,/index.html,/home.html,/dashboard.html,/js/**,/css/**,/webjars/**
-  sessions: ALWAYS
-  oauth2:
-    sso:
-      loginPath: /dashboard/login
+    user:
+      password: user
+    ignored: /,/favicon.ico,/index.html,/home.html,/dashboard.html,/js/**,/css/**,/webjars/**
+    sessions: ALWAYS
+    oauth2:
+      sso:
+        loginPath: /dashboard/login
+        
 management:
   security:
-    role: HERO
+      role: HERO
+    
 
 logging:
   level:
@@ -21,6 +23,8 @@ logging:
 
 ---
 spring:
+  application:
+    name: cloud-sso
   profiles: default
 security:
   oauth2:
@@ -52,3 +56,12 @@ security:
     resource:
       userInfoUri: https://api.github.com/user
       preferTokenInfo: false
+      
+      
+---
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true      

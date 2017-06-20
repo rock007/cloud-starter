@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: discovery
+  cloud:
+      config:
+        uri: https://myconfig.mycompany.com
+        username: user
+        password: secret
+     
