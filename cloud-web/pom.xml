@@ -76,6 +76,12 @@
             <groupId>org.springframework.hateoas</groupId>
             <artifactId>spring-hateoas</artifactId>
         </dependency>
+        
+        <dependency>
+			<groupId>cloud-db</groupId>
+			<artifactId>cloud-db</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		
   </dependencies>
   <build>

@@ -35,14 +35,14 @@ public class BlogController extends SuperController{
 	BlogArticleRepository blogArticleRepository;
 	
 	@ExceptionHandler
-	public  JsonBody<String> handleException(HttpServletRequest request, Exception ex){
+	public @ResponseBody JsonBody<String> handleException(HttpServletRequest request, Exception ex){
 	   
 		logger.error("handleException", ex);
 		return new JsonBody<String>(-1,ex.getMessage()) ;
 	}
 	
 	@RequestMapping("/{userName}/articles")
-	public  JsonBody<Page<Article>> index(Map<String, Object> model,@PathVariable String userName,
+	public @ResponseBody JsonBody<Page<Article>> index(Map<String, Object> model,@PathVariable String userName,
 			@RequestParam(value="page",required=false,defaultValue="0")  int page,
 			@RequestParam(value="limit",required=false,defaultValue="20")  int limit) {
 		

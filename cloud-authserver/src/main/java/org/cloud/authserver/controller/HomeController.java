@@ -3,14 +3,21 @@ package org.cloud.authserver.controller;
 import java.util.Date;
 import java.util.Map;
 
+import org.cloud.db.service.ActLogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes("authorizationRequest")
+//@SessionAttributes("authorizationRequest")
 public class HomeController {
 
+	
+	@Autowired
+	private ActLogService actLogService;
+	
 	@RequestMapping("/")
 	public String index(Map<String, Object> model) {
 
@@ -18,8 +25,14 @@ public class HomeController {
 		model.put("message", "hello the world");
 		return "index";
 	}
-/***
-	@RequestMapping("/login")
+	
+	@RequestMapping("/demo")
+	public @ResponseBody String demo(Map<String, Object> model) {
+
+		return "index";
+	}
+
+	@RequestMapping("/login.html")
 	public String login(Map<String, Object> model) {
 
 		return "login";
@@ -30,5 +43,10 @@ public class HomeController {
 
 		return "login";
 	}
-	***/
+	@RequestMapping("/oauth/confirm_access")
+	public String confirm_access(){
+		
+		return "authorize";
+	}
+
 }

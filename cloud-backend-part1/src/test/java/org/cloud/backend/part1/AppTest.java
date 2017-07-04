@@ -1,4 +1,4 @@
-package org.cloud.gateway;
+package org.cloud.backend.part1;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

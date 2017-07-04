@@ -1,8 +1,8 @@
  eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
-    statusPageUrlPath: /uaa/info
-    healthCheckUrlPath: /uaa/health
+    statusPageUrlPath: /info
+    healthCheckUrlPath: /health
   client:
     registerWithEureka: true
     fetchRegistry: true
@@ -11,7 +11,7 @@
 
 --- 
 server:
-  contextPath: /uaa
+  ##contextPath: /uaa
   error:
     whitelabel:
       enabled: false
@@ -31,16 +31,33 @@ spring:
     content-type:  text/html
     cache:  false
   
-      
-security:
-  user:
-    name: demo
-    password: password
- ### role  : nnn
-  ignored:  /css/**,/js/**,/favicon.ico,/webjars/**,/
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&amp;characterEncoding=UTF-8&amp;useUnicode=true
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+    
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+            ddl-auto: create-drop 
+            naming-strategy : org.hibernate.cfg.ImprovedNamingStrategy
+              
+    properties:
+            hibernate:
+                dialect : org.hibernate.dialect.MySQL5Dialect
 
 logging:
   level:
     org.springframework.security: DEBUG
 
+
+security:
+   basic:
+      enabled: false
   
+
+management:
+   security:
+    enabled: false
