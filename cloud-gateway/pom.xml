@@ -4,14 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>cloud</groupId>
-    <artifactId>com.scarecrow</artifactId>
+    <artifactId>com.scarecrow.cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>cloud-gateway</groupId>
   <artifactId>cloud-gateway</artifactId>
   <name>cloud-gateway</name>
   <packaging>jar</packaging>
-  <url>http://maven.apache.org</url>
   <properties>
       <start-class>org.cloud.gateway.GatewayApplication</start-class>
   </properties>

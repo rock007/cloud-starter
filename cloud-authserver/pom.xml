@@ -4,21 +4,33 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>cloud</groupId>
-    <artifactId>com.scarecrow</artifactId>
+    <artifactId>com.scarecrow.cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>cloud-authserver</groupId>
   <artifactId>cloud-authserver</artifactId>
   <name>cloud-authserver</name>
-  <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
   
+  		<dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <scope>runtime</scope>
+      	</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
     	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -30,17 +42,13 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>cloud-db</groupId>
 			<artifactId>cloud-db</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>cloud-backend-part1</groupId>
-			<artifactId>cloud-backend-part1</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		
   </dependencies>
 </project>

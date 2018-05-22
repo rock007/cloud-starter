@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>cloud</groupId>
-    <artifactId>com.scarecrow</artifactId>
+    <artifactId>com.scarecrow.cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>cloud-discovery</artifactId>
   <name>cloud-discovery</name>
-  <url>http://maven.apache.org</url>
+ 
   <packaging>jar</packaging>
   <properties>
        <start-class>org.cloud.discovery.DiscoveryApplication</start-class>

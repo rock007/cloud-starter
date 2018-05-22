@@ -13,9 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan("org.cloud")
-@EnableJpaRepositories(basePackages ={ "org.cloud.db.repository"})
-@EntityScan(basePackages ={ "org.cloud.db"})
+@ComponentScan(basePackages ={"org.cloud.authserver","org.cloud.db.sys.service"})
+@EnableJpaRepositories(basePackages ={ "org.cloud.db.sys.repository"})
+@EntityScan(basePackages ={ "org.cloud.db.sys.entity"})
 public class AuthserverApplication  
 {
 

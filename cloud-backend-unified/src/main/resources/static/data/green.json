@@ -1,0 +1,50 @@
+[
+    {
+        "id": "item_1",
+        "label": "园林绿化信息",
+        "icon": "green_area",
+        "url": "http://localhost:10005/green/area-list.html"
+    },
+    {
+        "id": "item_2",
+        "label": "季度检查管理",
+        "icon": "area_check",
+        "url": "http://localhost:10005/green/area-check-list.html"
+    },
+    {
+        "id": "item_3",
+        "label": "破占用审批",
+        "icon": "green_break",
+        "url": "http://localhost:10005/green/break-list.html"
+    },
+    {
+        "id": "item_4",
+        "label": "绿化工程管理",
+        "icon": "green_project",
+        "url": "http://localhost:10005/green/project-list.html"
+    },
+    {
+        "id": "item_5",
+        "label": "绿化企业信息库",
+        "icon": "green_company",
+        "url": "http://localhost:10005/green/company-list.html"
+    },
+     {
+        "id": "item_6",
+        "label": "古树名木信息库",
+        "icon": "green_tree",
+        "url": "http://localhost:10005/green/tree-list.html"
+    },
+    {
+        "id": "item_7",
+        "label": "绿化应用统计",
+        "icon": "green_report",
+        "url": "http://localhost:10005/green/map-report.html"
+    },
+    {
+        "id": "item_8",
+        "label": "资料库管理",
+        "icon": "cms_articles",
+        "url": "/cms/article-list.html"
+    }
+]    

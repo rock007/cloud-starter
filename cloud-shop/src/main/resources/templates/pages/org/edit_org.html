@@ -1,0 +1,190 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>组织机构编辑</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+<div class="row">
+<div class="col-md-4">
+	<ul id="org_tv_edit" class="ztree"></ul>
+</div>
+<div class="col-md-8">
+
+<div id="createOrgDialog" class="crudDialog" >
+		<form name="org_form" class="form-horizontal">
+			<input type="hidden" name="id" th:value="${one.id}"/>
+			<input type="hidden" name="parentId"  th:value="${one.parentId}"/>
+			<div class="form-group">
+				<label >上级</label>
+				<p class="form-control-static" id="parent_name">(请选择左边组织机构)</p>
+			</div>
+			<div class="form-group">
+				<label >组织名称</label>
+				<input name="name" type="text" maxLength="25"  th:value="${one.name}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >联系人</label>
+				<input name="linkMan" type="text" maxLength="25"  th:value="${one.linkMan}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >联系电话</label>
+				<input name="linkPhone" type="text" maxLength="15"  th:value="${one.linkPhone}"  class="form-control"/>
+			</div>
+			<div class="alert alert-danger"></div>
+		</form>
+	</div>
+</div>
+</div>
+	<div class="form-group text-right dialog-buttons">
+			<a class="btn btn-primary" href="javascript:;" onclick="doSubmit();">保存</a>
+			<a class="waves-effect waves-button" href="javascript:;" onclick="org_dg.close();">取消</a>
+	</div>
+</div>
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+           /***
+           		 check: {
+		        enable: true,
+		        chkboxType : { "Y" : "", "N" : "" }
+		    },
+		    ***/
+var setting = {
+
+async: {
+	enable: true,
+	url: '/sms/rest/get-org-groups.action' 
+},
+data: {
+	key:{
+		children:'child',
+		name:'name',
+		title:'id',
+	}
+},
+callback: {
+	onAsyncSuccess: function(event, treeId, treeNode, msg){
+		
+		console.log('tv onAsyncSuccess'+msg);
+		
+		treeObjEdit.expandAll(true);
+		
+		var sel=$('input[name="parentId"]').val();
+		if(sel!=''){
+			
+			var node = treeObjEdit.getNodeByParam("id", sel, null);
+			if(node!=null){
+				
+				treeObjEdit.selectNode(node,false,false);
+				$('#parent_name').html(node.name);
+			}
+				
+		}
+	},
+	onClick:function(event, treeId, treeNode, clickFlag){
+		
+		$('input[name="parentId"]').val(treeNode.id);
+		$('#parent_name').html(treeNode.name);
+	}
+}
+};
+
+var treeObjEdit;
+
+$(function() {
+	
+	$.fn.zTree.init($("#org_tv_edit"), setting, []);
+	
+	treeObjEdit = $.fn.zTree.getZTreeObj("org_tv_edit");
+	
+	$('form .alert-danger').hide();
+	
+	checkIllegalChar();
+});
+
+function doSubmit(){
+	
+	var form=$('form[name="org_form"]');
+    $.ajax({
+        type: 'post',
+        url: '/sms/rest/submit-org-group.action',
+        data: form.serialize(),
+        beforeSend: function() {
+           
+        	var parentSelect=form.find('input[name="parentId"]');
+        	
+        	//form.find('.alert-danger').show();
+        	if (form.find('input[name="name"]').val() == '') {
+        		form.find('input[name="name"]').focus();
+                //form.find('.alert-danger').html('名称不能为空');
+                
+                showMsg('名称不能为空');
+                return false;
+            }
+        	
+            if (parentSelect.val() == '' ) {
+            	parentSelect.focus();
+            	//form.find('.alert-danger').html('请选择左边组织机构');
+            	showMsg('请选择左边组织机构');
+            	return false;
+            }
+            
+            form.find('.alert-danger').hide();
+            
+        },
+        success: function(resp) {
+
+			if (resp.result != 1) {
+				/***
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: resp.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				***/
+				showMsg(resp.msg);
+				
+			} else {
+				
+				org_dg.close();
+				
+				treeObj.reAsyncChildNodes(null, "refresh");
+			}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: textStatus,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
+					}
+				}
+			});
+        }
+    });
+	
+}
+
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

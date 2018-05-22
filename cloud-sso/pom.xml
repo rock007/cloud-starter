@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>cloud</groupId>
-    <artifactId>com.scarecrow</artifactId>
+    <artifactId>com.scarecrow.cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>cloud-sso</artifactId>

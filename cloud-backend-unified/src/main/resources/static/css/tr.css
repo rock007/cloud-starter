@@ -1,0 +1,73 @@
+body,html{width:100%;height:100%;font-family: "Microsoft YaHei" ! important;overflow: hidden;margin: 0px;}
+
+.yui3-container{margin:0px;padding:0px;width:100%;height:100%;}
+.yui3-container #sidebar li{cursor:pointer;}
+
+#topbar{width:100%;height:56px;margin-top:0px;background:url("/images/desktop/topbar.png") no-repeat scroll 0px center transparent;background-color:#2382c6;}
+#topbar #topbarleft{margin-left:20px;width:32%;height:100%;float:left;background:url("/images/desktop/topbar-left.png") no-repeat scroll 0px center transparent;}
+#topbar #topbarmiddle{width:39%;height:100%;float:left;}
+#topbar #topbarmiddle #logo{width:70px;height:100%;float:left;background:url("/images/desktop/logo.png") no-repeat scroll 1px center transparent;}
+#topbar #topbarmiddle #tittle{width:400px;height:100%;margin-left:30px;color:#F6F4F5;font-family:'SimSun';font-weight:bold}
+#topbar #topbarmiddle #tittle #titleC{margin:8px 30px;font-size:18px;color:#fff;letter-spacing:3px;}
+#topbar #topbarmiddle #tittle #titleE{margin:-10px 30px;font-size:13px;color:#fff;font-family:'kokila';letter-spacing:0px;}
+#topbar .topbar-ul{list-style:none;width:27%;height:100%;float:left;}
+#topbar li{float:right;margin-top:5px;height:45px; text-align:center;veritical-align:middle;}
+#topbar #userImg{float:right;width:30px;margin:8px 0px;background:url("/images/desktop/user.png") no-repeat scroll 0px center transparent;}
+#topbar #userName{color:#F5F5F5;font-weight:bold;font-family:'SimSun';float:right;width:185px;padding-top:16px;color:#F6F4F5;font-size:12px;text-align:left;}
+#topbar #phone{cursor:pointer;float:right;width:32px;margin:5px 2px;background:url("/images/desktop/phone.png") no-repeat scroll 0px center transparent;}
+#topbar #message{cursor:pointer;float:right;width:32px;margin:7px 2px;background:url("/images/desktop/message.png") no-repeat scroll 0px center transparent;}
+#topbar #message .message-tip-num{cursor:pointer;float:right;width:20px;height:20px;background:url("/images/desktop/message-tip-num.png") no-repeat scroll 0px center transparent;}
+#topbar #setting{cursor:pointer;float:right;width:32px;margin:8px 2px;background:url("/images/desktop/setting.png") no-repeat scroll 0px center transparent;}
+#topbar #close{cursor:pointer;float:right;width:32px;margin:6px 2px;background:url("/images/desktop/close.png") no-repeat scroll 0px center transparent;}
+
+#sidebar{width:80px;background-color:#0099ff;float:left;min-height:92.2%;top:-1px;position:relative;background:url("/images/desktop/sidebar.png") repeat scroll 0px center transparent;z-index: 120;}
+.sidebar-ul{list-style:none;margin-left:-40px;margin-top: 0px;}
+
+.yui3-appbtn .appbtn-icon{cursor:pointer;height:50px;margin:auto;overflow:hidden;width:50px;}
+.yui3-appbtn .appbtn-label{color:#F5F5F5;cursor:pointer;height:24px;margin-right:2px;margin-top:0px;overflow:hidden;text-align:center;font-size: 14px;}
+
+.yui3-appbtn {cursor:pointer;border-bottom:1px solid #5C98CE;display:inline;float:left;height:80px;width:80px;margin-top: 0px;}
+.yui3-appbtn:hover{background:url("/images/desktop/sidebarhover.png") no-repeat scroll center 0px transparent;}
+.yui3-appbtn-draggable{cursor:move;}
+.yui3-appbtn-draggable-more{cursor:move;border:0.5px solid white;}
+.yui3-appbtn-selected {background:url("/images/desktop/sidebarcheck.png") no-repeat scroll center 0px transparent;}
+
+.yui3-appbtn-draggable{cursor:move;}
+.yui3-appbtn-draggable-more{cursor:move;border:0.5px solid white;}
+
+.yui3-appbtn .appbtn-icon{cursor:pointer;height:50px;margin:auto;overflow:hidden;width:50px;}
+.appbtn-icon-appManage{background:url("/images/desktop/appAccept.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-appQuery{background:url("/images/desktop/appQuery.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-appAnalyse{background:url("/images/desktop/appStat.png") no-repeat scroll 7px center transparent;}
+
+.appbtn-icon-sendSms{background:url("/images/icon/send_sms.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-sms_template{background:url("/images/icon/sms_template.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-work_sms{background:url("/images/icon/work_sms.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-resp_sms{background:url("/images/icon/resp_sms.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-send_search{background:url("/images/icon/send_search.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-receive_search{background:url("/images/icon/receive_search.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-org_group{background:url("/images/icon/org_group.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-green_tree{background:url("/images/icon/green_tree.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-green_report{background:url("/images/icon/green_report.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-green_project{background:url("/images/icon/green_project.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-green_company{background:url("/images/icon/green_company.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-green_break{background:url("/images/icon/green_break.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-green_area{background:url("/images/icon/green_area.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-area_check{background:url("/images/icon/area_check.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-cms_articles{background:url("/images/icon/cms_articles.png") no-repeat scroll 7px center transparent;}
+.appbtn-icon-smile{background:url("/images/icon/smile.png") no-repeat scroll 7px center transparent;}
+
+.yui3-appbtn .appbtn-label{color:#F5F5F5;cursor:pointer;height:24px;margin-right:2px;margin-top:0px;overflow:hidden;text-align:center;}
+
+#maincontent{left:79px;height:91%;width:94%;background-color:white;position:relative;}
+.copyright-contaniner{color:white;background:url("/images/desktop/copyright.png") no-repeat scroll 10px center transparent;}
+
+.right-Panel{float:left;width:49.8%;height:99.8%;background-color:#F5F5F5;border-top:solid 1px #afaaa7;border-right:solid 1px #afaaa7;}
+.left-Panel{float:left;width:49.8%;height:99.8%;background-color:#F5F5F5;border-right: solid 1px #afaaa7;border-top: solid 1px #afaaa7;}
+
+.table-container {margin-top: 10px;padding-left: 20px;width: 90%;font-size:12px;}
+text-align:center;cursor:pointer;}
+
+.blue{
+	color:blue;
+}

@@ -1,0 +1,161 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>选择用户</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+	<div class="row" >
+		<div class="col-md-3" >
+			 <ul id="org_tv" class="ztree"></ul>
+	
+		</div>	
+		<div class="col-md-9" >
+			<div style="height:300px;overflow-y:auto;">
+			<table id="table2"></table>
+				<input type="hidden" name="orgId" id="orgId"/>
+			</div>
+		</div>	
+	</div>
+
+	<div class="form-group text-right dialog-buttons">
+			<a class="btn btn-primary" href="javascript:;" onclick="doSubmit();">保存</a>
+			<a class="waves-effect waves-button" href="javascript:;" onclick="user_select_dg.close();">取消</a>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+/*<![CDATA[*/
+var setting = {
+async: {
+	enable: true,
+	url: '/sms/rest/get-org-groups.action' 
+},
+data: {
+	key:{
+		children:'child',
+		name:'name',
+		title:'id',
+	}
+},
+callback: {
+	onAsyncSuccess: function(event, treeId, treeNode, msg){
+		
+		console.log('tv onAsyncSuccess'+msg);
+		
+		treeObj.expandAll(true);
+		
+	},
+	onClick:function(event, treeId, treeNode){
+		
+		$('#orgId').val(treeNode.id);
+		$table2.bootstrapTable('refresh');
+	}
+}
+		};
+
+var treeObj;
+var $table2 = $('#table2');           
+$(function() {
+	
+	$.fn.zTree.init($("#org_tv"), setting, []);
+	
+	treeObj = $.fn.zTree.getZTreeObj("org_tv");
+	
+	$table2.bootstrapTable({
+		url: '/sms/rest/search-org-users.action',
+		height: '400',
+		striped: false,
+		search: false,
+		searchOnEnterKey: true,
+		showRefresh: false,
+		showToggle: false,
+		showColumns: false,
+		minimumCountColumns: 2,
+		showPaginationSwitch: false,
+		clickToSelect: true,
+		detailView: false,
+		detailFormatter: 'detailFormatter',
+		pagination: true,
+		paginationLoop: false,
+		classes: 'table table-hover table-no-bordered',
+		silentSort: false,
+		sidePagination: 'server',
+		processing: true,
+		responseHandler:function(res){
+	        
+	        return {"total": res.data.totalElements,"rows":res.data.content};
+	    },
+	    queryParamsType : "undefined",
+        queryParams: function queryParams(params) {   
+         
+        	var search_key = $('.bootstrap-table').find('input[placeholder="搜索"]').val();
+        	var param = {
+            	pageNo: params.pageNumber -1,
+            	pageSize: params.pageSize,
+            	name:search_key,
+            	orgId:$('#orgId').val()
+          	};
+          return param;
+        },
+		smartDisplay: false,
+		idField: 'id',
+		sortName: 'id',
+		sortOrder: 'desc',
+		escape: true,
+		searchOnEnterKey: true,
+		idField: 'id',
+		maintainSelected: true,
+		columns: [
+			{field: 'state', checkbox: true},      
+			{field: 'name', title: '姓名', sortable: false, halign: 'center'},
+			{field: 'mobile', title: '手机号', sortable: false, halign: 'center'},
+			{field: 'postion', title: '职务', sortable: false, halign: 'center'},
+			{field: 'createDate', title: '创建时间', sortable: false, halign: 'center'}
+		]
+	}).on('all.bs.table', function (e, name, args) {
+		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="popover"]').popover();  
+	});
+
+	checkIllegalChar();
+});
+
+function doSubmit(){
+	
+	var rows = $table2.bootstrapTable('getSelections');
+	if (rows.length == 0) {
+		$.confirm({
+			title: false,
+			content: '请至少选择一条记录！',
+			autoClose: 'cancel|3000',
+			backgroundDismiss: true,
+			buttons: {
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+	}else{
+		
+		var ids = new Array();
+		for (var i in rows) {
+			ids.push(rows[i].mobile);
+			$('#phones').tagsinput('add',rows[i].mobile);
+		}
+		
+		user_select_dg.close();
+	}
+	
+}
+
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

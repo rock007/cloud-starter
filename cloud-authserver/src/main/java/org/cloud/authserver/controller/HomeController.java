@@ -3,7 +3,7 @@ package org.cloud.authserver.controller;
 import java.util.Date;
 import java.util.Map;
 
-import org.cloud.db.service.ActLogService;
+import org.cloud.db.sys.service.ActLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @Controller
 //@SessionAttributes("authorizationRequest")
 public class HomeController {
-
 	
 	@Autowired
 	private ActLogService actLogService;

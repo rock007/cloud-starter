@@ -1,0 +1,51 @@
+[
+    {
+        "id": "item_1",
+        "label": "发送短信",
+        "icon": "sendSms",
+        "url": "http://127.0.0.1:10004/sms/send.html"
+    },
+    {
+        "id": "item_2",
+        "label": "短信模版",
+        "icon": "sms_template",
+        "url": "http://127.0.0.1:10004/sms/templates.html"
+    },
+    {
+        "id": "item_3",
+        "label": "短信回复设置",
+        "icon": "resp_sms",
+        "url": "http://127.0.0.1:10004/sms/receive-resp-list.html"
+    },
+    {
+        "id": "item_4",
+        "label": "短信办理",
+        "icon": "work_sms",
+        "url": "http://127.0.0.1:10004/sms/dowork-list.html"
+    },
+   
+    {
+        "id": "item_5",
+        "label": "组织用户",
+        "icon": "org_group",
+        "url": "http://127.0.0.1:10004/sms/org/users.html"
+    },
+     {
+        "id": "item_6",
+        "label": "发送短信查询",
+        "icon": "send_search",
+        "url": "http://127.0.0.1:10004/sms/send-list.html"
+    },
+    {
+        "id": "item_7",
+        "label": "接收短信查询",
+        "icon": "receive_search",
+        "url": "http://127.0.0.1:10004/sms/receive-list.html"
+    },
+    {
+        "id": "item_8",
+        "label": "满意度查询",
+        "icon": "smile",
+        "url": "http://127.0.0.1:10004/sms/send.html"
+    }
+]    

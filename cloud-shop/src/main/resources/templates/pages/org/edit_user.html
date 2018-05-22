@@ -1,0 +1,200 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>组织机构用户编辑</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+<div class="row">
+<div class="col-md-4">
+	<ul id="user_tv_edit" class="ztree"></ul>
+</div>
+<div class="col-md-8">
+
+<div style="height:300px;overflow-y:auto;">
+		<form name="user_form" class="form-horizontal">
+			<input type="hidden" name="id"  th:value="${one.id}"/>
+			<input type="hidden" name="orgId"  th:value="${one.orgId}"/>
+			<div class="form-group">
+				<label >组织机构</label>
+				<p class="form-control-static" id="org_name">(请选择左边组织机构)</p>
+			</div>
+			<div class="form-group">
+				<label >姓名</label>
+				<input name="name" type="text" maxLength="25"  th:value="${one.name}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >职务</label>
+				<input name="postion" type="text" maxLength="25"  th:value="${one.postion}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >性别</label>
+				<input name="sex" type="text" maxLength="2"  th:value="${one.sex}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >出生年月</label>
+				<input name="birthday" type="date"  th:value="${one.birthday}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >手机号</label>
+				<input name="mobile" type="number" maxLength="15"  th:value="${one.mobile}" class="form-control"/>
+			</div>
+
+			<div class="alert alert-danger"></div>
+		</form>
+	</div>
+</div>
+</div>
+	<div class="form-group text-right dialog-buttons">
+			<a class="btn btn-primary" href="javascript:;" onclick="doUserSubmit();">保存</a>
+			<a class="waves-effect waves-button" href="javascript:;" onclick="user_dg.close();">取消</a>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+/*<![CDATA[*/
+var setting = {
+async: {
+	enable: true,
+	url: '/sms/rest/get-org-groups.action' 
+},
+data: {
+	key:{
+		children:'child',
+		name:'name',
+		title:'id',
+	}
+},
+callback: {
+	onAsyncSuccess: function(event, treeId, treeNode, msg){
+		
+		console.log('tv onAsyncSuccess'+msg);
+		
+		treeObj_userEdit.expandAll(true);
+		
+		var sel=$('input[name="orgId"]').val();
+		if(sel!=''){
+			
+			var node = treeObj_userEdit.getNodeByParam("id", sel, null);
+			if(node!=null){
+				
+				treeObj_userEdit.selectNode(node,false,false);
+				$('#org_name').html(node.name);
+			}
+				
+		}
+		
+	},
+	onClick:function(event, treeId, treeNode, clickFlag){
+		
+		$('input[name="orgId"]').val(treeNode.id);
+		$('#org_name').html(treeNode.name);
+	}
+}
+};
+
+var treeObj_userEdit;
+
+$(function() {
+	
+	$.fn.zTree.init($("#user_tv_edit"), setting, []);
+	
+	treeObj_userEdit = $.fn.zTree.getZTreeObj("user_tv_edit");
+	
+	$('form .alert-danger').hide();
+	
+	checkIllegalChar();
+});
+
+
+function doUserSubmit(){
+	
+	var form=$('form[name="user_form"]');
+    $.ajax({
+        type: 'post',
+        url: '/sms/rest/submit-org-user.action',
+        data: form.serialize(),
+        beforeSend: function() {
+           
+        	var orgIdSelect=form.find('input[name="orgId"]');
+        	var mobileInput=form.find('input[name="mobile"]');
+        	
+        	//form.find('.alert-danger').show();
+        	if (form.find('input[name="name"]').val() == '') {
+        		form.find('input[name="name"]').focus();
+                //form.find('.alert-danger').html('名称不能为空');
+                showMsg('名称不能为空');
+                return false;
+            }
+        	
+            if (orgIdSelect.val() == '') {
+            	//form.find('.alert-danger').html('请选择组织结构');
+            	showMsg('请选择组织结构');
+                return false;
+            }
+            if (mobileInput.val() == '') {
+            	mobileInput.focus();
+            	//form.find('.alert-danger').html('手机号不能为空');
+            	showMsg('手机号不能为空');
+                return false;
+            }
+            
+            form.find('.alert-danger').hide();
+            
+        },
+        success: function(resp) {
+        	
+			if (resp.result != 1) {
+				/***
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: resp.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				***/
+				showMsg(resp.msg);
+				
+			} else {
+				
+				user_dg.close();
+				
+				//refresh 
+				$table.bootstrapTable('refresh');
+			}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: textStatus,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
+					}
+				}
+			});
+        }
+    });
+	
+}
+
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>
