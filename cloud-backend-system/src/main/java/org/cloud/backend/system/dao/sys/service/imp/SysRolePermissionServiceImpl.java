@@ -1,8 +1,5 @@
 package org.cloud.backend.system.dao.sys.service.imp;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import org.cloud.backend.system.comm.base.BaseServiceImpl;
 import org.cloud.backend.system.dao.sys.mapper.SysRolePermissionMapper;
 import org.cloud.backend.system.dao.sys.model.SysRolePermission;
@@ -17,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
 * SysRolePermissionService实现
@@ -33,17 +31,17 @@ public class SysRolePermissionServiceImpl extends BaseServiceImpl<SysRolePermiss
     SysRolePermissionMapper sysRolePermissionMapper;
 
     @Override
-    public int rolePermission(JSONArray datas, int id) {
+    public int rolePermission(List<Map<String,Object>> datas, int id) {
         List<Integer> deleteIds = new ArrayList<>();
         for (int i = 0; i < datas.size(); i ++) {
-            JSONObject json = datas.getJSONObject(i);
-            if (!json.getBoolean("checked")) {
-                deleteIds.add(json.getIntValue("id"));
+        	Map<String,Object> json = datas.get(i);
+            if (!((boolean)json.get("checked"))) {
+                deleteIds.add((Integer)json.get("id"));
             } else {
                 // 新增权限
                 SysRolePermission SysRolePermission = new SysRolePermission();
                 SysRolePermission.setRoleId(id);
-                SysRolePermission.setPermissionId(json.getIntValue("id"));
+                SysRolePermission.setPermissionId((Integer)json.get("id"));
                 sysRolePermissionMapper.insertSelective(SysRolePermission);
             }
         }

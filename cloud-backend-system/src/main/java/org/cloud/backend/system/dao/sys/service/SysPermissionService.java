@@ -1,6 +1,8 @@
 package org.cloud.backend.system.dao.sys.service;
 
-import com.alibaba.fastjson.JSONArray;
+import java.util.List;
+import java.util.Map;
+
 import org.cloud.backend.system.comm.base.BaseService;
 import org.cloud.backend.system.dao.sys.model.SysPermission;
 import org.cloud.backend.system.dao.sys.model.SysPermissionExample;
@@ -11,8 +13,8 @@ import org.cloud.backend.system.dao.sys.model.SysPermissionExample;
 */
 public interface SysPermissionService extends BaseService<SysPermission, SysPermissionExample> {
 
-    JSONArray getTreeByRoleId(Integer roleId);
+	List<Map<String,Object>> getTreeByRoleId(Integer roleId);
 
-    JSONArray getTreeByUserId(Integer usereId, Byte type);
+	List<Map<String,Object>> getTreeByUserId(Integer usereId, Byte type);
 
 }

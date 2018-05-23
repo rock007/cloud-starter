@@ -10,7 +10,7 @@
   <groupId>cloud-front</groupId>
   <artifactId>cloud-front</artifactId>
   <packaging>war</packaging>
-  <name>cloud-web Maven Webapp</name>
+  <name>cloud-front</name>
   <dependencies>
     
     	<dependency>

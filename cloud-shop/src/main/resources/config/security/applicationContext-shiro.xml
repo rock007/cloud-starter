@@ -45,11 +45,6 @@
 	<!-- 自定义用户登录验证-->
 	<bean id="systemAuthenticationFilter" class="org.cloud.core.shiro.filter.SystemAuthenticationFilter"/>
 
-	<!--（本地） 用户授权信息Cache, 采用EhCache 
-	<bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManagerConfigFile" value="classpath:config/security/ehcache-shiro.xml"/>
-	</bean>
-	-->
     <!--（集群） 自定义redisManager-redis -->  
     <bean id="redisCacheManager" class="org.cloud.core.shiro.cache.RedisCacheManager"> 
     </bean> 

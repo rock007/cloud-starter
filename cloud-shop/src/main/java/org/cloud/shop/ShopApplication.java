@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableEurekaClient
+@EnableFeignClients("org.cloud.unified.service.api.shop")
 @ComponentScan(basePackages ={ "org.cloud.shop"
         ,"org.cloud.db.sys.service","org.cloud.db.shop.service"})
 @EnableJpaRepositories(basePackages ={ "org.cloud.db.sys.repository","org.cloud.db.shop.repository"})

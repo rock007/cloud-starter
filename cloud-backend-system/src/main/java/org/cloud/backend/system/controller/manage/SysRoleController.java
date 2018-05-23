@@ -1,11 +1,11 @@
 package org.cloud.backend.system.controller.manage;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import com.baidu.unbiz.fluentvalidator.ComplexResult;
 import com.baidu.unbiz.fluentvalidator.FluentValidator;
 import com.baidu.unbiz.fluentvalidator.ResultCollectors;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.cloud.backend.system.comm.constant.Result;
 import org.cloud.backend.system.comm.constant.ResultConstant;
@@ -66,7 +66,16 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/permission/{id}", method = RequestMethod.POST)
     @ResponseBody
     public Object permission(@PathVariable("id") int id, HttpServletRequest request) {
-        JSONArray datas = JSONArray.parseArray(request.getParameter("datas"));
+    	
+    	 Gson gson = new GsonBuilder().enableComplexMapKeySerialization()  
+                 .create();  
+    	 
+    	String datastr=request.getParameter("datas");
+    	
+        List<Map<String,Object>> datas =  gson.fromJson(datastr,  
+                new TypeToken<List<Map<String, Object>>>() {  
+                }.getType());
+        
         int result = sysRolePermissionService.rolePermission(datas, id);
         return new Result(ResultConstant.SUCCESS, result);
     }

@@ -1,8 +1,5 @@
 package org.cloud.backend.system.dao.sys.service.imp;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import org.cloud.backend.system.comm.base.BaseServiceImpl;
 import org.cloud.backend.system.dao.sys.mapper.SysPermissionMapper;
 import org.cloud.backend.system.dao.sys.mapper.SysSystemMapper;
@@ -11,13 +8,17 @@ import org.cloud.backend.system.dao.sys.model.*;
 import org.cloud.backend.system.dao.sys.service.SysApiService;
 import org.cloud.backend.system.dao.sys.service.SysPermissionService;
 import org.cloud.core.annotation.MyBatisService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * SysPermissionService实现
@@ -43,11 +44,11 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
     SysUserPermissionMapper sysUserPermissionMapper;
 
     @Override
-    public JSONArray getTreeByRoleId(Integer roleId) {
+    public List<Map<String,Object>> getTreeByRoleId(Integer roleId) {
         // 角色已有权限
         List<SysRolePermission> rolePermissions = sysApiService.selectSysRolePermisstionBySysRoleId(roleId);
 
-        JSONArray systems = new JSONArray();
+        List<Map<String,Object>> systems = new ArrayList<>();
         // 系统
         SysSystemExample sysSystemExample = new SysSystemExample();
         sysSystemExample.createCriteria()
@@ -55,7 +56,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
         sysSystemExample.setOrderByClause("orders asc");
         List<SysSystem> SysSystems = sysSystemMapper.selectByExample(sysSystemExample);
         for (SysSystem SysSystem : SysSystems) {
-            JSONObject node = new JSONObject();
+        	Map<String,Object> node = new HashMap<>();
             node.put("id", SysSystem.getSystemId());
             node.put("name", SysSystem.getTitle());
             node.put("nocheck", true);
@@ -64,19 +65,21 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
         }
 
         if (systems.size() > 0) {
-            for (Object system: systems) {
+            for (Map<String,Object> system: systems) {
                 SysPermissionExample SysPermissionExample = new SysPermissionExample();
                 SysPermissionExample.createCriteria()
                         .andStatusEqualTo((byte) 1)
-                        .andSystemIdEqualTo(((JSONObject) system).getIntValue("id"));
+                        .andSystemIdEqualTo((Integer)system.get("id"));
+                
                 SysPermissionExample.setOrderByClause("orders asc");
                 List<SysPermission> SysPermissions = sysPermissionMapper.selectByExample(SysPermissionExample);
                 if (SysPermissions.size() == 0) continue;
                 // 目录
-                JSONArray folders = new JSONArray();
+                List<Map<String,Object>> folders = new ArrayList<>();
                 for (SysPermission SysPermission: SysPermissions) {
                     if (SysPermission.getPid().intValue() != 0 || SysPermission.getType() != 1) continue;
-                    JSONObject node = new JSONObject();
+                    
+                    Map<String,Object> node = new HashMap<>();
                     node.put("id", SysPermission.getPermissionId());
                     node.put("name", SysPermission.getName());
                     node.put("open", true);
@@ -87,11 +90,11 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                     }
                     folders.add(node);
                     // 菜单
-                    JSONArray menus = new JSONArray();
-                    for (Object folder : folders) {
+                    List<Map<String,Object>> menus = new ArrayList<>();
+                    for (Map<String,Object> folder : folders) {
                         for (SysPermission SysPermission2: SysPermissions) {
-                            if (SysPermission2.getPid().intValue() != ((JSONObject) folder).getIntValue("id") || SysPermission2.getType() != 2) continue;
-                            JSONObject node2 = new JSONObject();
+                            if (SysPermission2.getPid().intValue() != ( (Integer)folder.get("id")) || SysPermission2.getType() != 2) continue;
+                            Map<String,Object> node2 = new HashMap<>();
                             node2.put("id", SysPermission2.getPermissionId());
                             node2.put("name", SysPermission2.getName());
                             node2.put("open", true);
@@ -102,11 +105,11 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                             }
                             menus.add(node2);
                             // 按钮
-                            JSONArray buttons = new JSONArray();
-                            for (Object menu : menus) {
+                            List<Map<String,Object>> buttons = new ArrayList<>();
+                            for (Map<String,Object> menu : menus) {
                                 for (SysPermission SysPermission3: SysPermissions) {
-                                    if (SysPermission3.getPid().intValue() != ((JSONObject) menu).getIntValue("id") || SysPermission3.getType() != 3) continue;
-                                    JSONObject node3 = new JSONObject();
+                                    if (SysPermission3.getPid().intValue() != ((Integer) menu.get("id")) || SysPermission3.getType() != 3) continue;
+                                    Map<String,Object> node3 = new HashMap<>();
                                     node3.put("id", SysPermission3.getPermissionId());
                                     node3.put("name", SysPermission3.getName());
                                     node3.put("open", true);
@@ -118,19 +121,19 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                                     buttons.add(node3);
                                 }
                                 if (buttons.size() > 0) {
-                                    ((JSONObject) menu).put("children", buttons);
-                                    buttons = new JSONArray();
+                                     menu.put("children", buttons);
+                                    buttons = new ArrayList<Map<String,Object>>();
                                 }
                             }
                         }
                         if (menus.size() > 0) {
-                            ((JSONObject) folder).put("children", menus);
-                            menus = new JSONArray();
+                            folder.put("children", menus);
+                            menus = new ArrayList<Map<String,Object>>();
                         }
                     }
                 }
                 if (folders.size() > 0) {
-                    ((JSONObject) system).put("children", folders);
+                     system.put("children", folders);
                 }
             }
         }
@@ -138,7 +141,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
     }
 
     @Override
-    public JSONArray getTreeByUserId(Integer usereId, Byte type) {
+    public List<Map<String,Object>> getTreeByUserId(Integer usereId, Byte type) {
         // 角色权限
         SysUserPermissionExample SysUserPermissionExample = new SysUserPermissionExample();
         SysUserPermissionExample.createCriteria()
@@ -146,7 +149,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                 .andTypeEqualTo(type);
         List<SysUserPermission> SysUserPermissions = sysUserPermissionMapper.selectByExample(SysUserPermissionExample);
 
-        JSONArray systems = new JSONArray();
+        List<Map<String,Object>> systems = new ArrayList<>();
         // 系统
         SysSystemExample SysSystemExample = new SysSystemExample();
         SysSystemExample.createCriteria()
@@ -154,7 +157,7 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
         SysSystemExample.setOrderByClause("orders asc");
         List<SysSystem> SysSystems = sysSystemMapper.selectByExample(SysSystemExample);
         for (SysSystem SysSystem : SysSystems) {
-            JSONObject node = new JSONObject();
+        	Map<String,Object> node = new HashMap<>();
             node.put("id", SysSystem.getSystemId());
             node.put("name", SysSystem.getTitle());
             node.put("nocheck", true);
@@ -163,19 +166,19 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
         }
 
         if (systems.size() > 0) {
-            for (Object system: systems) {
+            for (Map<String,Object> system: systems) {
                 SysPermissionExample SysPermissionExample = new SysPermissionExample();
                 SysPermissionExample.createCriteria()
                         .andStatusEqualTo((byte) 1)
-                        .andSystemIdEqualTo(((JSONObject) system).getIntValue("id"));
+                        .andSystemIdEqualTo((Integer) system.get("id"));
                 SysPermissionExample.setOrderByClause("orders asc");
                 List<SysPermission> SysPermissions = sysPermissionMapper.selectByExample(SysPermissionExample);
                 if (SysPermissions.size() == 0) continue;
                 // 目录
-                JSONArray folders = new JSONArray();
+                List<Map<String,Object>> folders = new ArrayList<>();
                 for (SysPermission SysPermission: SysPermissions) {
                     if (SysPermission.getPid().intValue() != 0 || SysPermission.getType() != 1) continue;
-                    JSONObject node = new JSONObject();
+                    Map<String,Object> node = new HashMap<>();
                     node.put("id", SysPermission.getPermissionId());
                     node.put("name", SysPermission.getName());
                     node.put("open", true);
@@ -186,11 +189,11 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                     }
                     folders.add(node);
                     // 菜单
-                    JSONArray menus = new JSONArray();
-                    for (Object folder : folders) {
+                    List<Map<String,Object>> menus = new ArrayList<>();
+                    for (Map<String,Object> folder : folders) {
                         for (SysPermission SysPermission2: SysPermissions) {
-                            if (SysPermission2.getPid().intValue() != ((JSONObject) folder).getIntValue("id") || SysPermission2.getType() != 2) continue;
-                            JSONObject node2 = new JSONObject();
+                            if (SysPermission2.getPid().intValue() != (Integer) folder.get("id") || SysPermission2.getType() != 2) continue;
+                            Map<String,Object> node2 = new HashMap<>();
                             node2.put("id", SysPermission2.getPermissionId());
                             node2.put("name", SysPermission2.getName());
                             node2.put("open", true);
@@ -201,11 +204,11 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                             }
                             menus.add(node2);
                             // 按钮
-                            JSONArray buttons = new JSONArray();
-                            for (Object menu : menus) {
+                            List<Map<String,Object>> buttons = new ArrayList<>();
+                            for (Map<String,Object> menu : menus) {
                                 for (SysPermission SysPermission3: SysPermissions) {
-                                    if (SysPermission3.getPid().intValue() != ((JSONObject) menu).getIntValue("id") || SysPermission3.getType() != 3) continue;
-                                    JSONObject node3 = new JSONObject();
+                                    if (SysPermission3.getPid().intValue() != (Integer) menu.get("id") || SysPermission3.getType() != 3) continue;
+                                    Map<String,Object> node3 = new HashMap<>();
                                     node3.put("id", SysPermission3.getPermissionId());
                                     node3.put("name", SysPermission3.getName());
                                     node3.put("open", true);
@@ -217,19 +220,19 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionMappe
                                     buttons.add(node3);
                                 }
                                 if (buttons.size() > 0) {
-                                    ((JSONObject) menu).put("children", buttons);
-                                    buttons = new JSONArray();
+                                    menu.put("children", buttons);
+                                    buttons = new ArrayList<Map<String,Object>>();
                                 }
                             }
                         }
                         if (menus.size() > 0) {
-                            ((JSONObject) folder).put("children", menus);
-                            menus = new JSONArray();
+                            folder.put("children", menus);
+                            menus =new ArrayList<Map<String,Object>>();
                         }
                     }
                 }
                 if (folders.size() > 0) {
-                    ((JSONObject) system).put("children", folders);
+                    system.put("children", folders);
                 }
             }
         }

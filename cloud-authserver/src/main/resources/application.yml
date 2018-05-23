@@ -7,17 +7,16 @@
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:20000/eureka/
 
---- 
+---
 server:
-  ##contextPath: /uaa
+  port: 20002
+  #contextPath: /
   error:
     whitelabel:
       enabled: false
 
-
-      
 spring:
   application:
     name: cloud-authserver
@@ -49,14 +48,4 @@ spring:
 
 logging:
   level:
-    org.springframework.security: DEBUG
-
-
-security:
-   basic:
-      enabled: false
-  
-
-management:
-   security:
-    enabled: false
+    org.springframework.security: WARN

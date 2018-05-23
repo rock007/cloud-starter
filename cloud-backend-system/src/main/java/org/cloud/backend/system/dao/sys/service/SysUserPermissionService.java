@@ -1,6 +1,8 @@
 package org.cloud.backend.system.dao.sys.service;
 
-import com.alibaba.fastjson.JSONArray;
+import java.util.List;
+import java.util.Map;
+
 import org.cloud.backend.system.comm.base.BaseService;
 import org.cloud.backend.system.dao.sys.model.SysUserPermission;
 import org.cloud.backend.system.dao.sys.model.SysUserPermissionExample;
@@ -16,6 +18,6 @@ public interface SysUserPermissionService extends BaseService<SysUserPermission,
      * @param id 用户id
      * @return
      */
-    int permission(JSONArray datas, int id);
+    int permission(List<Map<String,Object>> datas, int id);
 
 }

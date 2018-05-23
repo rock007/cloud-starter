@@ -1,9 +1,4 @@
-/**
-*@Project: gan-sms
-*@Author: sam
-*@Date: 2017年1月4日
-*@Copyright: 2017  All rights reserved.
-*/
+
 package org.cloud.backend.system.config;
 
 import org.springframework.context.annotation.Bean;

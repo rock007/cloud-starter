@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fp.gan.system.dao.sys.mapper.SysSystemMapper">
-  <resultMap id="BaseResultMap" type="com.fp.gan.system.dao.sys.model.SysSystem">
+<mapper namespace="org.cloud.backend.system.dao.sys.mapper.SysSystemMapper">
+  <resultMap id="BaseResultMap" type="org.cloud.backend.system.dao.sys.model.SysSystem">
     <id column="system_id" jdbcType="INTEGER" property="systemId" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="banner" jdbcType="VARCHAR" property="banner" />
@@ -76,7 +76,7 @@
     system_id, icon, banner, theme, basepath, status, name, title, description, ctime, 
     orders
   </sql>
-  <select id="selectByExample" parameterType="com.fp.gan.system.dao.sys.model.SysSystemExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysSystemExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -100,13 +100,13 @@
     delete from Sys_system
     where system_id = #{systemId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.fp.gan.system.dao.sys.model.SysSystemExample">
+  <delete id="deleteByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysSystemExample">
     delete from Sys_system
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.fp.gan.system.dao.sys.model.SysSystem">
+  <insert id="insert" parameterType="org.cloud.backend.system.dao.sys.model.SysSystem">
     insert into Sys_system (system_id, icon, banner,
       theme, basepath, status, 
       name, title, description, 
@@ -116,7 +116,7 @@
       #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{ctime,jdbcType=BIGINT}, #{orders,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.fp.gan.system.dao.sys.model.SysSystem">
+  <insert id="insertSelective" parameterType="org.cloud.backend.system.dao.sys.model.SysSystem">
     insert into Sys_system
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="systemId != null">
@@ -189,7 +189,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.fp.gan.system.dao.sys.model.SysSystemExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysSystemExample" resultType="java.lang.Long">
     select count(*) from Sys_system
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -253,7 +253,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fp.gan.system.dao.sys.model.SysSystem">
+  <update id="updateByPrimaryKeySelective" parameterType="org.cloud.backend.system.dao.sys.model.SysSystem">
     update Sys_system
     <set>
       <if test="icon != null">
@@ -289,7 +289,7 @@
     </set>
     where system_id = #{systemId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.fp.gan.system.dao.sys.model.SysSystem">
+  <update id="updateByPrimaryKey" parameterType="org.cloud.backend.system.dao.sys.model.SysSystem">
     update Sys_system
     set icon = #{icon,jdbcType=VARCHAR},
       banner = #{banner,jdbcType=VARCHAR},

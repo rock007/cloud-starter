@@ -9,7 +9,7 @@
   </parent>
   <groupId>cloud-core</groupId>
   <artifactId>cloud-core</artifactId>
-  <name>cloud-comm</name>
+  <name>cloud-core</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -20,18 +20,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
-      
-        <!-- Java EE 
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-        </dependency>-->
 		<dependency>
     		<groupId>javax.servlet</groupId>
     		<artifactId>servlet-api</artifactId>

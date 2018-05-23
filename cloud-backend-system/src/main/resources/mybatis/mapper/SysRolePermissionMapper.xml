@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fp.gan.system.dao.sys.mapper.SysRolePermissionMapper">
-  <resultMap id="BaseResultMap" type="com.fp.gan.system.dao.sys.model.SysRolePermission">
+<mapper namespace="org.cloud.backend.system.dao.sys.mapper.SysRolePermissionMapper">
+  <resultMap id="BaseResultMap" type="org.cloud.backend.system.dao.sys.model.SysRolePermission">
     <id column="role_permission_id" jdbcType="INTEGER" property="rolePermissionId" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="permission_id" jdbcType="INTEGER" property="permissionId" />
@@ -67,7 +67,7 @@
   <sql id="Base_Column_List">
     role_permission_id, role_id, permission_id
   </sql>
-  <select id="selectByExample" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermissionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -91,19 +91,19 @@
     delete from Sys_role_permission
     where role_permission_id = #{rolePermissionId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermissionExample">
+  <delete id="deleteByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermissionExample">
     delete from Sys_role_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermission">
+  <insert id="insert" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermission">
     insert into Sys_role_permission (role_permission_id, role_id, permission_id
       )
     values (#{rolePermissionId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermission">
+  <insert id="insertSelective" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermission">
     insert into Sys_role_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="rolePermissionId != null">
@@ -128,7 +128,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermissionExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermissionExample" resultType="java.lang.Long">
     select count(*) from Sys_role_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -160,7 +160,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermission">
+  <update id="updateByPrimaryKeySelective" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermission">
     update Sys_role_permission
     <set>
       <if test="roleId != null">
@@ -172,7 +172,7 @@
     </set>
     where role_permission_id = #{rolePermissionId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.fp.gan.system.dao.sys.model.SysRolePermission">
+  <update id="updateByPrimaryKey" parameterType="org.cloud.backend.system.dao.sys.model.SysRolePermission">
     update Sys_role_permission
     set role_id = #{roleId,jdbcType=INTEGER},
       permission_id = #{permissionId,jdbcType=INTEGER}

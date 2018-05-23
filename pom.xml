@@ -15,7 +15,7 @@
     	<module>cloud-sso</module>
       	<module>cloud-authserver</module>
       	<module>cloud-db</module>
-      	<module>cloud-rest-unified</module>
+      	<module>cloud-unified-service</module>
     	<module>cloud-backend-unified</module>
 		<module>cloud-backend-system</module>
 		<module>cloud-core</module>
@@ -43,13 +43,6 @@
 		</dependency>
 
 		<dependency>
-    		<groupId>org.apache.directory.studio</groupId>
-    		<artifactId>org.apache.commons.io</artifactId>
-    		<version>2.4</version>
-		</dependency>
-
-		  
-		<dependency>
     		<groupId>org.apache.httpcomponents</groupId>
     		<artifactId>httpclient</artifactId>
     	</dependency>
@@ -58,7 +51,8 @@
     		<groupId>commons-codec</groupId>
     		<artifactId>commons-codec</artifactId>
     	</dependency>
-	 	<dependency>
+
+        <dependency>
     		<groupId>org.apache.directory.studio</groupId>
     		<artifactId>org.apache.commons.io</artifactId>
     		<version>2.4</version>
@@ -68,6 +62,7 @@
   			<artifactId>org.apache.commons.lang</artifactId>
   			<version>2.6</version>
 		</dependency>
+
 		<dependency>
     		<groupId>commons-httpclient</groupId>
     		<artifactId>commons-httpclient</artifactId>

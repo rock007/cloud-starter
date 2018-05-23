@@ -1,7 +1,7 @@
 package org.cloud.backend.system.dao.sys.service.imp;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+import java.util.Map;
 
 import org.cloud.backend.system.comm.base.BaseServiceImpl;
 import org.cloud.backend.system.dao.sys.mapper.SysUserPermissionMapper;
@@ -29,22 +29,22 @@ public class SysUserPermissionServiceImpl extends BaseServiceImpl<SysUserPermiss
     SysUserPermissionMapper sysUserPermissionMapper;
 
     @Override
-    public int permission(JSONArray datas, int id) {
+    public int permission(List<Map<String,Object>> datas, int id) {
         for (int i = 0; i < datas.size(); i ++) {
-            JSONObject json = datas.getJSONObject(i);
-            if (json.getBoolean("checked")) {
+        	Map<String,Object> json = datas.get(i);
+            if (((Boolean)json.get("checked"))) {
                 // 新增权限
                 SysUserPermission sysUserPermission = new SysUserPermission();
                 sysUserPermission.setUserId(id);
-                sysUserPermission.setPermissionId(json.getIntValue("id"));
-                sysUserPermission.setType(json.getByte("type"));
+                sysUserPermission.setPermissionId((Integer)json.get("id"));
+                sysUserPermission.setType((Byte)json.get("type"));
                 sysUserPermissionMapper.insertSelective(sysUserPermission);
             } else {
                 // 删除权限
                 SysUserPermissionExample sysUserPermissionExample = new SysUserPermissionExample();
                 sysUserPermissionExample.createCriteria()
-                        .andPermissionIdEqualTo(json.getIntValue("id"))
-                        .andTypeEqualTo(json.getByte("type"));
+                        .andPermissionIdEqualTo((Integer)json.get("id"))
+                        .andTypeEqualTo((Byte)json.get("type"));
                 sysUserPermissionMapper.deleteByExample(sysUserPermissionExample);
             }
         }

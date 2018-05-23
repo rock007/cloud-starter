@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fp.gan.system.dao.sys.mapper.SysUserPermissionMapper">
-  <resultMap id="BaseResultMap" type="com.fp.gan.system.dao.sys.model.SysUserPermission">
+<mapper namespace="org.cloud.backend.system.dao.sys.mapper.SysUserPermissionMapper">
+  <resultMap id="BaseResultMap" type="org.cloud.backend.system.dao.sys.model.SysUserPermission">
     <id column="user_permission_id" jdbcType="INTEGER" property="userPermissionId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="permission_id" jdbcType="INTEGER" property="permissionId" />
@@ -68,7 +68,7 @@
   <sql id="Base_Column_List">
     user_permission_id, user_id, permission_id, type
   </sql>
-  <select id="selectByExample" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermissionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -92,19 +92,19 @@
     delete from Sys_user_permission
     where user_permission_id = #{userPermissionId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermissionExample">
+  <delete id="deleteByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermissionExample">
     delete from Sys_user_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermission">
+  <insert id="insert" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermission">
     insert into Sys_user_permission (user_permission_id, user_id, permission_id,
       type)
     values (#{userPermissionId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER}, 
       #{type,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermission">
+  <insert id="insertSelective" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermission">
     insert into Sys_user_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userPermissionId != null">
@@ -135,7 +135,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermissionExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermissionExample" resultType="java.lang.Long">
     select count(*) from Sys_user_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -171,7 +171,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermission">
+  <update id="updateByPrimaryKeySelective" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermission">
     update Sys_user_permission
     <set>
       <if test="userId != null">
@@ -186,7 +186,7 @@
     </set>
     where user_permission_id = #{userPermissionId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.fp.gan.system.dao.sys.model.SysUserPermission">
+  <update id="updateByPrimaryKey" parameterType="org.cloud.backend.system.dao.sys.model.SysUserPermission">
     update Sys_user_permission
     set user_id = #{userId,jdbcType=INTEGER},
       permission_id = #{permissionId,jdbcType=INTEGER},

@@ -64,8 +64,9 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
                         		||curUrl.indexOf("_js_")>=0
                         		||curUrl.indexOf("/error")>=0
                                 		||curUrl.indexOf("/403")>=0
+                                        		||curUrl.indexOf("/info")>=0
                                         		||curUrl.endsWith(".json")
-                        ||curUrl.equals("/")||curUrl.indexOf(".ico")>=0) {
+                        ||curUrl.endsWith("/")||curUrl.indexOf(".ico")>=0) {
             return true;
         }
 
