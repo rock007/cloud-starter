@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "order-service")
-public interface OrderService {
+@FeignClient(value = "addressFeignService")
+public interface AddressFeignService {
 
-	@RequestMapping(value = "/submit-order")
-    String submitOrder(@RequestParam("name") String name);
+	@RequestMapping(value = "get-my-address")
+    String getMyAddress(@RequestParam("name") String name);
 
 }

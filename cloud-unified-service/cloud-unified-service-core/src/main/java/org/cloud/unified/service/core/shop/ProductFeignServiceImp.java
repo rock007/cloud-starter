@@ -1,11 +1,11 @@
 package org.cloud.unified.service.core.shop;
 
 import org.cloud.db.sys.entity.SysUser;
-import org.cloud.unified.service.api.shop.ProductService;
+import org.cloud.unified.service.api.shop.ProductFeignService;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ProductServiceImp implements ProductService {
+public class ProductFeignServiceImp implements ProductFeignService {
 
 	@Override
     public String hello(String name) {

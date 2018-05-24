@@ -16,12 +16,13 @@
   </properties>
   <dependencies>
 
-     <dependency>
+      <!--
+      <dependency>
           <groupId>mysql</groupId>
           <artifactId>mysql-connector-java</artifactId>
           <scope>runtime</scope>
-     </dependency>
-       
+      </dependency>
+      -->
 	 <dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>
@@ -30,16 +31,13 @@
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-starter-thymeleaf</artifactId>
 	  </dependency>
+      <!--
 	  <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
       </dependency>
-       <dependency>
-			<groupId>cloud-db</groupId>
-			<artifactId>cloud-db</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+-->
       <dependency>
           <groupId>cloud-unified-service-api</groupId>
           <artifactId>cloud-unified-service-api</artifactId>
