@@ -13,12 +13,14 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.cloud.core.utils.EncriptUtil;
 import org.cloud.db.sys.entity.SysUser;
 import org.cloud.db.sys.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -40,7 +42,7 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 
 	@Autowired
 	protected RestTemplate restTemplate;
-	
+
 	/**
 	 * 授权：验证权限时调用
 	 * @param principalCollection
@@ -81,7 +83,7 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 				throw new UnknownAccountException();
 			}
 			//MD5Util.MD5(password + upmsUser.getSalt())
-			if ("".contains(password)&&!upmsUser.getPassword().equals(password )) {
+			if ("".contains(password)&&!upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
 				throw new IncorrectCredentialsException();
 			}
 			if (upmsUser.getLocked() == 1) {

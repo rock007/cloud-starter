@@ -12,7 +12,7 @@
 		<module>cloud-discovery</module>
 		<module>cloud-gateway</module>
 		<module>cloud-front</module>
-      	<module>cloud-rest-api</module>
+      	<module>cloud-api</module>
       	<module>cloud-db</module>
       	<module>cloud-unified-service</module>
     	<module>cloud-backend-unified</module>

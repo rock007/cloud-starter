@@ -94,6 +94,7 @@
 		<property name="httpOnly" value="true"/>
 		<!-- Cookie名称 -->
 		<property name="name" value="wb"/>
+        <property name="path" value="/" />
 	</bean>
 
 	<!-- 会话监听器 -->

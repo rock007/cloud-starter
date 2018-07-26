@@ -1,0 +1,276 @@
+@CHARSET "UTF-8";
+body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
+
+h4 {
+  margin-top: 25px;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+.row .row {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+[class*="col-"] {
+ 
+  padding-top: 15px;
+  padding-bottom: 15px;
+/**
+  background-color: #eee;
+  background-color: rgba(86,61,124,.15);
+*/
+
+  border: 1px solid #ddd;
+  border: 1px solid rgba(86,61,124,.2);
+}
+
+hr {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.metro{
+  height: 140pt;
+  padding: 5px 0px 5px 0px;
+}
+
+.metro_half{
+  height: 70pt;
+  padding: 5px 0px 5px 0px;
+}
+
+
+/**========================================begin  ***/
+#slides {
+      display: none
+    }
+
+    #slides .slidesjs-navigation {
+      margin-top:5px;
+    }
+
+    a.slidesjs-next,
+    a.slidesjs-previous,
+    a.slidesjs-play,
+    a.slidesjs-stop {
+      background-image: url(../images/btns-next-prev.png);
+      background-repeat: no-repeat;
+      display:block;
+      width:12px;
+      height:18px;
+      overflow: hidden;
+      text-indent: -9999px;
+      float: left;
+      margin-right:5px;
+    }
+
+    a.slidesjs-next {
+      margin-right:10px;
+      background-position: -12px 0;
+    }
+
+    a:hover.slidesjs-next {
+      background-position: -12px -18px;
+    }
+
+    a.slidesjs-previous {
+      background-position: 0 0;
+    }
+
+    a:hover.slidesjs-previous {
+      background-position: 0 -18px;
+    }
+
+    a.slidesjs-play {
+      width:15px;
+      background-position: -25px 0;
+    }
+
+    a:hover.slidesjs-play {
+      background-position: -25px -18px;
+    }
+
+    a.slidesjs-stop {
+      width:18px;
+      background-position: -41px 0;
+    }
+
+    a:hover.slidesjs-stop {
+      background-position: -41px -18px;
+    }
+
+    .slidesjs-pagination {
+      margin: 7px 0 0;
+      float: right;
+      list-style: none;
+    }
+
+    .slidesjs-pagination li {
+      float: left;
+      margin: 0 1px;
+    }
+
+    .slidesjs-pagination li a {
+      display: block;
+      width: 13px;
+      height: 0;
+      padding-top: 13px;
+      background-image: url(../images/pagination.png);
+      background-position: 0 0;
+      float: left;
+      overflow: hidden;
+    }
+
+    .slidesjs-pagination li a.active,
+    .slidesjs-pagination li a:hover.active {
+      background-position: 0 -13px
+    }
+
+    .slidesjs-pagination li a:hover {
+      background-position: 0 -26px
+    }
+
+    #slides a:link,
+    #slides a:visited {
+      color: #333
+    }
+
+    #slides a:hover,
+    #slides a:active {
+      color: #9e2020
+    }
+    
+/**杞崲========================================end  ***/
+
+.product-img{
+  height:auto;
+  width:6em;
+}
+
+.product-img-fixheight{
+  height:80px;
+  width:auto;
+}
+
+.fit-size{
+  margin:0;
+  padding: 0;
+}
+
+.products-table{
+	width:100%;
+}
+
+.products-table tr{
+  border-bottom-style:solid;
+  border-bottom-width: 1px;
+  border-bottom-color:#ddd; 
+}
+.products-table tr td{
+  padding: 5px;
+}
+
+.product-price{
+  color: orangered;
+  font-size: 20px;
+}
+
+.navbar-title {
+  height: 50px;
+  width: 200px;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px;
+  vertical-align:bottom;
+  text-align: center;
+}
+
+.navbar-header{
+  background-color: snow;
+  color: black;
+}
+
+.product-info-ul li{
+  float: none;
+  padding: 5px;
+  
+}
+
+/***chat ==============================begin*/
+
+.chat-content{
+	 height: 420px;
+     overflow: auto;
+}
+.chat-more{
+  text-align: center;
+  background-color: #E0E0E0;
+}
+.chat-seller > span.seller{
+  font-style: italic;
+  color: blue;
+}
+
+
+.chat-me{
+
+  text-align: right;
+
+}
+.chat-me > span.me{
+  font-style: italic;
+  color: blue;  
+}
+
+.chat-box {
+  position: fixed;
+  bottom: 55px;
+  width: 100%;
+}
+
+.bottom {position:fixed;bottom:0px;width:100%;}
+
+.div-right {float:right;text-align:right;}
+
+/***chat ==============================end*/
+
+.font-blue{
+  color: blue;
+}
+.font-red{
+  color: red;
+}
+
+.title{
+  font-weight: bold;
+}
+
+.getdata-loading {
+  position: absolute;
+  top: 25px;
+  left: 15px;
+  color:#ebebeb;
+}
+
+.preloader {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  background: #ebebeb;
+  z-index: 2000;
+}
+
+.pager-more{
+  text-align:center;
+  width: 100%;
+  color: blue;
+}
+
+
+#product-desc  img{
+	width:100%;
+	height:auto;
+}

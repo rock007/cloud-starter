@@ -5,6 +5,7 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.subject.Subject;
+import org.cloud.core.model.JsonBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
+
 import java.util.Date;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * Created by sam on 2017/7/7.
@@ -49,6 +53,18 @@ public abstract class BaseController {
 	    
         if (null != request.getHeader("X-Requested-With") && request.getHeader("X-Requested-With").equalsIgnoreCase("XMLHttpRequest")) {
             request.setAttribute("requestHeader", "ajax");
+            
+            Gson gson = new Gson();
+            JsonBody<String> err=new JsonBody<String>(-100,"系统出现错误",exception.getMessage());
+            try {
+            	response.setCharacterEncoding("UTF-8");
+            	response.setContentType("application/json;charset=UTF-8");
+            	response.getWriter().write(gson.toJson(err));
+            	response.getWriter().flush();
+            }catch(Exception ex) {
+            	
+            }
+            return null;
         }
 
         // shiro没有权限异常

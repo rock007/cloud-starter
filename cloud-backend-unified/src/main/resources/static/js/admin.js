@@ -162,6 +162,13 @@ $(function() {
 			}
 		}
 	});
+
+	$('a.switch-systems[systemid]').click(function(){
+
+	    console.log('systemid'+$(this).attr('systemid'));
+
+	 });
+
 });
 // 选项卡对象
 var Tab = {

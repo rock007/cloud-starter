@@ -27,8 +27,6 @@
     		<version>2.5</version>
     		<scope>provided</scope>
 		</dependency>
-        
-        
     <dependency>
 		<groupId>org.apache.commons</groupId>
 		<artifactId>commons-lang3</artifactId>
@@ -82,22 +80,11 @@
     	<groupId>com.google.code.gson</groupId>
     	<artifactId>gson</artifactId>
     </dependency>
-    <!--  
-    <dependency>
-    		<groupId>org.jdom</groupId>
-    		<artifactId>jdom2</artifactId>
-    	</dependency>
-    	
-    <dependency>
-     		<groupId>com.alibaba</groupId>
-     		<artifactId>fastjson</artifactId>
-     		<version>1.2.21</version>
-		</dependency>
-		-->
+
     <dependency>
     	<groupId>com.google.guava</groupId>
     	<artifactId>guava</artifactId>
-    	</dependency>
+    </dependency>
     
   </dependencies>
 </project>

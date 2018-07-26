@@ -1,0 +1,378 @@
+package org.cloud.shop.controller.mobile;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.cloud.core.model.JsonBody;
+import org.cloud.db.shop.entity.Order;
+import org.cloud.db.shop.repository.OrderRepository;
+import org.cloud.db.shop.repository.PayRepository;
+import org.cloud.db.shop.service.OrderService;
+import org.cloud.db.sys.service.ActLogService;
+import org.cloud.shop.ShopApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+/**
+ * 支付
+ * @author 上午11:47:22 by sam
+ *
+ */
+@Controller
+@RequestMapping(value="/pay")
+public class PayController {
+
+	private static final Logger logger = LoggerFactory.getLogger(PayController.class);
+	
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Autowired
+	private PayRepository payRepository;
+	
+	@Autowired
+	private ActLogService actLogService;
+	
+	@Autowired
+	private OrderService orderService;
+	
+	//@Autowired
+	//private MessageService messageService;
+	
+	@ExceptionHandler
+	public @ResponseBody
+    JsonBody<String> handleException(HttpServletRequest request, Exception ex){
+	   
+		logger.error("handleException", ex);
+		return new JsonBody<String>(-1,ex.getMessage()) ;
+	 }
+	
+	@RequestMapping(value="/ali-pay-create.action")
+	public  String aliapay_create(HttpServletResponse response, 
+			HttpServletRequest request,Map<String, Object> model,Long id){
+		
+		Order oneOrder=null;
+		
+		if(id!=null){
+			oneOrder =orderRepository.findOne(id);	
+			
+			//把请求参数打包成数组
+			Map<String, String> sParaTemp = new HashMap<String, String>();
+			sParaTemp.put("service", "alipay.wap.create.direct.pay.by.user");
+			sParaTemp.put("partner", AlipayConfig.partner);
+			sParaTemp.put("seller_id", AlipayConfig.seller_id);
+			sParaTemp.put("_input_charset", AlipayConfig.input_charset);
+			sParaTemp.put("payment_type", "1");
+			sParaTemp.put("notify_url", "http://www.hs-dx.com/pay/ali-pay-create-notify.action");
+			sParaTemp.put("return_url", "http://www.hs-dx.com/pay/ali-pay-create-result.action");
+			sParaTemp.put("out_trade_no", oneOrder.getOrderCode());
+			sParaTemp.put("subject", oneOrder.getCreateUser()+"用于购买"+oneOrder.getOrderProduct().getTitle()+"付款");
+			sParaTemp.put("total_fee", "0.01");
+			sParaTemp.put("show_url", "http://www.hs-dx.com/index.html#ajax/product-"+oneOrder.getOrderProduct().getProductId()+".html");
+			sParaTemp.put("body", "经销商用户："+oneOrder.getOrderProduct().getCreate_user());
+
+			//建立请求
+			String sHtmlText = AlipaySubmit.buildRequest(sParaTemp,"get","确认");
+			model.put("html", sHtmlText);
+			
+		}else{
+			model.put("msg", "参数不正确");
+		}
+		
+		return "pay/ali_pay_create";
+	}
+	
+	/**
+	 * 支付操作后通知
+	 * @return
+	 */
+	@RequestMapping(value="/ali-pay-create-notify.action")
+	public @ResponseBody String aliapay_create_notify(HttpServletResponse response, 
+			HttpServletRequest request){
+		
+		logger.debug("支付操作后通知");
+		String result="";
+		//获取支付宝POST过来反馈信息
+		Map<String,String> params = new HashMap<String,String>();
+		Map requestParams = request.getParameterMap();
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i]
+						: valueStr + values[i] + ",";
+			}
+			//乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+			//valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");
+			params.put(name, valueStr);
+			
+			logger.debug(name+":"+ valueStr);
+		}
+		
+		//获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
+		//商户订单号
+		//本系统的订单号
+		String out_trade_no =request.getParameter("out_trade_no");
+		
+		//支付宝交易号
+		String trade_no = request.getParameter("trade_no");
+
+		//交易状态
+		String trade_status =request.getParameter("trade_status");
+
+		//获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
+
+		if(AlipayNotify.verify(params)){//验证成功
+			
+			try{
+				
+				Order oneOrder= orderRepository.findByOrderCode(out_trade_no);
+				
+				Long orderId=oneOrder.getId();
+				String orderCreater=oneOrder.getCreateUser();
+				
+				
+				Pay onePay= payRepository.findByOrderId(oneOrder.getId());
+				onePay.setTrade_no(trade_no);
+				onePay.setTrade_status(trade_status);
+				onePay.setUpdate_date(new Date());
+				payRepository.save(onePay);
+				
+				if(trade_status.equals("TRADE_FINISHED")){
+					//判断该笔订单是否在商户网站中已经做过处理
+					//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+					//如果有做过处理，不执行商户的业务程序
+						
+					//注意：
+					//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
+					//交易完成，不能退款或修改订单状态
+					//Order oneOrder= orderRepository.findOne(Long.parseLong(out_trade_no));
+					
+					//订单完成
+					oneOrder.setIs_complete(1);
+					orderRepository.save(oneOrder);
+					
+				} else if (trade_status.equals("TRADE_SUCCESS")){
+					
+					//判断该笔订单是否在商户网站中已经做过处理
+					//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+					//如果有做过处理，不执行商户的业务程序
+						
+					//注意：
+					//付款完成后，支付宝系统发送该交易状态通知
+					
+					//支付成功
+					oneOrder.setOrderStatus(OrderStatusType.pay);
+					oneOrder.setUpdate_date(new Date());
+					orderRepository.save(oneOrder);
+					
+					//消息，通知
+					/*******更新订单，消息 begin***********************************************/
+					//记录日志		
+					actLogService.recOrderLog(orderId, "买家支付宝付款成功",orderCreater);
+					
+					//发送消息
+					String productOrder= orderService.findOrderProductCreateUser(orderId);
+					
+					//messageService.SendMsg(productOrder,orderCreater,orderCreater,"买家支付宝付款成功，订单号为"+orderId+".");
+					messageService.SendNotice(App.getCurUser().getUsername(), productOrder, "买家提交订单，订单号为"+oneOrder.getOrderCode()+"，请尽快发货！");
+					
+					/*******更新订单，消息 end***********************************************/
+				}
+				result="success";
+				
+			}catch(Exception ex){
+				
+				logger.error("支付操作后通知出错", ex);
+				result="fail";
+			}
+
+		}else{//验证失败
+			result="fail";
+		}
+		return result;
+	}
+	
+	/**
+	 * 支付操作返回结果
+	 * @return
+	 */
+	@RequestMapping(value="/ali-pay-create-result.action")
+	public String aliapay_create_result(HttpServletResponse response, 
+			HttpServletRequest request,Map<String, Object> model){
+		
+		logger.debug("支付操作返回结果");
+		String result="";
+		String trade_status_Str="";
+		
+		Map<String,String> params = new HashMap<String,String>();
+		Map requestParams = request.getParameterMap();
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i]
+						: valueStr + values[i] + ",";
+			}
+			//乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+			//valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+			
+			params.put(name, valueStr);
+			
+			logger.debug(name, valueStr);
+		}
+		
+		//获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
+		//商户订单号
+		String out_trade_no =request.getParameter("out_trade_no");
+		logger.debug("商户订单号:", out_trade_no);
+		
+		//支付宝交易号
+		String trade_no =request.getParameter("trade_no");
+		logger.debug("支付宝交易号:", trade_no);
+		
+		//交易状态
+		String trade_status =request.getParameter("trade_status");
+		logger.debug("交易状态:", trade_status);
+		
+		//获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
+		
+		//计算得出通知验证结果
+		boolean verify_result = true;//AlipayNotify.verify(params);
+		
+		if(verify_result){//验证成功
+			
+
+			try{
+				
+				Order oneOrder= orderRepository.findByOrderCode("201507230023");//out_trade_no
+
+				Long orderId=oneOrder.getId();
+				String orderCreater=oneOrder.getCreateUser();
+				
+				Pay onePay= payRepository.findByOrderId(oneOrder.getId());
+				onePay.setTrade_no(trade_no);
+				onePay.setTrade_status(trade_status);
+				onePay.setUpdate_date(new Date());
+				onePay=payRepository.save(onePay);
+				
+				model.put("onePay", onePay);
+				
+				if(trade_status.equals("TRADE_FINISHED")){
+					
+					trade_status_Str="交易完成";
+					//判断该笔订单是否在商户网站中已经做过处理
+					//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+					//如果有做过处理，不执行商户的业务程序
+						
+					//注意：
+					//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
+					//交易完成，不能退款或修改订单状态
+					//Order oneOrder= orderRepository.findOne(Long.parseLong(out_trade_no));
+					
+					//订单完成
+					oneOrder.setIs_complete(1);
+					oneOrder=orderRepository.save(oneOrder);
+					
+				} else if (trade_status.equals("TRADE_SUCCESS")){
+					
+					trade_status_Str="交易成功";
+					//判断该笔订单是否在商户网站中已经做过处理
+					//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+					//如果有做过处理，不执行商户的业务程序
+						
+					//注意：
+					//付款完成后，支付宝系统发送该交易状态通知
+					
+					//支付成功
+					oneOrder.setOrderStatus(OrderStatusType.pay);
+					oneOrder.setUpdate_date(new Date());
+					oneOrder=orderRepository.save(oneOrder);
+					
+					//消息，通知
+					/*******更新订单，消息 begin***********************************************/
+					//记录日志		
+					actLogService.recOrderLog(orderId, "买家支付宝付款成功",orderCreater);
+					
+					//发送消息
+					String productOrder= orderService.findOrderProductCreateUser(orderId);
+					
+					//messageService.SendMsg(productOrder,orderCreater,orderCreater,"买家支付宝付款成功，订单号为"+orderId+".");
+					messageService.SendNotice(App.getCurUser().getUsername(), productOrder, "买家支付宝付款成功，订单号为"+orderId+".");
+					
+					/*******更新订单，消息 end***********************************************/
+				}else{
+					trade_status_Str="交易失败";
+					actLogService.recOrderLog(orderId, "买家支付宝付款失败,trade_status:"+trade_status,orderCreater);
+				}
+				
+				model.put("order", oneOrder);
+				result="success";
+				
+			}catch(Exception ex){
+				trade_status_Str="交易失败";
+				logger.error("支付操作后通知出错", ex);
+				result="fail";
+			}
+			
+			//////////////////////////////////////////////////////////////////////////////////////////
+			//请在这里加上商户的业务逻辑程序代码
+
+			//——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
+			if(trade_status.equals("TRADE_FINISHED") || trade_status.equals("TRADE_SUCCESS")){
+				//判断该笔订单是否在商户网站中已经做过处理
+					//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+					//如果有做过处理，不执行商户的业务程序
+			}
+			
+			//该页面可做页面美工编辑
+			result="验证成功";
+			//——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
+
+			//////////////////////////////////////////////////////////////////////////////////////////
+		}else{
+			//该页面可做页面美工编辑
+			result="验证失败";
+		}
+		
+		model.put("result", result);
+		model.put("trade_status", trade_status_Str);
+		return "pay/ali_pay_result";
+	}
+	
+	/**
+	 * 退款操作后通知
+	 * @return
+	 */
+	@RequestMapping(value="/ali-pay-refund-notify.action")
+	public String aliapay_refund_notify(){
+		
+		
+		return "";
+	}
+	/**
+	 * 退款操作返回结果
+	 * @return
+	 */
+	@RequestMapping(value="/ali-pay-refund-result.action")
+	public String aliapay_refund_result(){
+		
+		
+		return "";
+	}
+}

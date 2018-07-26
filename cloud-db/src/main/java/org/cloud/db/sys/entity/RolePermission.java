@@ -11,34 +11,36 @@ public class RolePermission {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long role_permission_id;
+    @Column(name = "role_permission_id")
+    private Long rolePermissionId;
 
-    private Long role_id;
+    @Column(name = "role_id")
+    private Long roleId;
 
-    private Long permission_id;
+    @Column(name = "permission_id")
+    private Long permissionId;
 
-
-    public Long getRole_permission_id() {
-        return role_permission_id;
+    public Long getRolePermissionId() {
+        return rolePermissionId;
     }
 
-    public void setRole_permission_id(Long role_permission_id) {
-        this.role_permission_id = role_permission_id;
+    public void setRolePermissionId(Long rolePermissionId) {
+        this.rolePermissionId = rolePermissionId;
     }
 
-    public Long getRole_id() {
-        return role_id;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setRole_id(Long role_id) {
-        this.role_id = role_id;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public Long getPermission_id() {
-        return permission_id;
+    public Long getPermissionId() {
+        return permissionId;
     }
 
-    public void setPermission_id(Long permission_id) {
-        this.permission_id = permission_id;
+    public void setPermissionId(Long permissionId) {
+        this.permissionId = permissionId;
     }
 }

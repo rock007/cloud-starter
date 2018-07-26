@@ -1,0 +1,163 @@
+/**
+ * red-db  by sam @2018年7月9日  
+ */
+package org.cloud.db.sys.service.imp;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.cloud.db.sys.entity.Permission;
+import org.cloud.db.sys.entity.RolePermission;
+import org.cloud.db.sys.entity.UserPermission;
+import org.cloud.db.sys.repository.PermissionRepository;
+import org.cloud.db.sys.repository.RolePermissionRepository;
+import org.cloud.db.sys.repository.UserPermissionRepository;
+import org.cloud.db.sys.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+/**
+ * @author sam
+ *
+ */
+@Component("permissionService")
+public class PermissionServiceImp implements PermissionService {
+
+	@Autowired
+	private PermissionRepository permissionRepository;
+	
+	@Autowired
+	private UserPermissionRepository userPermissionRepository;
+	
+	@Autowired
+	private RolePermissionRepository rolePermissionRepository;
+
+	@Override
+	public void delete(Long id) {
+
+		permissionRepository.delete(id);
+	}
+
+	@Override
+	public Permission save(Permission w) {
+
+		return permissionRepository.save(w);
+	}
+
+	@Override
+	public Permission findById(Long id) {
+		return permissionRepository.findOne(id);
+	}
+
+	@Override
+	public Page<Permission> search(Permission m, int page, int pageSize) {
+		
+		return permissionRepository.findAll(new Specification<Permission>() {
+			public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				
+				String name = m.getName();
+
+				Integer status = m.getStatus(); //状态
+				
+				Long pid=m.getPid();
+				
+				Predicate p1,p2,p3,p4,pc;
+			    
+			    p1 = cb.notEqual(root.get("permissionId").as(Long.class), 0);
+				pc=cb.and(p1);
+			    
+			    if(!StringUtils.isEmpty(name)){
+			    	
+					p2 =cb.like(root.get("name").as(String.class),"%"+name.toLowerCase()+"%");
+					pc=cb.and(pc,p2);
+				}
+			    
+			    if(status!=null){
+				    p3 =cb.equal(root.get("status").as(Integer.class),status);
+					pc=cb.and(pc,p3);
+			    }
+			    
+			    if(pid!=null){
+			    	p4 =cb.equal(root.get("pid").as(Long.class),pid);
+					pc=cb.and(pc,p4);
+			    }
+			    query.where(pc);
+			    
+				// 添加排序的功能
+				query.orderBy(cb.desc(root.get("orders").as(Integer.class)),cb.desc(root.get("name").as(String.class)));
+				
+			    return null;
+			}
+		}, new PageRequest(page, pageSize));
+	}
+	
+	@Override
+	public List<Permission> findByPidAndType(Long pid, Integer mtype) {
+		
+		return permissionRepository.findByPidAndType(pid, mtype);
+	}
+
+	@Override
+	public List<Permission> findByPidAndTypeAndStatus(Long pid, Integer mtype, Integer Status) {
+		
+		return permissionRepository.findByPidAndTypeAndStatus(pid, mtype, Status);
+	}
+
+	@Override
+	public void deleteRolePermission(Long id) {
+		
+		rolePermissionRepository.delete(id);
+	}
+
+	@Override
+	public RolePermission saveRolePermission(RolePermission w) {
+		
+		return rolePermissionRepository.save(w);
+	}
+
+	@Override
+	public RolePermission findRolePermissionById(Long id) {
+		
+		return rolePermissionRepository.findOne(id);
+	}
+	
+	@Override
+	public List<RolePermission> findRolePermissionByRoldId(Long roldId) {
+		
+		return rolePermissionRepository.findRolePermissionByRoleId(roldId);
+	}	
+	
+	@Override
+	public RolePermission findRolePermissionByRoleIdAndPermissionId(Long roldId,Long permissionId) {
+		
+		return rolePermissionRepository.findRolePermissionByRoleIdAndPermissionId(roldId,permissionId);
+	}
+
+	@Override
+	public void deleteUserPermission(Long id) {
+	
+		rolePermissionRepository.delete(id);
+	}
+
+	@Override
+	public UserPermission saveUserPermission(UserPermission w) {
+		
+		return userPermissionRepository.save(w);
+	}
+
+	@Override
+	public UserPermission findUserPermissionById(Long id) {
+	
+		return userPermissionRepository.findOne(id);
+	}
+	
+}

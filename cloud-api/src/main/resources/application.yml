@@ -1,0 +1,78 @@
+ eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    statusPageUrlPath: /info
+    healthCheckUrlPath: /health
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+---
+server:
+  port: 20002
+  #contextPath: /
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    name: cloud-api
+
+  http:
+     multipart:
+      max-file-size: 5Mb
+      max-request-size: 20Mb
+
+  thymeleaf:
+    check-template-location:  false
+    prefix:  classpath:/templates/
+    suffix:  .html
+    mode:  HTML5
+    encoding:  UTF-8
+    content-type:  text/html
+    cache:  false
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/saascloud?autoReconnect=true&amp;characterEncoding=UTF-8&amp;useUnicode=true
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+    
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+            naming-strategy : org.hibernate.cfg.ImprovedNamingStrategy
+              
+    properties:
+            hibernate:
+                dialect : org.hibernate.dialect.MySQL5Dialect
+
+
+logging:
+  path: D:\\temp\\logs
+  file: cloud-api.log
+  level:
+    root: debug
+    org.springframework.security: WARN
+
+authentication:
+  oauth:
+    clientid: pf_app
+    secret: secret
+    tokenValidityInSeconds: 2592000
+
+
+
+jwt:
+  token:
+    secret: cloud_api
+    expiration: 604800
+
+application:
+    uploadDir: upload2
+    uploadRootDir: D:\\temp\\files_dir
+

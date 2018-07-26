@@ -1,6 +1,7 @@
 package org.cloud.db.sys.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by sam on 2017/7/7.
@@ -12,7 +13,7 @@ public class Permission {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="permission_id")
-    private Long permission_id;
+    private Long permissionId;
 
     private Long system_id;
 
@@ -20,7 +21,7 @@ public class Permission {
 
     private String name;
 
-    private String type;
+    private Integer type;
 
     private String permission_value;
 
@@ -34,12 +35,15 @@ public class Permission {
 
     private Integer orders;
 
-    public Long getPermission_id() {
-        return permission_id;
+    @Transient
+    private List<Permission> child;
+
+    public Long getPermissionId() {
+        return permissionId;
     }
 
-    public void setPermission_id(Long permission_id) {
-        this.permission_id = permission_id;
+    public void setPermissionId(Long permissionId) {
+        this.permissionId = permissionId;
     }
 
     public Long getSystem_id() {
@@ -66,11 +70,11 @@ public class Permission {
         this.name = name;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -120,5 +124,13 @@ public class Permission {
 
     public void setOrders(Integer orders) {
         this.orders = orders;
+    }
+
+    public List<Permission> getChild() {
+        return child;
+    }
+
+    public void setChild(List<Permission> child) {
+        this.child = child;
     }
 }

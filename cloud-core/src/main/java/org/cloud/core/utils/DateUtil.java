@@ -49,6 +49,10 @@ public class DateUtil {
 		
 		return getDate(m,yyyymmdd);
 	}
+
+    public static String getDate(Date date,SimpleDateFormat sd){
+        return sd.format(date);
+    }
 		
 	
 }

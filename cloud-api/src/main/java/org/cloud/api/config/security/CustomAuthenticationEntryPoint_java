@@ -1,0 +1,43 @@
+package org.cloud.api.config.security;
+
+import com.google.gson.Gson;
+import org.cloud.core.model.JsonBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+/**
+ * Returns a 401 error code (Unauthorized) to the client.
+ */
+@Component
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    private final Logger log = LoggerFactory.getLogger(CustomAuthenticationEntryPoint.class);
+
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse response,
+                         AuthenticationException ae) throws IOException, ServletException {
+
+        log.info("认证 entry point called. Rejecting access:"+request.getRequestURI());
+
+        Gson gson = new Gson();
+        response.setContentType("application/json;charset=UTF-8");
+
+        PrintWriter writer= response.getWriter();
+        writer.write(gson.toJson(new JsonBody<String>(-401,"Access Denied",request.getRequestURI())));
+        writer.flush();
+    }
+    
+    public static boolean isAjax(HttpServletRequest request) {
+        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+    
+}

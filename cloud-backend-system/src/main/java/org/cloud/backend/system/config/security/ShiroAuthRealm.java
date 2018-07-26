@@ -20,6 +20,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.cloud.core.utils.EncriptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -94,7 +95,7 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 			throw new UnknownAccountException();
 		}
 		//MD5Util.MD5(password + upmsUser.getSalt())
-		if (!"".contains(password)&&!upmsUser.getPassword().equals(password )) {
+		if (!"".contains(password)&&!upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
 			throw new IncorrectCredentialsException();
 		}
 		if (upmsUser.getLocked() == 1) {

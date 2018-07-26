@@ -12,7 +12,7 @@
   <name>cloud-backend-unified</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	<start-class>org.cloud.backend.BackendApplication</start-class>
+  	<start-class>org.cloud.backend.UnifiedBackendApplication</start-class>
   </properties>
   
   <dependencies>
@@ -39,9 +39,9 @@
 	  <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-		  <!-- in idea war -->
+		  <!-- in idea war-->
             <scope>provided</scope>
-            
+
       </dependency>
     
         <dependency>

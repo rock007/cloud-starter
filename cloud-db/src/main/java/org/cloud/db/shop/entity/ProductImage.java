@@ -1,12 +1,11 @@
 package org.cloud.db.shop.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -14,33 +13,31 @@ import javax.persistence.Table;
 public class ProductImage {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name = "product_id")
+	@Column(name="product_id")
 	private Long productId;
 	
-	private String img_src;
+	private String src;
 	
-	private Long file_id;
-	
-	private String tootips;
-	
-	private Integer remarks;
-	
-	private Integer status;
-	
-	private String postion;
-	
-	private Date create_date;
+	private String alt;
 
+	private Integer status;
+
+	private Long upload_file_id;
+
+	private String  create_user;
+
+	private Integer postion;
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}	
+	}
 
 	public Long getProductId() {
 		return productId;
@@ -50,36 +47,20 @@ public class ProductImage {
 		this.productId = productId;
 	}
 
-	public String getImg_src() {
-		return img_src;
+	public String getSrc() {
+		return src;
 	}
 
-	public void setImg_src(String img_src) {
-		this.img_src = img_src;
+	public void setSrc(String src) {
+		this.src = src;
 	}
 
-	public Long getFile_id() {
-		return file_id;
+	public String getAlt() {
+		return alt;
 	}
 
-	public void setFile_id(Long file_id) {
-		this.file_id = file_id;
-	}
-
-	public String getTootips() {
-		return tootips;
-	}
-
-	public void setTootips(String tootips) {
-		this.tootips = tootips;
-	}
-
-	public Integer getRemarks() {
-		return remarks;
-	}
-
-	public void setRemarks(Integer remarks) {
-		this.remarks = remarks;
+	public void setAlt(String alt) {
+		this.alt = alt;
 	}
 
 	public Integer getStatus() {
@@ -90,19 +71,30 @@ public class ProductImage {
 		this.status = status;
 	}
 
-	public String getPostion() {
+	public Long getUpload_file_id() {
+		return upload_file_id;
+	}
+
+	public void setUpload_file_id(Long upload_file_id) {
+		this.upload_file_id = upload_file_id;
+	}
+
+	public String getCreate_user() {
+		return create_user;
+	}
+
+	public void setCreate_user(String create_user) {
+		this.create_user = create_user;
+	}
+
+	public Integer getPostion() {
 		return postion;
 	}
 
-	public void setPostion(String postion) {
+	public void setPostion(Integer postion) {
 		this.postion = postion;
 	}
-
-	public Date getCreate_date() {
-		return create_date;
-	}
-
-	public void setCreate_date(Date create_date) {
-		this.create_date = create_date;
-	}
+	
+	
+	
 }

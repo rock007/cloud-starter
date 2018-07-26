@@ -1,5 +1,6 @@
 package org.cloud.core.shiro.filter;
 
+import com.google.gson.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,14 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import com.google.gson.Gson;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -66,7 +66,7 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
                                 		||curUrl.indexOf("/403")>=0
                                         		||curUrl.indexOf("/info")>=0
                                         		||curUrl.endsWith(".json")
-                        ||curUrl.endsWith("/")||curUrl.indexOf(".ico")>=0) {
+                        ||curUrl.indexOf(".ico")>=0) {
             return true;
         }
 
@@ -175,12 +175,28 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
              _log.info("check code resp:"+resp);
              
              if (resp!=null&&!"".equals(resp)) {
-             	
-            	 Gson g=new Gson();
-            	 Map result = g.fromJson(resp, Map.class);
-                 
-                 if (1 == Integer.parseInt(result.get("result").toString()) && result.get("data").equals(code)) {
-                    
+
+                 /*********************** not work
+                 Gson g = new GsonBuilder().
+                         registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
+
+                             @Override
+                             public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
+                                 if (src == src.longValue())
+                                     return new JsonPrimitive(src.longValue());
+
+                                 return new JsonPrimitive(src);
+                                 //Integer value = (int)Math.round(src);
+                                 //return new JsonPrimitive(value);
+                             }
+                         }).create();
+
+                 ***********************/
+                 Gson g=new Gson();
+                 Map result = g.fromJson(resp, Map.class);
+                 //gson转换问题
+                 if ("1.0".equals(result.get("result").toString()) && result.get("data").equals(code)) {
+
                      // 移除url中的token参数
                      String backUrl = RequestParameterUtil.getParameterWithOutCode(httpServletRequest);
 

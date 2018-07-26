@@ -1,5 +1,6 @@
 package org.cloud.shop;
 
+import org.cloud.db.shop.enumType.RoleType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +16,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.text.SimpleDateFormat;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -28,6 +33,17 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         HibernateJpaAutoConfiguration.class})
 public class ShopApplication extends SpringBootServletInitializer {
 
+    public static String CON_SESSION_LOGIN="56WB_SHOP_SESSION";
+
+    public static String CON_SESSION_PAY_CARTS="SHOP_FUCK_PAY_CARTS";
+
+    public static String CON_SESSION_PAY_ADDRESS="SHOP_FUCK_PAY_ADDRESS";
+
+    private static SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    public static String basePath="/";
+
+
     public static void main(String[] args) {
     	
         SpringApplication.run(ShopApplication.class, args);
@@ -36,6 +52,30 @@ public class ShopApplication extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(ShopApplication.class);
+    }
+
+    public static String GetCurDT(){
+        return sd.format(new java.util.Date());
+    }
+
+    public static UserDetails getCurUser(){
+
+        UserDetails curUser=null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            curUser = (UserDetails)principal;
+        }
+        return curUser;
+    }
+
+    public static RoleType getCurUserRole(){
+
+        UserDetails curUser=getCurUser();
+
+        String text= curUser.getAuthorities().iterator().next().getAuthority();
+
+        return RoleType.valueOf(text);
     }
 
 }

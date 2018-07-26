@@ -1,5 +1,6 @@
 package org.cloud.db.sys.repository;
 
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by sam on 2017/7/7.
  */
-public interface PermissionRepository extends CrudRepository<Permission, Long> {
+public interface PermissionRepository extends CrudRepository<Permission, Long> ,JpaSpecificationExecutor<Permission> {
 
     @Query(value=" select\n" +
             "\t\t\t*\n" +
@@ -26,4 +27,9 @@ public interface PermissionRepository extends CrudRepository<Permission, Long> {
             "\t\t\tselect permission_id from sys_user_permission uup2 where uup2.user_id=:user_id and uup2.type=-1\n" +
             "\t\t) order by up.orders asc  ",nativeQuery =true)
     List<Permission> findByUserId(@Param("user_id")Long user_id);
+
+    List<Permission> findByPidAndType(Long pid,Integer mtype);
+
+    List<Permission> findByPidAndTypeAndStatus(Long pid,Integer mtype,Integer Status);
+
 }

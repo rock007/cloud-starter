@@ -173,7 +173,7 @@ public class SSOController extends BaseController {
             stringRedisTemplate.opsForValue().set(AppConst.SERVER_SESSION_ID + "_" + sessionId, code, session.getTimeout(), TimeUnit.MILLISECONDS);
             // code校验值
             stringRedisTemplate.opsForValue().set(AppConst.SERVER_CODE + "_" + code, code, session.getTimeout(), TimeUnit.MILLISECONDS);
-            
+
         }
         // 回跳登录前地址
         String backurl = request.getParameter("backurl");
