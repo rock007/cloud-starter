@@ -95,42 +95,4 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 			
 	}
 
-	private Map<String,Object>  getUserInfo(String userid,String idcode,String url){
-		
-		Map<String,Object> result=new HashMap<>();
-		
-		HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-	    MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-	    map.add("userid", userid);
-	    map.add("idcode", idcode);
-
-	    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-
-	    try{
-	    	
-	    	logger.debug("get userInfo, serid:"+userid+" idcode:"+idcode);
-	    	
-	    	ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-	    	
-	    	String jsonStr=response.getBody();
-	    	
-			logger.debug("get userInfo :"+jsonStr);
-			
-	    	Gson gson = new Gson();
-			JsonObject jsonObject = gson.fromJson(jsonStr, JsonObject.class);
-			
-			result.put("isSuccessful", jsonObject.get("isSuccessful").getAsString().toLowerCase());
-			result.put("message", jsonObject.get("message").getAsString());
-			//result.put("data", jsonObject.get("result").isJsonObject()?jsonObject.get("result").getAsJsonObject():jsonObject.get("result").getAsString());
-			
-	    }catch(Exception ex){
-	    	
-	    	logger.error("getUserInfo:", ex);
-	    }
-	    
-	    return result;
-	}
-
 }

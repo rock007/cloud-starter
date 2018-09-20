@@ -11,7 +11,7 @@ import org.cloud.backend.system.dao.sys.model.SysOrganization;
 import org.cloud.backend.system.dao.sys.model.SysOrganizationExample;
 import org.cloud.backend.system.dao.sys.service.SysOrganizationService;
 import org.cloud.core.validator.LengthValidator;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

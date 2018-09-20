@@ -1,9 +1,6 @@
 package org.cloud.backend.app;
 
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-
 import java.text.SimpleDateFormat;
 
 public class AppUtil {

@@ -1,9 +1,6 @@
 /**
-*@Project: 
-*@Author: sam
-*@Date: 2016年9月29日
-*@Copyright: 2016  All rights reserved.
-*/
+ * 
+ */
 package org.cloud.backend.controller.rest;
 
 import java.util.Date;

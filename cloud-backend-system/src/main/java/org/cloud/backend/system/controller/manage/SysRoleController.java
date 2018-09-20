@@ -15,7 +15,7 @@ import org.cloud.backend.system.dao.sys.model.SysRoleExample;
 import org.cloud.backend.system.dao.sys.service.SysRolePermissionService;
 import org.cloud.backend.system.dao.sys.service.SysRoleService;
 import org.cloud.core.validator.LengthValidator;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

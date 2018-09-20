@@ -1,6 +1,6 @@
 package org.cloud.core.shiro.session;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.cloud.core.app.AppConst;

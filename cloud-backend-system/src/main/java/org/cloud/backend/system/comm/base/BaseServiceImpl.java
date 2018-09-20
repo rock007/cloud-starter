@@ -5,7 +5,7 @@ import org.cloud.backend.system.comm.db.DataSourceEnum;
 import org.cloud.backend.system.comm.db.DynamicDataSource;
 import org.cloud.backend.system.comm.util.SpringContextUtil;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 
 import java.lang.reflect.Method;

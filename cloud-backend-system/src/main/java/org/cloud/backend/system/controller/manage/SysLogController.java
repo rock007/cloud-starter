@@ -6,7 +6,7 @@ import org.cloud.backend.system.controller.BaseController;
 import org.cloud.backend.system.dao.sys.model.SysLog;
 import org.cloud.backend.system.dao.sys.model.SysLogExample;
 import org.cloud.backend.system.dao.sys.service.SysLogService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

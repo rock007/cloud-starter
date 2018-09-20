@@ -21,7 +21,7 @@ public class Organization {
     private String description;
 
     private Long ctime;
-
+    
     public Long getOrganizationId() {
         return organizationId;
     }
@@ -61,4 +61,5 @@ public class Organization {
     public void setCtime(Long ctime) {
         this.ctime = ctime;
     }
+    
 }
