@@ -38,3 +38,7 @@ body .jconfirm{z-index: 999;}
     margin-right: 0px;
     margin-left: 0px; 
 }
+
+.red {
+	color:red;
+}

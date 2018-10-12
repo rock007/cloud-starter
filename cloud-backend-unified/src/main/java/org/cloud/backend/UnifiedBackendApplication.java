@@ -19,7 +19,7 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
 @SpringBootApplication
 @ComponentScan(basePackages ={ "org.cloud.backend"
-        ,"org.cloud.db.sys.service","org.cloud.db.cms.service"})
+        ,"org.cloud.db.sys.service","org.cloud.db.cms.service","org.cloud.core"})
 @EnableJpaRepositories(basePackages ={ "org.cloud.db.sys.repository","org.cloud.db.cms.repository"})
 @EntityScan(basePackages ={ "org.cloud.db.sys.entity","org.cloud.db.cms.entity"})
 @EnableAutoConfiguration(exclude={RepositoryRestMvcAutoConfiguration.class})

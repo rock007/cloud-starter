@@ -36,10 +36,11 @@
             </a>
             <span id="system_title">PBSAAS统一管理平台</span>
         </li>
+        
         <li class="pull-right">
             <ul class="hi-menu">
                 <!-- 搜索 -->
-                
+				<li style="height: 36px;line-height: 36px;vertical-align: bottom;"><a href="/swagger-ui.html" target="_blank">接口中心</a> </li>
 				<li class="dropdown">
 					<a class="waves-effect waves-light" data-toggle="dropdown" href="javascript:;">
 						<i class="him-icon zmdi zmdi-dropbox"></i>
@@ -119,28 +120,28 @@
             <li class="sub-menu system_menus system_1 3">
                 <a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-accounts"></i>帐号管理</a>
                 <ul>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('用户管理', 'http://127.0.0.1:20011/system/user/index');">用户管理</a></li>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('角色管理', 'http://127.0.0.1:20011/system/role/index');">角色管理</a></li>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('组织管理', 'http://127.0.0.1:20011/system/organization/index');">组织管理</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('用户管理', '/sys/account-list.html');">用户管理</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('角色管理', '/sys/role-list.html');">角色管理</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('组织机构', '/sys/organization-list.html');">组织机构</a></li>
                 </ul>
             </li>
 
             <li class="sub-menu system_menus system_1 6">
                 <a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-lock-outline"></i> 用户权限</a>
                 <ul>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('权限管理', '/sys/permission-list.html');">权限管理</a></li>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('角色权限管理', 'http://127.0.0.1:20011/system/permission/index');">角色权限管理</a></li>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('组织权限管理', 'http://127.0.0.1:20011/system/permission/index');">组织权限管理</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('权限管理', '/sys/permission-list.html');">系统权限管理</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('角色权限管理', '/sys/role-permission.html');">角色权限管理</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('组织权限管理', '/sys/organization-permission.html');">组织权限管理</a></li>
 
                 </ul>
             </li>
             <li class="sub-menu system_menus system_1 7">
                 <a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-collection-text"></i>基础数据</a>
                 <ul>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('组织机构', '/sys/organization-list.html');">组织机构</a></li>
+
                     <li><a class="waves-effect" href="javascript:Tab.addTab('公共码表', 'http://127.0.0.1:20011/system/coder/index');">公共码表</a></li>
                     <li><a class="waves-effect" href="javascript:Tab.addTab('会话管理', 'http://127.0.0.1:20011/system/session/index');">会话管理</a></li>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('系统日志', 'http://127.0.0.1:20011/system/log/index');">日志记录</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('系统日志', '/sys/log-list.html');">日志记录</a></li>
                     <li><a class="waves-effect" href="javascript:Tab.addTab('字典表', '/sys/dict-list.html');">字典表</a></li>
                 </ul>
             </li>
@@ -155,7 +156,7 @@
             <li class="sub-menu system_menus system_2 15">
                 <a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-collection-text"></i> 文章管理</a>
                 <ul>
-                    <li><a class="waves-effect" href="javascript:Tab.addTab('分类一', '/cms/article-list.html');">分类一</a></li>
+                    <li><a class="waves-effect" href="javascript:Tab.addTab('分类一', 'http://127.0.0.1:20012/cms/backend/article-list.html');">分类一</a></li>
                     <li><a class="waves-effect" href="javascript:Tab.addTab('分类二', '/cms/article-list.html');">分类二</a></li>
                     <li><a class="waves-effect" href="javascript:Tab.addTab('分类三', '/cms/article-list.html');">分类三</a></li>
                     <li><a class="waves-effect" href="javascript:Tab.addTab('分类四', '/cms/article-list.html');">分类四</a></li>

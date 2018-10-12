@@ -34,7 +34,7 @@ public class Swagger2 {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(" org.cloud.rest.api.controller"))
+                .apis(RequestHandlerSelectors.basePackage("org.cloud.api.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);
@@ -45,7 +45,6 @@ public class Swagger2 {
                 .title("接口中心")
                 .description("")
                 .termsOfServiceUrl("http://www.56wb.com/")
-                .contact("sam")
                 .version("1.0")
                 .build();
     }

@@ -5,6 +5,7 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.subject.Subject;
+import org.cloud.core.model.ActLogModel;
 import org.cloud.core.model.JsonBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+
+import reactor.bus.Event;
+import reactor.bus.EventBus;
 
 import java.util.Date;
 
@@ -35,6 +39,9 @@ public abstract class BaseController {
     @Value("${sso.server.url}")
 	private String server_url;
     
+	@Autowired
+	private EventBus eventBus;
+	
     /**
      * 统一异常处理
      * @param request
@@ -44,12 +51,21 @@ public abstract class BaseController {
     @ExceptionHandler
     public String exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception) {
         _log.error("统一异常处理：", exception);
+        
+        String errorMessage = (exception != null ? exception.getMessage() : "Unknown error");
+	    
+		String url=request.getRequestURI();
+    	if(url.length()>256){
+			url=url.substring(url.length()-260);
+		}
+		
+		addLog(url,"error",request.getQueryString(),errorMessage,"",request.getRemoteAddr());
+	
         request.setAttribute("errorMessage", exception);
         
         request.setAttribute("time", new Date());
         //request.setAttribute("status",response.getStatus());
         request.setAttribute("url", request.getRequestURI()+"		queryStr:"+request.getQueryString());
-	   
 	    
         if (null != request.getHeader("X-Requested-With") && request.getHeader("X-Requested-With").equalsIgnoreCase("XMLHttpRequest")) {
             request.setAttribute("requestHeader", "ajax");
@@ -90,8 +106,14 @@ public abstract class BaseController {
     	return null;
 	}
     
+    protected void addLog(String title,String msg,String content,String error,String create_user,String  create_ip){
+		
+    	ActLogModel log=new ActLogModel(title,msg,content,error,create_user,create_ip);
+		eventBus.notify("quotes", Event.wrap(log));
+	}
+
     /***
-     * not work
+     * work
      * @param model
      */
     @ModelAttribute

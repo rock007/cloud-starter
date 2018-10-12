@@ -35,7 +35,7 @@ public class PermissionController  extends BaseController {
 			
 	@GetMapping("/permission-list.json")
 	public @ResponseBody JsonBody<Page<Permission>> get_permission_list(Permission permission,
-			@RequestParam(value="page",required=false,defaultValue="0")  int pageIndex,
+			@RequestParam(value="pageNo",required=false,defaultValue="0")  int pageIndex,
 			@RequestParam(value="pageSize",required=false,defaultValue="20")  int pageSize){
 		
 		Page<Permission> page= permissionService.search(permission, pageIndex, pageSize);

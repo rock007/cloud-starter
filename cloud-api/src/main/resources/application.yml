@@ -1,15 +1,4 @@
- eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    statusPageUrlPath: /info
-    healthCheckUrlPath: /health
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://localhost:20000/eureka/
 
----
 server:
   port: 20002
   #contextPath: /
@@ -61,8 +50,8 @@ logging:
 
 authentication:
   oauth:
-    clientid: pf_app
-    secret: secret
+    clientid: cloud_api
+    secret: fuck-you
     tokenValidityInSeconds: 2592000
 
 

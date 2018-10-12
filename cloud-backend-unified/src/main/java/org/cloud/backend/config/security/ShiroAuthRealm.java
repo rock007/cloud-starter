@@ -5,32 +5,21 @@
  */
 package org.cloud.backend.config.security;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.cloud.core.shiro.jwt.JwtToken;
+import org.cloud.core.shiro.jwt.TokenProvider;
 import org.cloud.core.utils.EncriptUtil;
 import org.cloud.db.sys.entity.SysUser;
 import org.cloud.db.sys.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class ShiroAuthRealm extends AuthorizingRealm{
@@ -43,6 +32,15 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 	@Autowired
 	protected RestTemplate restTemplate;
 
+    @Autowired
+    private TokenProvider tokenUtil;
+    
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        //表示此Realm只支持JwtToken类型
+        return token instanceof JwtToken || token instanceof UsernamePasswordToken;
+    }
+    
 	/**
 	 * 授权：验证权限时调用
 	 * @param principalCollection
@@ -61,38 +59,77 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 	 * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException{
-		
-		UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
-        String username = upToken.getUsername();
-        String password= new String(upToken.getPassword());
-        
-		//String username = (String) authenticationToken.getPrincipal();
-		
-		logger.debug("Auth,username"+username);
-		
-		//String password = (String) authenticationToken.getCredentials();
-		//String password =authenticationToken.getCredentials()==null?"": new String((char[]) authenticationToken.getCredentials());
-		
-		logger.debug("Auth, password:"+password);
-			
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
+			throws AuthenticationException {
+
+		String username, password;
+		// 判断是否token
+		if (authenticationToken instanceof JwtToken) {
+
+			JwtToken jwtToken = (JwtToken) authenticationToken;
+
+			// 获取token
+			String token = jwtToken.getToken();
+
+			if (token == null || "".equals(token)) {
+
+				throw new IncorrectCredentialsException();
+			}
+
+			// 从token中获取用户名
+			username = tokenUtil.getUsernameFromToken(token);
+			password = tokenUtil.getPasswordFromToken(token);
+
 			// 查询用户信息
 			SysUser upmsUser = userService.findUserByName(username);
 
 			if (null == upmsUser) {
 				throw new UnknownAccountException();
 			}
-			//MD5Util.MD5(password + upmsUser.getSalt())
-			if ("".contains(password)&&!upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
+
+			if (!StringUtils.isEmpty(password)
+					&& !upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
 				throw new IncorrectCredentialsException();
 			}
-			if (upmsUser.getLocked() == 1) {
+			// 用户被禁用
+			if (upmsUser.getLocked() != null && upmsUser.getLocked() == 1) {
+				throw new LockedAccountException();
+			}
+
+			try {
+				return new SimpleAuthenticationInfo(upmsUser.getUserId(), token, getName());
+			} catch (Exception e) {
+				throw new AuthenticationException(e);
+			}
+
+		} else {
+
+			UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
+			username = upToken.getUsername();
+			password = new String(upToken.getPassword());
+
+			logger.debug("Auth,username" + username);
+
+			logger.debug("Auth, password:" + password);
+
+			// 查询用户信息
+			SysUser upmsUser = userService.findUserByName(username);
+
+			if (null == upmsUser) {
+				throw new UnknownAccountException();
+			}
+			// MD5Util.MD5(password + upmsUser.getSalt())
+			if ("".equals(password) || !upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
+				throw new IncorrectCredentialsException();
+			}
+			if (upmsUser.getLocked() != null && upmsUser.getLocked() == 1) {
 				throw new LockedAccountException();
 			}
 
 			return new SimpleAuthenticationInfo(username, password, getName());
-		
-			
+
+		}
+
 	}
 
 }

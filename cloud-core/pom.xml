@@ -86,5 +86,29 @@
     	<artifactId>guava</artifactId>
     </dependency>
     
+    <dependency>
+       <groupId>io.jsonwebtoken</groupId>
+       <artifactId>jjwt</artifactId>
+       <version>0.9.0</version>
+    </dependency>
+    
+    	<dependency>
+                <groupId>io.projectreactor.spring</groupId>
+                <artifactId>reactor-spring-core</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>io.projectreactor.spring</groupId>
+              <artifactId>reactor-spring-context</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>io.projectreactor.spring</groupId>
+              <artifactId>reactor-spring-webmvc</artifactId>
+          </dependency>
+
+          <dependency>
+              <groupId>io.projectreactor.spring</groupId>
+              <artifactId>reactor-spring-messaging</artifactId>
+          </dependency> 
+      
   </dependencies>
 </project>

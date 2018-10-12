@@ -32,15 +32,6 @@
 							<input type="submit" class="btn btn-primary" value="登  陆"/>
 						</div>
 
-						<p class="text-danger" th:if="${msg}" th:text="${msg}">
-							用户名密码不正确.
-						</p>
-						<p class="text-danger" th:if="${param.error}">
-							用户名密码不正确.
-						</p>
-						<p class="text-danger" th:if="${param.logout}">
-							你已经退出登录.
-						</p>
 					</div>
 				</div>
 			</form>

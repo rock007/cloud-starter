@@ -7,7 +7,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.cloud.core.utils.EncriptUtil;
 import org.cloud.db.sys.entity.Permission;
-import org.cloud.db.sys.entity.Role;
+import org.cloud.db.sys.entity.SysRole;
 import org.cloud.db.sys.entity.SysUser;
 import org.cloud.db.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +39,9 @@ public class JwtRealm extends AuthorizingRealm {
 		SysUser curUser = userService.findUserByName(username);
 		
 		// 当前用户所有角色
-		Set<Role> upmsRoles =curUser.getRoles();
+		Set<SysRole> upmsRoles =curUser.getRoles();
 		Set<String> roles = new HashSet<>();
-		for (Role upmsRole : upmsRoles) {
+		for (SysRole upmsRole : upmsRoles) {
 			if (StringUtils.isNotBlank(upmsRole.getName())) {
 				roles.add(upmsRole.getName());
 			}

@@ -41,35 +41,25 @@
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 		  <!-- in idea war-->
             <scope>provided</scope>
-
       </dependency>
-    
-        <dependency>
-            <groupId>io.projectreactor.spring</groupId>
-            <artifactId>reactor-spring-core</artifactId>
-
-        </dependency>
-        <dependency>
-            <groupId>io.projectreactor.spring</groupId>
-            <artifactId>reactor-spring-context</artifactId>
-
-        </dependency>
-        <dependency>
-            <groupId>io.projectreactor.spring</groupId>
-            <artifactId>reactor-spring-webmvc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.projectreactor.spring</groupId>
-            <artifactId>reactor-spring-messaging</artifactId>
-        </dependency>
                 
         <dependency>
 			<groupId>cloud-db</groupId>
 			<artifactId>cloud-db</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+      
+      <dependency>
+          <groupId>io.springfox</groupId>
+          <artifactId>springfox-swagger2</artifactId>
+          <version>2.7.0</version>
+      </dependency>
+      <dependency>
+          <groupId>io.springfox</groupId>
+          <artifactId>springfox-swagger-ui</artifactId>
+          <version>2.7.0</version>
+      </dependency>
+      
   </dependencies>
   <build>
           <plugins>

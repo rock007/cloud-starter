@@ -40,7 +40,7 @@ public class SysUser {
     @JoinTable(name="sys_user_role",
             joinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")},
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="role_id")})
-    private Set<Role> roles = new HashSet<Role>();
+    private Set<SysRole> roles = new HashSet<SysRole>();
 
 
     public Long getUserId() {
@@ -132,11 +132,11 @@ public class SysUser {
         this.ctime = ctime;
     }
 
-    public Set<Role> getRoles() {
+    public Set<SysRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<SysRole> roles) {
         this.roles = roles;
     }
 

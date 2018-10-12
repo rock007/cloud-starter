@@ -1,22 +1,43 @@
 package org.cloud.backend.receiver;
 
+import org.cloud.core.model.ActLogModel;
+import org.cloud.db.sys.entity.ActLog;
+import org.cloud.db.sys.service.ActLogService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.bus.Event;
 import reactor.fn.Consumer;
 
 @Service
-public class LogReceiver implements Consumer<Event<String>> {
+public class LogReceiver implements Consumer<Event<ActLogModel>> {
 
-	public void accept(Event<String> ev) {
+	static final Logger logger = LoggerFactory.getLogger(LogReceiver.class);
+	
+	@Autowired
+	private ActLogService actLogService;
+	
+	public void accept(Event<ActLogModel> ev) {
 		
 		try {
-			Thread.sleep(1000*20);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			ActLogModel oneLog= ev.getData();
+			if(oneLog!=null) {
+				
+				ActLog log=new ActLog();
+				BeanUtils.copyProperties(oneLog,log);
+				
+				actLogService.saveLog(log);
+			}	
+			
+		} catch (Exception e) {
+
+			logger.error("accept error:", e);
 		}
 		
-		System.out.println("收到值:"+ev.getData()); 
+		logger.debug("LogReceiver","收到值:"+ev.getData().getContent()); 
 
 	}
 

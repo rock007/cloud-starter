@@ -118,4 +118,10 @@ public class OrganizationController {
 		
 		return new JsonBody<>(1,"操作成功");
 	}
+	
+	@RequestMapping("/organization-permission.html")
+	public String organization_permission() {
+		
+		return "pages/sys/organization-permission";
+	}
 }

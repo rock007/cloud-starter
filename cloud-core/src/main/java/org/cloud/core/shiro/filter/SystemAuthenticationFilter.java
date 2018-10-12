@@ -15,17 +15,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -48,28 +46,27 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
 	@Autowired
     private StringRedisTemplate  redisTemplate;
 	
+	private List<String> allowedPaths;
+	
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 
+    	//允许跨域
+    	HttpServletResponse resp = (HttpServletResponse) response;
+    	resp.setHeader("Access-Control-Allow-Origin", "*");
+    	resp.setHeader("Access-Control-Allow-Credentials", "true");
+    	resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+    	resp.setHeader("Access-Control-Max-Age", "3600");
+    	resp.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+    	
         String curUrl = getRequestUrl(request);
 
 		Subject subject = SecurityUtils.getSubject();
 		
-        if(curUrl.indexOf("/resources/")>=0
-                ||curUrl.indexOf("/plugins/")>=0 ||curUrl.indexOf("/fonts/")>=0
-                ||curUrl.indexOf("/js/")>=0||curUrl.indexOf("/css/")>=0
-                ||curUrl.indexOf("/images/")>=0
-                ||curUrl.indexOf("/sso/")>=0
-                		||curUrl.indexOf("/demo/")>=0
-                        		||curUrl.indexOf("_js_")>=0
-                        		||curUrl.indexOf("/error")>=0
-                                		||curUrl.indexOf("/403")>=0
-                                        		||curUrl.indexOf("/info")>=0
-                                        		||curUrl.endsWith(".json")
-                        ||curUrl.indexOf(".ico")>=0) {
-            return true;
-        }
-
+        boolean isfind= allowedPaths.stream().anyMatch(a->curUrl.indexOf(a)!=-1);
+        
+        if(isfind||curUrl.equals("/")) return true;
+      
         _log.info("getRequestURI ==" + curUrl);
         
         _log.debug("ssoType :" + ssoType+" ssoServerUrl:"+ssoServerUrl+" ssoAppid:"+ssoAppid);
@@ -116,7 +113,7 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
      */
     private boolean validateClient(ServletRequest request, ServletResponse response) {
        
-    	HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
+    	//HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
     	HttpServletRequest httpServletRequest=WebUtils.toHttp(request);
     			
     	Subject subject = getSubject(request, response);
@@ -143,12 +140,12 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
                 _log.debug("backUrl 1:"+backUrl);
                 
                 try {
-                    httpServletResponse.sendRedirect(backUrl.toString());
-                    //httpServletResponse.flushBuffer();
-                    
+                	
+                	WebUtils.toHttp(response).sendRedirect(backUrl.toString());
+                	
                     return true;
                     
-                } catch (IOException e) {
+                } catch (Exception e) {
                     _log.error("局部会话已登录，移除code参数跳转出错：", e);
                 }
             } else {
@@ -175,23 +172,7 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
              _log.info("check code resp:"+resp);
              
              if (resp!=null&&!"".equals(resp)) {
-
-                 /*********************** not work
-                 Gson g = new GsonBuilder().
-                         registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
-
-                             @Override
-                             public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
-                                 if (src == src.longValue())
-                                     return new JsonPrimitive(src.longValue());
-
-                                 return new JsonPrimitive(src);
-                                 //Integer value = (int)Math.round(src);
-                                 //return new JsonPrimitive(value);
-                             }
-                         }).create();
-
-                 ***********************/
+                
                  Gson g=new Gson();
                  Map result = g.fromJson(resp, Map.class);
                  //gson转换问题
@@ -209,7 +190,7 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
                          
                          _log.debug("client login "+username);
                          
-                         subject.login(new UsernamePasswordToken(username, ssoAppid));
+                         subject.login(new UsernamePasswordToken(username, ""));//ssoAppid
                          
                          _log.debug("before sendRedirect ");
                          // code校验正确，创建局部会话
@@ -219,7 +200,7 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
                          redisTemplate.opsForList().leftPush(AppConst.CLIENT_SESSION_IDS + "_" + code, sessionId);
                          redisTemplate.expire(AppConst.CLIENT_SESSION_ID + "_" + code, timeOut, TimeUnit.SECONDS);
                          
-                         httpServletResponse.sendRedirect(backUrl.toString());
+                         WebUtils.toHttp(response).sendRedirect(backUrl.toString());
                          
                          //option 2
                          //httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
@@ -273,5 +254,15 @@ public class SystemAuthenticationFilter extends AuthenticationFilter {
         return req.getRequestURL()+queryString;
         
     }
+
+	public List<String> getAllowedPaths() {
+		return allowedPaths;
+	}
+
+	public void setAllowedPaths(List<String> allowedPaths) {
+		this.allowedPaths = allowedPaths;
+	}
    
+    
+    
 }

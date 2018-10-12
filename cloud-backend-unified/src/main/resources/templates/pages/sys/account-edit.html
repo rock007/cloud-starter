@@ -1,0 +1,135 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>用户编辑</title>
+	<link rel="stylesheet" href="/plugins/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+</head>
+<body>
+
+<div layout:fragment="content" >
+	<div id="toolbar2">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除</a>
+	</div>
+	<div class="col-xs-4">
+		<ul id="org_tv" class="ztree"></ul>
+	</div>
+	<div   class="col-xs-8">
+		<form>
+			<div class="form-group">
+				<label for="input1">用户名<span class="red">*</span></label>
+				<input name="username" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input2">昵称<span class="red">*</span></label>
+				<input name="realname" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input3">性别<span class="red">*</span></label>
+				
+				<ul class="list-inline">
+				<li>
+					<label class="radio-inline">
+  						<input type="radio" name="sex" value="1"/> 男
+					</label>				
+				</li>
+				<li>
+					<label class="radio-inline">
+  						<input type="radio" name="sex" value="0"/> 女
+					</label>
+				</li>
+				</ul>
+			</div>
+			<div class="form-group">
+				<label for="input3">手机号<span class="red">*</span></label>
+				<input name="phone" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input3">邮箱<span class="red">*</span></label>
+				<input name="email" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input4">状态</label>
+				<ul class="list-inline">
+				<li>
+					<label class="radio-inline">
+  						<input type="radio" name="locked" value="0"/> 正常
+					</label>				
+				</li>
+				<li>
+					<label class="radio-inline">
+  						<input type="radio" name="locked" value="1"/> 禁用
+					</label>
+				</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+<script type="text/javascript" src="/plugins/zTree_v3/js/jquery.ztree.all.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+var setting = {
+		async: {
+			enable: true,
+			type:'get',
+			url: '/sys/get-organization.json' ,
+			autoParam:["id=pid", "name=n", "level=lv"],
+			dataFilter:function(treeId, parentNode, resp){
+
+			    var list=resp.data;
+			    for(var i=0;i<list.length;i++){
+			    	
+			    	list[i].id=list[i].organizationId;
+			    	list[i].isParent=true;
+			    }
+			    
+			    if(parentNode==null){
+			    	
+			    	return {
+			    		name:'全部',
+						id:0,
+						isParent:true,
+						children:list,
+						open:true
+			    	}
+			    }
+			    return list;
+			}		
+		},
+		view: {
+			showIcon: true
+		},
+		callback: {
+			onAsyncSuccess: function(event, treeId, treeNode, msg){
+				
+			},
+			onClick:function(event, treeId, treeNode){
+				
+				pid=treeNode.organizationId;
+				
+			}
+		  }
+		};
+		
+var orgTreeObj;	
+
+var pid=0;
+$(function() {
+	
+	$.fn.zTree.init($("#org_tv"), setting, []);
+	
+	orgTreeObj = $.fn.zTree.getZTreeObj("org_tv");
+	
+});
+	
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

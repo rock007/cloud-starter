@@ -25,11 +25,12 @@
 		<property name="filters">
 			<map>
 				<entry key="authc" value-ref="systemAuthenticationFilter"></entry>
+				<entry key="jwt" value-ref="jwtFilter"></entry>
 			</map>
 		</property>
 		<property name="filterChainDefinitions">
 			<value>
-				/index=anon
+				/index = anon
 				/**.html = anon
 				/plugins/** = anon
 				/css/** = anon
@@ -38,14 +39,43 @@
 				/data/** = anon
 				/images/** = anon
 				/sso/** = anon
+				/api/** = jwt
 				/** = authc
 				/ = authc
 			</value>
 		</property>
 	</bean>
 	<!-- 自定义用户登录验证-->
-	<bean id="systemAuthenticationFilter" class="org.cloud.core.shiro.filter.SystemAuthenticationFilter"/>
-
+	<bean id="systemAuthenticationFilter" class="org.cloud.core.shiro.filter.SystemAuthenticationFilter">
+		<property name="allowedPaths">
+			<list>
+         		<value>/resources/</value>
+         		<value>/plugins/</value>
+         		<value>/fonts/</value>
+         		<value>/js/</value>
+         		<value>/css/</value>
+         		<value>/images/</value>
+         		<value>/data/</value>
+         		<value>/app/</value>
+         		<value>/login</value>
+         		<value>/sso/</value>
+         		<value>.ico</value>
+      		</list>
+		</property>
+	</bean>
+	
+	<bean id="jwtFilter" class="org.cloud.core.shiro.filter.JwtAuthenticationFilter">
+		<property name="allowedPaths">
+			<list>
+         		<value>/token.json</value>
+         		<value>/check-token.json</value>
+         		<value>/logout.json</value>
+         		<value>/refresh-token.json</value>
+         		<value>/token.json</value>
+      		</list>
+		</property>
+	</bean>
+	
     <!--（集群） 自定义redisManager-redis -->  
     <bean id="redisCacheManager" class="org.cloud.core.shiro.cache.RedisCacheManager"> 
     </bean> 
