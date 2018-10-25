@@ -126,8 +126,7 @@
 		<property name="name" value="wb"/>
 		
 		<!-- jsessionId的path为 / 用于多个系统共享jsessionId-->   
-        <property name="path" value="/" />  
-       
+        <property name="path" value="/" /> 
 	</bean>
 
 	<!-- 会话监听器 -->

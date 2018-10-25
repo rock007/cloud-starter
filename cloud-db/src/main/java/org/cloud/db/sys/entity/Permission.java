@@ -15,7 +15,8 @@ public class Permission {
     @Column(name="permission_id")
     private Long permissionId;
 
-    private Long system_id;
+    @Column(name="system_id")
+    private Long systemId;
 
     private Long pid;
 
@@ -46,15 +47,15 @@ public class Permission {
         this.permissionId = permissionId;
     }
 
-    public Long getSystem_id() {
-        return system_id;
-    }
+    public Long getSystemId() {
+		return systemId;
+	}
 
-    public void setSystem_id(Long system_id) {
-        this.system_id = system_id;
-    }
+	public void setSystemId(Long systemId) {
+		this.systemId = systemId;
+	}
 
-    public Long getPid() {
+	public Long getPid() {
         return pid;
     }
 

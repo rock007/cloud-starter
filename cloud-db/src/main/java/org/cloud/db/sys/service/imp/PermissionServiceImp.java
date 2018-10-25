@@ -3,7 +3,6 @@
  */
 package org.cloud.db.sys.service.imp;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -44,6 +43,10 @@ public class PermissionServiceImp implements PermissionService {
 	@Override
 	public void delete(Long id) {
 
+		userPermissionRepository.deleteByPermissionId(id);
+		
+		rolePermissionRepository.deleteByPermissionId(id);
+		
 		permissionRepository.delete(id);
 	}
 
@@ -70,7 +73,11 @@ public class PermissionServiceImp implements PermissionService {
 				
 				Long pid=m.getPid();
 				
-				Predicate p1,p2,p3,p4,pc;
+				Integer type=m.getType();
+				
+				Long systemId=m.getSystemId();
+				
+				Predicate p1,p2,p3,p4,p5,p6,pc;
 			    
 			    p1 = cb.notEqual(root.get("permissionId").as(Long.class), 0);
 				pc=cb.and(p1);
@@ -90,10 +97,20 @@ public class PermissionServiceImp implements PermissionService {
 			    	p4 =cb.equal(root.get("pid").as(Long.class),pid);
 					pc=cb.and(pc,p4);
 			    }
+			    
+			    if(type!=null){
+			    	p5 =cb.equal(root.get("type").as(Integer.class),type);
+					pc=cb.and(pc,p5);
+			    }
+			    
+			    if(systemId!=null){
+			    	p6 =cb.equal(root.get("systemId").as(Long.class),systemId);
+					pc=cb.and(pc,p6);
+			    }
 			    query.where(pc);
 			    
 				// 添加排序的功能
-				query.orderBy(cb.desc(root.get("orders").as(Integer.class)),cb.desc(root.get("name").as(String.class)));
+				query.orderBy(cb.desc(root.get("orders").as(Integer.class)),cb.asc(root.get("name").as(String.class)));
 				
 			    return null;
 			}
@@ -101,15 +118,9 @@ public class PermissionServiceImp implements PermissionService {
 	}
 	
 	@Override
-	public List<Permission> findByPidAndType(Long pid, Integer mtype) {
+	public List<Permission> findBySystemIdAndPidAndType(Long systemId, Long pid, Integer mtype) {
 		
-		return permissionRepository.findByPidAndType(pid, mtype);
-	}
-
-	@Override
-	public List<Permission> findByPidAndTypeAndStatus(Long pid, Integer mtype, Integer Status) {
-		
-		return permissionRepository.findByPidAndTypeAndStatus(pid, mtype, Status);
+		return permissionRepository.findBySystemIdAndPidAndType(systemId,pid, mtype);
 	}
 
 	@Override
@@ -159,5 +170,19 @@ public class PermissionServiceImp implements PermissionService {
 	
 		return userPermissionRepository.findOne(id);
 	}
+
+	@Override
+	public List<UserPermission> findUserPermissionByUserId(Long userId) {
+		
+		return userPermissionRepository.findByUserId(userId);
+	}
+	
+	@Override
+	public List<Permission> find4Menu(Long systemId,Long userId, Long pid) {
+		
+		return permissionRepository.find4Menu(systemId,userId, pid);
+	}
+	
+	
 	
 }

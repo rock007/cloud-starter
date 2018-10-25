@@ -13,12 +13,34 @@
 	<br/>
 	<div class="list-group">
 	
- 		<a th:href="'javascript:tab('+${role.roleId}+')'" class="list-group-item"  th:each="role : ${roles}" th:text="${role.title}" th:classappend="${(role.roleId == roleId )?'active' : '' }">
+ 		<a th:id="${'role_'+role.roleId}" th:href="'javascript:tab('+${role.roleId}+')'" class="list-group-item"  th:each="role : ${roles}" th:text="${role.title}" th:classappend="${(role.roleId == roleId )?'active' : '' }">
   		普通居民
  		</a>
 	</div>
 </div>
 <div class="col-xs-10">
+	<div  id="toolbar">
+		<ul class="list-inline">
+			<li>
+				<div class="form-group">
+					<select id="systemId_ddl"  class="form-control">
+						<option th:each="system : ${systems}" th:value="${system.systemId}" th:text="${system.name}"></option>
+					</select>
+				</div>
+			</li>
+			<li><label>类型<span class="red">*</span></label></li>
+			<li><input type="radio" name="type" value="" checked="checked" /> <label>不限</label>
+			</li>
+			<li><input type="radio" name="type" value="0" /> <label>未知</label>
+			</li>
+			<li><input type="radio" name="type" value="1" /> <label>菜单</label>
+			</li>
+			<li><input type="radio" name="type" value="2" /> <label>功能</label>
+			</li>
+			<li><input type="radio" name="type" value="3" /> <label>接口(api)</label>
+			</li>
+		</ul>
+	</div>
 	<div id="main">
 		<table id="table"></table>
 	</div>
@@ -89,11 +111,14 @@ $(function() {
 	    queryParamsType : "undefined",
         queryParams: function queryParams(params) {   
         	
-        	var search_key=$('.bootstrap-table').find('.pull-right.search > input').val();
+        	var toolbar=$('#toolbar');
+        	var type = toolbar.find('input[type="radio"][name="type"]:checked').val();
+        	
         	var param = {
             	pageNo: params.pageNumber-1,
             	pageSize: params.pageSize,
-            	title: search_key
+            	type: type,
+            	systemId:$("#systemId_ddl").val()
           	};
           return param;
         },
@@ -107,7 +132,32 @@ $(function() {
 		maintainSelected: true,
 		toolbar: '#toolbar',
 		columns: [
-			{field: 'state', checkbox: true},
+			{field: 'state', checkbox: true,formatter:function(value, row, index){
+				
+				 var seeked=false;
+				 
+				 if(roleId==0||roleId==null) 
+					 return {checked : false};
+			        	
+			     for(var i=0;i<permissions[roleId].length;i++){
+			    	 
+			    	 if(permissions[roleId][i].permissionId==row.permissionId){
+			    		 
+			    		 seeked=true;
+			    		 break;
+			    	 }
+			     }
+			     
+				 if (seeked)
+				        return {
+				            //disabled : true,//设置是否可用
+				            checked : true
+				        };
+				        
+				 return {
+				            checked : false
+				        };
+			}},
 			{field: 'permissionId', title: '编号', sortable: true, halign: 'center'},
 			{field: 'name', title: '名称', sortable: true, halign: 'center'},
 			{field: 'type', title: '类型', sortable: true, halign: 'center'},
@@ -127,10 +177,11 @@ $(function() {
         	
         	console.log('checkbox onCheck：'+row.permissionId);
         	
+        	doSet(roleId,row.permissionId,1);
 	    },
 	    onUncheck: function (row, $element) {
 	    	
-	    	console.log('checkbox onUncheck：'+row.permissionId);
+	    	doSet(roleId,row.permissionId,-1);
 	    }
 	}).on('all.bs.table', function (e, name, args) {
 		$('[data-toggle="tooltip"]').tooltip();
@@ -138,42 +189,7 @@ $(function() {
 	});
 	
 });
-function actionFormatter(value, row, index) {
-    return [
-        '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-        '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
-    ].join('');
-}
 
-window.actionEvents = {
-    'click .edit': function (e, value, row, index) {
-        
-    	createAction(row.id);
-    },
-    'click .remove': function (e, value, row, index) {
-        
-        $.confirm({
-			type: 'red',
-			animationSpeed: 300,
-			title: false,
-			content: '确认删除该记录吗？',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						
-						doDelete(row.id);
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-    }
-};
 function detailFormatter(index, row) {
 	var html = [];
 	$.each(row, function (key, value) {
@@ -256,60 +272,12 @@ function updateAction() {
 		});
 	}
 }
-// 删除
-function deleteAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		$.confirm({
-			type: 'red',
-			animationSpeed: 300,
-			title: false,
-			content: '确认删除该记录吗？',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						var ids = new Array();
-						for (var i in rows) {
-							ids.push(rows[i].systemId);
-						}
 
-						doDelete(ids.join(','));
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	}
-}
-
-
-function doDelete(ids){
+function doSet(roleId,permissionId,act){
 	
-	$.post("/rest/article-rm.action", { ids: ids},function(resp, textStatus, xhr){
+	$.post("/sys/set-role-permission.json", { roleId: roleId,permissionId : permissionId,act:act},function(resp, textStatus, xhr){
 		
-		if(resp.result==1){
-			
-			$table.bootstrapTable('refresh');
-			
-		}else{
+		if(resp.result!=1){
 			
 			$.confirm({
 				theme: 'dark',
@@ -329,6 +297,15 @@ function doDelete(ids){
 		
 	});
 }
+var roleId=0;
+function tab(id){
+	
+	roleId=id;
+	$('a.list-group-item').removeClass('active');
+	$('#role_'+id).addClass('active');
+	$table.bootstrapTable('refresh');
+}
+
 /*]]>*/
 </script>
 </th:block>

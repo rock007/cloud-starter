@@ -20,6 +20,8 @@
 <th:block layout:fragment="script">
 <script th:inline="javascript">
 /*<![CDATA[*/
+var backend_host=[[${sso_host}]];
+
 var cols = {
 		id : 'id',
 		title : '标题',
@@ -146,7 +148,7 @@ function actionFormatter(value, row, index) {
 window.actionEvents = {
     'click .edit': function (e, value, row, index) {
         
-    	createAction(row.id);
+    	createAction(row.userId);
     },
     'click .remove': function (e, value, row, index) {
         
@@ -161,7 +163,7 @@ window.actionEvents = {
 					btnClass: 'waves-effect waves-button',
 					action: function () {
 						
-						doDelete(row.id);
+						doDelete(row.userId);
 					}
 				},
 				cancel: {
@@ -197,44 +199,7 @@ function createAction(id) {
 		content:'url:/sys/account-edit.html?uid='+id
 	});
 }
-// 编辑
-function updateAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		$.confirm({
-			type: 'blue',
-			animationSpeed: 300,
-			title: '编辑文章',
-			content: $('#createDialog').html(),
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						$.alert('确认');
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	}
-}
+
 // 删除
 function deleteAction() {
 	var rows = $table.bootstrapTable('getSelections');
@@ -264,7 +229,7 @@ function deleteAction() {
 					action: function () {
 						var ids = new Array();
 						for (var i in rows) {
-							ids.push(rows[i].systemId);
+							ids.push(rows[i].userId);
 						}
 
 						doDelete(ids.join(','));
@@ -282,7 +247,7 @@ function deleteAction() {
 
 function doDelete(ids){
 	
-	$.post("/rest/article-rm.action", { ids: ids},function(resp, textStatus, xhr){
+	$.post("/sys//account-rm.json", { ids: ids},function(resp, textStatus, xhr){
 		
 		if(resp.result==1){
 			

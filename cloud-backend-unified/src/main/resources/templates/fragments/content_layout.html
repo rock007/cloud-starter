@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -14,16 +14,15 @@
     <link href="/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
 
     <link href="/css/common.css" rel="stylesheet"/>
-
+	
 </head>
 <body>
-
 <div layout:fragment="content">
 
     这是母版内容页
 
-
 </div>
+<input id="sso_host" type="hidden" th:value="${sso_host}"/>
 <script src="/plugins/jquery.1.12.4.min.js"></script>
 <script src="/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
 <script src="/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
@@ -32,7 +31,7 @@
 <script src="/plugins/jquery-confirm/jquery-confirm.min.js"></script>
 
 <script src="/js/common.js"></script>
-
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+</th:block>
 </body>
 </html>

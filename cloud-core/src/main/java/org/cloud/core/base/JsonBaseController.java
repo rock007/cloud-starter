@@ -44,14 +44,22 @@ public abstract class  JsonBaseController {
 		eventBus.notify("quotes", Event.wrap(log));
 	}
 	
-	public String getCurUserId() {
+	public Long getCurUserId() {
 
 		Subject subject = SecurityUtils.getSubject();
 		if (subject != null && subject.isAuthenticated()) {
 
-			return (String) subject.getPrincipal();// 获取用户id
+			return (Long) subject.getPrincipal();// 获取用户id
 		}
 
 		return null;
 	}
+	
+	public String getLoginUid() {
+		
+		Long uid=getCurUserId();
+		
+		return uid==null?"":String.valueOf(uid);
+	}
+
 }

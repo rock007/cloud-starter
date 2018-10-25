@@ -3,9 +3,9 @@ package org.cloud.db.sys.repository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
-import org.cloud.db.sys.entity.ActLog;
+import org.cloud.db.sys.entity.ActErrLog;
 
-public interface ActLogRepository extends CrudRepository<ActLog, Long> ,JpaSpecificationExecutor<ActLog> {
+public interface ActLogRepository extends CrudRepository<ActErrLog, Long> ,JpaSpecificationExecutor<ActErrLog> {
 	
-	ActLog findById(Long id);
+	ActErrLog findById(Long id);
 }

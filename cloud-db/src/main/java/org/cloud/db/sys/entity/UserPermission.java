@@ -16,7 +16,8 @@ public class UserPermission {
     @Column(name="user_id")
     private Long userId;
 
-    private Long permission_id;
+    @Column(name="permission_id")
+    private Long permissionId;
 
     private Integer type;
 
@@ -34,17 +35,17 @@ public class UserPermission {
 
     public void setUserId(Long user_id) {
         this.userId = user_id;
-    }
+    }   
 
-    public Long getPermission_id() {
-        return permission_id;
-    }
+    public Long getPermissionId() {
+		return permissionId;
+	}
 
-    public void setPermission_id(Long permission_id) {
-        this.permission_id = permission_id;
-    }
+	public void setPermissionId(Long permissionId) {
+		this.permissionId = permissionId;
+	}
 
-    public Integer getType() {
+	public Integer getType() {
         return type;
     }
 

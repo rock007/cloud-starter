@@ -110,7 +110,7 @@ public class ArticleRestController  extends JsonBaseController{
 			 //添加
 			 article.setStatus(0);
 			 article.setCreate_date(new Date());
-			 article.setCreateUser(getCurUserId());
+			 article.setCreateUser(getLoginUid());
 			 
 			 article=articleService.save(article);
 			 
@@ -173,7 +173,7 @@ public class ArticleRestController  extends JsonBaseController{
 			 //添加
 			 article.setStatus(0);
 			 article.setCreate_date(new Date());
-			 article.setCreateUser(getCurUserId());
+			 article.setCreateUser(getLoginUid());
 		 }
 		 
 		 articleService.save(article);

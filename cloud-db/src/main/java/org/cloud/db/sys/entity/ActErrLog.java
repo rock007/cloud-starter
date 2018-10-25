@@ -8,8 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "act_log")
-public class ActLog {
+@Table(name = "sys_err_log")
+public class ActErrLog {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -94,7 +94,7 @@ public class ActLog {
 	}
 
 
-	public ActLog() {
+	public ActErrLog() {
 		super();
 	}
 
@@ -107,7 +107,7 @@ public class ActLog {
 	 * @param create_user
 	 * @param create_ip
 	 */
-	public ActLog(String title, String msg, String content, String error, String create_user, String create_ip) {
+	public ActErrLog(String title, String msg, String content, String error, String create_user, String create_ip) {
 		super();
 		this.title = title;
 		this.msg = msg;

@@ -17,5 +17,5 @@ public interface SysFeignService {
     public SysUser findUserById(Long user_id);
 
     @RequestMapping(value = "/findPermissionsByUserId")
-    public List<Permission> findPermissionsByUserId(Long userId);
+    public List<Permission> findPermissionsByUserId(Long systemId,Long userId);
 }

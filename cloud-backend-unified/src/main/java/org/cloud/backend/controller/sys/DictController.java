@@ -2,6 +2,7 @@ package org.cloud.backend.controller.sys;
 
 import java.util.List;
 
+import org.cloud.core.base.BaseController;
 import org.cloud.core.model.JsonBody;
 import org.cloud.db.sys.entity.SysDic;
 import org.cloud.db.sys.service.CommService;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value="/sys")
-public class DictController {
+public class DictController extends BaseController{
 
 	@Autowired
 	private CommService commService;

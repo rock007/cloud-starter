@@ -2,7 +2,8 @@ package org.cloud.db.sys.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import org.cloud.db.sys.entity.Permission;
+import java.util.List;
+
 import org.cloud.db.sys.entity.SysRole;
 
 /**
@@ -11,4 +12,6 @@ import org.cloud.db.sys.entity.SysRole;
 public interface RoleRepository extends CrudRepository<SysRole, Long> {
 
 
+	List<SysRole> findByName(String name);
+	
 }

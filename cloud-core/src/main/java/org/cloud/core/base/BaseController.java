@@ -95,12 +95,12 @@ public abstract class BaseController {
         return "error";
     }
 
-    public  String getCurUserId(){
+    public  Long getCurUserId(){
 
     	Subject subject = SecurityUtils.getSubject();
     	if(subject!=null&&subject.isAuthenticated()){
     		
-    	 	return (String) subject.getPrincipal();// 获取用户id
+    	 	return (Long) subject.getPrincipal();// 获取用户id
     	}
     	
     	return null;

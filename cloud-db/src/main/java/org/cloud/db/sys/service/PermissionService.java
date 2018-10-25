@@ -24,9 +24,7 @@ public interface PermissionService {
 
 	public Page<Permission> search(Permission m, int page, int pageSize);
 
-	public List<Permission> findByPidAndType(Long pid, Integer mtype);
-    
-	public List<Permission> findByPidAndTypeAndStatus(Long pid, Integer mtype, Integer Status);
+	public List<Permission> findBySystemIdAndPidAndType(Long systemId,Long pid, Integer mtype);
     
 	public void deleteRolePermission(Long id);
 
@@ -44,4 +42,7 @@ public interface PermissionService {
 
 	public UserPermission findUserPermissionById(Long id);
 
+	public List<UserPermission> findUserPermissionByUserId(Long userId);
+	
+	public List<Permission> find4Menu(Long systemId,Long userId,Long pid);
 }

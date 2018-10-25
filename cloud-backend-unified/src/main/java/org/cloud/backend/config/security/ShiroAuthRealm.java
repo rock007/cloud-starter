@@ -81,23 +81,23 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 			password = tokenUtil.getPasswordFromToken(token);
 
 			// 查询用户信息
-			SysUser upmsUser = userService.findUserByName(username);
+			SysUser loginUser = userService.findUserByName(username);
 
-			if (null == upmsUser) {
+			if (null == loginUser) {
 				throw new UnknownAccountException();
 			}
 
 			if (!StringUtils.isEmpty(password)
-					&& !upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
+					&& !loginUser.getPassword().equals(EncriptUtil.md5(password + loginUser.getSalt()))) {
 				throw new IncorrectCredentialsException();
 			}
 			// 用户被禁用
-			if (upmsUser.getLocked() != null && upmsUser.getLocked() == 1) {
+			if (loginUser.getLocked() != null && loginUser.getLocked() == 1) {
 				throw new LockedAccountException();
 			}
 
 			try {
-				return new SimpleAuthenticationInfo(upmsUser.getUserId(), token, getName());
+				return new SimpleAuthenticationInfo(loginUser.getUserId(), token, getName());
 			} catch (Exception e) {
 				throw new AuthenticationException(e);
 			}
@@ -113,20 +113,20 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 			logger.debug("Auth, password:" + password);
 
 			// 查询用户信息
-			SysUser upmsUser = userService.findUserByName(username);
+			SysUser loginUser = userService.findUserByName(username);
 
-			if (null == upmsUser) {
+			if (null == loginUser) {
 				throw new UnknownAccountException();
 			}
 			// MD5Util.MD5(password + upmsUser.getSalt())
-			if ("".equals(password) || !upmsUser.getPassword().equals(EncriptUtil.md5(password + upmsUser.getSalt()))) {
+			if ("".equals(password) || !loginUser.getPassword().equals(EncriptUtil.md5(password + loginUser.getSalt()))) {
 				throw new IncorrectCredentialsException();
 			}
-			if (upmsUser.getLocked() != null && upmsUser.getLocked() == 1) {
+			if (loginUser.getLocked() != null && loginUser.getLocked() == 1) {
 				throw new LockedAccountException();
 			}
 
-			return new SimpleAuthenticationInfo(username, password, getName());
+			return new SimpleAuthenticationInfo(loginUser.getUserId(), password, getName());
 
 		}
 

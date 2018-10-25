@@ -43,9 +43,26 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private PermissionRepository permissionRepository;
-
-
+    
     @Override
+	public SysUser save(SysUser m) {
+
+		return userRepository.save(m);
+	}
+    
+	@Override
+	public void delete(Long id) {
+
+		userRepository.delete(id);
+	}
+
+	@Override
+	public SysUser findUserByMobile(String mobile) {
+		
+		return userRepository.findByPhone(mobile);
+	}
+
+	@Override
     public SysUser findUserByName(String username) {
 
         return userRepository.findByUsername(username);
@@ -55,11 +72,11 @@ public class UserServiceImp implements UserService {
     public SysUser findUserById(Long user_id){
         return userRepository.findOne(user_id);
     }
-
+   
     @Override
-    public List<Permission> findPermissionsByUserId(Long userId){
+    public List<Permission> findPermissionsByUserId(Long systemId,Long userId){
 
-        return permissionRepository.findByUserId(userId);
+        return permissionRepository.findByUserId(systemId,userId);
     }
 
 	@Override
@@ -117,6 +134,33 @@ public class UserServiceImp implements UserService {
 
 		return Lists.newArrayList(roleRepository.findAll());
 	}
+
+	@Override
+	public SysRole saveRole(SysRole m) {
+
+		return roleRepository.save(m);
+	}
+
+	@Override
+	public SysRole findRoleById(Long roleId) {
+		
+		return roleRepository.findOne(roleId);
+	}
+
+	@Override
+	public SysRole findRoleByName(String name) {
+		
+		List<SysRole> list= roleRepository.findByName(name);
+		
+		return list.size()>0?list.get(0):null;
+	}
+
+	@Override
+	public void deleteRole(Long roleId) {
+
+		roleRepository.delete(roleId);
+	}
     
+	
     
 }

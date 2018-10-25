@@ -23,6 +23,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.cloud.core.base.JsonBaseController;
 import org.cloud.core.model.JsonBody;
+import org.cloud.core.utils.DateUtil;
 import org.cloud.core.utils.StringUtil;
 import org.cloud.db.sys.entity.UploadFile;
 import org.cloud.db.sys.service.UploadFileService;
@@ -106,7 +107,7 @@ public class FileUploadRestController extends JsonBaseController{
 	    UploadFile oneFile=new UploadFile();
 		try {
 
-			String userId=this.getCurUserId();
+			String userId=DateUtil.yyyymmdd(new Date());
 			
 			if (file.isEmpty()) {
 				
@@ -154,8 +155,8 @@ public class FileUploadRestController extends JsonBaseController{
 	}
 	
 	 
-	 	@GetMapping("/download-file-{pid}.action")
-		public  ResponseEntity<byte[]> getProductImage(@PathVariable String pid,
+	@GetMapping("/download-file-{pid}.action")
+	public  ResponseEntity<byte[]> getProductImage(@PathVariable String pid,
 				HttpServletResponse response, 
 				HttpServletRequest request) throws Exception{
 			
@@ -205,6 +206,4 @@ public class FileUploadRestController extends JsonBaseController{
 		    return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(fullPath)),  
 		                                      headers, HttpStatus.OK);  
 		}
-		
-	
 }

@@ -2,7 +2,7 @@ package org.cloud.db.sys.service;
 
 import java.util.List;
 
-import org.cloud.db.sys.entity.ActLog;
+import org.cloud.db.sys.entity.ActErrLog;
 import org.springframework.data.domain.Page;
 
 
@@ -13,9 +13,9 @@ import org.springframework.data.domain.Page;
  */
 public interface ActLogService {
 
-	public void saveLog(ActLog log);
+	public void saveLog(ActErrLog log);
 	
-	public List<ActLog> getActLogByOrder(long orderId);
+	public List<ActErrLog> getActLogByOrder(long orderId);
 	
-	public Page<ActLog> search(ActLog m, int page, int pageSize);
+	public Page<ActErrLog> search(ActErrLog m, int page, int pageSize);
 }

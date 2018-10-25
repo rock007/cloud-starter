@@ -1,4 +1,9 @@
+var backend_host="";
+
 $(function() {
+
+	backend_host=$('#sso_host').val();
+	
 	// Waves初始化
 	Waves.displayEffect();
 	// 数据表格动态高度
@@ -10,6 +15,10 @@ $(function() {
 	
 	// select2初始化
 	//$('select').select2();
+	
+	if(self==top){
+		window.top.location.href=backend_host+"/dashboard?p=system";
+	}
 });
 // 动态高度
 function getHeight() {
@@ -41,11 +50,7 @@ function initMaterialInput() {
 function checkIllegalChar() {
 
 	$('input[type="text"]').bind('keyup',function(e){
-		/**
-		 * add by lj-20170113
-		 * 非法字符验证
-		 */
-
+		
 		var me=$(this);
 		var IllegalString = "１２３４５６７８９０ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ，．，。‘＇；；～＠＃＄％＾＆＊（）＿＼｜｛｝［］＜＞＂＂；×——【】、\|》《“”——……\*·`~!！@@##\$￥%\^\&\*\\_\<>\"\{\}\\\\;\[\]";
 		var reg=/[１２３４５６７８９０ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ，．，。‘＇；；～＠＃＄％＾＆＊（）＿＼｜｛｝［］＜＞＂＂；×——【】、\|》《“”——……\*·`~!！@@##\$￥%\^\&\*\\_\<>\"\{\}\\\\;\[\]]/img; 
@@ -79,4 +84,21 @@ function checkIllegalChar() {
 		
 	});
 	
+}
+
+function msgbox(content){
+	
+	$.confirm({
+		theme: 'dark',
+		animation: 'rotateX',
+		closeAnimation: 'rotateX',
+		title: false,
+		content: content,
+		buttons: {
+			confirm: {
+				text: '确认',
+				btnClass: 'waves-effect waves-button waves-light'
+			}
+		}
+	});
 }

@@ -14,36 +14,23 @@
 	</div>
 	<div id="main"  class="col-xs-10">
 		<div id="toolbar">
-			<a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增</a>
-			<a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑</a>
-			<a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除</a>
+			<a class="waves-effect waves-button" href="javascript:;" onclick="createAction(0)"><i class="zmdi zmdi-plus"></i> 新增</a>
 		</div>
 		<table id="table"></table>
 	</div>
-	<!-- 新增 -->
-	<div id="createDialog" class="crudDialog hide" >
-		<form>
-			<div class="form-group">
-				<label for="input1">所属上级</label>
-				<input id="pid" type="text" class="form-control"/>
-			</div>
-			<div class="form-group">
-				<label for="input2">名称</label>
-				<input id="name" type="text" class="form-control"/>
-			</div>
-			<div class="form-group">
-				<label for="input3">描述</label>
-				<textarea name="description" rows="3" cols="3"  class="form-control"></textarea>
-			</div>
 
-		</form>
-	</div>
 </div>
 <th:block layout:fragment="script">
 <script type="text/javascript" src="/plugins/zTree_v3/js/jquery.ztree.all.min.js"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
-	
+
+var cols = {
+		organizationId : 'id',
+		name : '名称',
+		description : '描述'
+	};
+
 var treeObj;	
 var $table = $('#table');
 var pid=0;
@@ -101,7 +88,6 @@ $(function() {
 		maintainSelected: true,
 		toolbar: '#toolbar',
 		columns: [
-			{field: 'state', checkbox: true},
 			{field: 'organizationId', title: '编号',halign: 'center'},
 			{field: 'name', title: '名称',  halign: 'center'},
 			{field: 'description', title: '描述',  halign: 'center'},
@@ -165,135 +151,94 @@ var setting = {
 		
 function actionFormatter(value, row, index) {
     return [
-        '<a class="like" href="javascript:void(0)" data-toggle="tooltip" title="Like"><i class="glyphicon glyphicon-heart"></i></a>　',
         '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
         '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
     ].join('');
 }
 
 window.actionEvents = {
-    'click .like': function (e, value, row, index) {
-        alert('You click like icon, row: ' + JSON.stringify(row));
-        console.log(value, row, index);
-    },
+   
     'click .edit': function (e, value, row, index) {
-        alert('You click edit icon, row: ' + JSON.stringify(row));
-        console.log(value, row, index);
+        
+        createAction(row.organizationId)
     },
     'click .remove': function (e, value, row, index) {
-        alert('You click remove icon, row: ' + JSON.stringify(row));
-        console.log(value, row, index);
+    	
+    	$.confirm({
+			type: 'red',
+			animationSpeed: 300,
+			title: false,
+			content: '确认删除该记录吗？',
+			buttons: {
+				confirm: {
+					text: '确认',
+					btnClass: 'waves-effect waves-button',
+					action: function () {
+						
+						doDelete(row.organizationId);
+					}
+				},
+				cancel: {
+					text: '取消',
+					btnClass: 'waves-effect waves-button'
+				}
+			}
+		});
+
     }
 };
 function detailFormatter(index, row) {
 	var html = [];
 	$.each(row, function (key, value) {
-		html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+		if(cols[key] == null) return;
+		if(cols[key+'_render']!==null && typeof cols[key+'_render'] == 'function'){
+			
+			html.push('<p><b>' + cols[key] + ':</b> ' +cols[key+'_render']( value) + '</p>');
+			
+		}else{
+			html.push('<p><b>' + cols[key] + ':</b> ' + value + '</p>');			
+		}
 	});
 	return html.join('');
 }
 // 新增
-function createAction() {
-	$.confirm({
-		type: 'dark',
+var org_dlg;
+function createAction(id) {
+	org_dlg=$.dialog({
 		animationSpeed: 300,
-		title: '新增系统',
-		content: $('#createDialog').html(),
-		buttons: {
-			confirm: {
-				text: '确认',
-				btnClass: 'waves-effect waves-button',
-				action: function () {
-					$.alert('确认');
-				}
-			},
-			cancel: {
-				text: '取消',
-				btnClass: 'waves-effect waves-button'
-			}
-		}
+		title: id>0?'编辑':'新增',
+		columnClass:'col-xs-8 col-xs-offset-2',		
+		content:'url:/sys/organization-edit.html?id='+id
 	});
 }
-// 编辑
-function updateAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		$.confirm({
-			type: 'blue',
-			animationSpeed: 300,
-			title: '编辑系统',
-			content: $('#createDialog').html(),
-			//content: 'url:${basePath}/XX/create.html',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						$.alert('确认');
+
+function doDelete(id){
+	
+	$.post("/sys/organization-rm.json", { id: id},function(resp, textStatus, xhr){
+		
+		if(resp.result==1){
+			
+			$table.bootstrapTable('refresh');
+			
+		}else{
+			
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: resp.msg,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
 					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
 				}
-			}
-		});
-	}
-}
-// 删除
-function deleteAction() {
-	var rows = $table.bootstrapTable('getSelections');
-	if (rows.length == 0) {
-		$.confirm({
-			title: false,
-			content: '请至少选择一条记录！',
-			autoClose: 'cancel|3000',
-			backgroundDismiss: true,
-			buttons: {
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	} else {
-		$.confirm({
-			type: 'red',
-			animationSpeed: 300,
-			title: false,
-			content: '确认删除该系统吗？',
-			buttons: {
-				confirm: {
-					text: '确认',
-					btnClass: 'waves-effect waves-button',
-					action: function () {
-						var ids = new Array();
-						for (var i in rows) {
-							ids.push(rows[i].systemId);
-						}
-						$.alert('删除：id=' + ids.join("-"));
-					}
-				},
-				cancel: {
-					text: '取消',
-					btnClass: 'waves-effect waves-button'
-				}
-			}
-		});
-	}
+			});			
+			
+		}
+		
+	});
 }
 /*]]>*/
 </script>

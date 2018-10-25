@@ -3,26 +3,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>cloud</groupId>
-    <artifactId>com.scarecrow.cloud</artifactId>
+    <groupId>com.scarecrow.cloud</groupId>
+    <artifactId>cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>cloud-shop</groupId>
   <artifactId>cloud-shop</artifactId>
   <name>cloud-shop</name>
-  <url>http://maven.apache.org</url>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
 
-      <!--
-      <dependency>
-          <groupId>mysql</groupId>
-          <artifactId>mysql-connector-java</artifactId>
-          <scope>runtime</scope>
-      </dependency>
-      -->
 	 <dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>
@@ -31,15 +23,9 @@
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-starter-thymeleaf</artifactId>
 	  </dependency>
-      <!--
-	  <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-      </dependency>
--->
+    
       <dependency>
-          <groupId>cloud-unified-service-api</groupId>
+          <groupId>com.scarecrow.cloud</groupId>
           <artifactId>cloud-unified-service-api</artifactId>
           <version>${project.version}</version>
       </dependency>
@@ -59,7 +45,6 @@
       <dependency>
           <groupId>org.springframework.security</groupId>
           <artifactId>spring-security-core</artifactId>
-          <version>5.0.0.M2</version>
           <scope>compile</scope>
       </dependency>
 

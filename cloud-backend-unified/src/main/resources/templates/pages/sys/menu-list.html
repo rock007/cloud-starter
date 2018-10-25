@@ -15,7 +15,35 @@
 		</div>
 		<table id="table"></table>
 	</div>
-	
+	<!-- 新增 -->
+	<div id="createDialog" class="crudDialog hide" >
+		<form>
+			<div class="form-group">
+				<label for="input1">名称<span class="red">*</span></label>
+				<input name="name" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input2">链接<span class="red">*</span></label>
+				<input name="host" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input3">打开方式<span class="red">*</span></label>
+				<input name="basepath" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input3">icon<span class="red">*</span></label>
+				<input name="basepath" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input3">host<span class="red">*</span></label>
+				<input name="basepath" type="text" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label for="input4">描述</label>
+				<textarea name="description" rows="3" cols="3" class="form-control"></textarea>
+			</div>
+		</form>
+	</div>
 </div>
 <th:block layout:fragment="script">
 <script th:inline="javascript">
@@ -53,7 +81,7 @@ var $table = $('#table');
 $(function() {
 	
 	$table.bootstrapTable({
-		url: '/rest/search-article.action',
+		url: '/sys/menu-list.json',
 		height: getHeight(),
 		striped: true,
 		cache:false,
@@ -177,17 +205,16 @@ function detailFormatter(index, row) {
 var article_dlg;
 function createAction(id) {
 	
-	
 	article_dlg=$.confirm({
-		type: 'dark',
+		//type: 'dark',
 		animationSpeed: 300,
-		title: id>0?'编辑文章':'新增文章',
-		columnClass:'col-xs-10 col-xs-offset-1',
-		content:id>0?'url:/cms/article-edit.html?id='+id:'url:/cms/article-new.html',
+		title: id>0?'编辑':'新增',
+		//columnClass:'col-xs-10 col-xs-offset-1',
+		content:$('#createDialog').html(),
 		onContentReady: function () {
 			
-			this.buttons.confirm.hide();
-			this.buttons.cancel.hide();
+			//this.buttons.confirm.hide();
+			//this.buttons.cancel.hide();
 		},
 		buttons: {
 			confirm: {

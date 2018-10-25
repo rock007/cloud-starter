@@ -45,11 +45,11 @@ public class SysController extends JsonBaseController {
 	@ApiIgnore
 	@ApiOperation(value="系统权限")
 	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="query",name="systemId",dataType="long",required=true,value="系统id"),
 		@ApiImplicitParam(paramType="query",name="mtype",dataType="Integer",required=true,value="类型(1:目录,2:菜单,3:按钮)"),
-		@ApiImplicitParam(paramType="query",name="status",dataType="Integer",required=false,value="状态(0:禁止,1:正常)"),
 	})
 	@GetMapping("/get-permission.action")
-	public @ResponseBody Permission get_permission(final Integer mtype, final Integer status) {
+	public @ResponseBody Permission get_permission(Long systemId,final Integer mtype) {
 	
 		Permission root=new Permission();
 		if(mtype==null||mtype==0){
@@ -61,27 +61,18 @@ public class SysController extends JsonBaseController {
 		root.setName("root");
 		root.setPid(-1L);
 		
-		initChild(root, mtype, status);
+		initChild(root, systemId,mtype);
 		
 		return root;
 	}
 	
-	private void  initChild(Permission m,final Integer mtype,final Integer status){
+	private void  initChild(Permission m,final Long systemId,final Integer mtype){
 		
-		List<Permission> childs= new ArrayList<>();
-		
-		if(status!=null){
-			
-			childs= permissionService.findByPidAndTypeAndStatus(m.getPermissionId(),mtype,status);
-			
-		}else{
-			childs= permissionService.findByPidAndType(m.getPermissionId(),mtype);
-			
-		}
+		List<Permission> childs= permissionService.findBySystemIdAndPidAndType(systemId,m.getPermissionId(),mtype);
 		
 		for(Permission c:childs){
 			
-			initChild(c, mtype, status);
+			initChild(c,systemId, mtype);
 		}
 		
 		m.setChild(childs);

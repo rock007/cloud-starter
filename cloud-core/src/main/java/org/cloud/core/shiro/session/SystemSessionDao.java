@@ -1,6 +1,7 @@
 package org.cloud.core.shiro.session;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.cloud.core.app.AppConst;
@@ -76,7 +77,7 @@ public class SystemSessionDao extends EnterpriseCacheSessionDAO {
         
         //==
         String sessionId = session.getId().toString();
-        String upmsType =ObjectUtils.toString(session.getAttribute(AppConst.SSO_TYPE));
+        String upmsType =StringUtils.defaultString((String)session.getAttribute(AppConst.SSO_TYPE));
         if ("client".equals(upmsType)) {
             // 删除局部会话和同一code注册的局部会话
             

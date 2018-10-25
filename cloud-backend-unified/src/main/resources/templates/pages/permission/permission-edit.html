@@ -1,0 +1,248 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>权限编辑</title>
+	<link rel="stylesheet" href="/plugins/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+</head>
+<body>
+
+<div layout:fragment="content" >
+	<div id="toolbar2">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="saveAction()"><i class="zmdi zmdi-plus"></i>保存</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="closeAction()"><i class="zmdi zmdi-close"></i>取消</a>
+	</div>
+	<div class="col-xs-4">
+		<select id="systemId_edit" onChange="selectSystem()" class="form-control">
+			<option value="">(请选择)</option>
+			<option th:each="system : ${systems}" th:value="${system.systemId}" th:text="${system.name}"></option>
+		</select>
+		<ul id="permission_menu_tv" class="ztree"></ul>
+	</div>
+	<div   class="col-xs-8">
+		<form name="permissionForm">
+			<input type="hidden" name="permissionId" th:value="${m.permissionId}"/>
+			<input type="hidden" name="pid" id="pid" th:value="${m.pid}" />
+			<input type="hidden" name="systemId" id="systemId"  th:value="${m.systemId}" />
+			
+			<div class="form-group">
+				<label >上一级</label>
+				<p id="pid_text"  class="form-control">(请选择左侧)</p>
+			</div>
+			<div class="form-group">
+				<label >名称</label>
+				<input name="name" type="text" class="form-control" th:value="${m.name}"/>
+			</div>
+			<div class="form-group">
+				<label >类型</label>
+				<ul class="list-inline">
+					<li>
+						<input type="radio" name="type" value="0" /> <label>未知</label>
+					</li>
+					<li>
+						<input type="radio" name="type" value="1" /> <label>菜单</label>
+					</li>
+					<li>
+						<input type="radio" name="type" value="2" /> <label>功能</label>
+					</li>
+					<li>
+						<input type="radio" name="type" value="3" /> <label>接口</label>
+					</li>
+				</ul>
+			</div>
+			<div class="form-group">
+				<label >路径</label>
+				<input name="uri" type="text" class="form-control" th:value="${m.uri}"/>
+			</div>
+			<div class="form-group">
+				<label >图标</label>
+				<input name="icon" type="text" class="form-control" th:value="${m.icon}"/>
+			</div>
+			<div class="form-group">
+				<label >权限值</label>
+				<input name="permission_value" type="text" class="form-control" th:value="${m.permission_value}"/>
+			</div>
+			<div class="form-group">
+				<label for="input4">排序</label>
+				<input name="orders" type="number" class="form-control"  th:value="${m.orders}"/>
+			</div>
+			<div class="form-group">
+				<label for="input4">状态</label>
+				<ul class="list-inline">
+					<li>
+						<input type="radio" name="status" value="0" /> <label>禁止</label>
+					</li>
+					<li>
+						<input type="radio" name="status" value="1" /> <label>正常</label>
+					</li>
+				</ul>
+			</div>
+			
+			
+		</form>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+<script type="text/javascript" src="/plugins/zTree_v3/js/jquery.ztree.all.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var treePermissionObj;
+var pid=[[${m.pid}]];
+
+var status=[[${m.status}]];
+var type=[[${m.type}]];
+
+$(function(){
+	
+	if(status!=null)
+		$('input[name="status"][value='+status+']').attr("checked","checked");
+	
+	if(type!=null)
+		$('input[name="type"][value='+type+']').attr("checked","checked");
+	
+})
+
+function treePermissionSetting(systemid){
+	
+	return {
+		async: {
+			enable: true,
+			type:'get',
+			url: '/sys/get-permission.json?mtype=1&systemId='+systemid 
+		},
+		data: {
+			key:{
+				children:'child',
+				name:'name',
+				title:'permissionId',
+			}
+		},
+		callback: {
+			onAsyncSuccess: function(event, treeId, treeNode, msg){
+				
+				treePermissionObj.expandAll(true);
+				
+			},
+			onClick:function(event, treeId, treeNode){
+				
+				$('#pid').val(treeNode.permissionId);
+				$('#pid_text').text(treeNode.name);
+			}
+		  }
+		};
+} 
+		
+function selectSystem(){
+	
+	var sel=$("#systemId_edit").val();
+	
+	$("#systemId").val(sel);
+	
+	$.fn.zTree.init($("#permission_menu_tv"),treePermissionSetting(sel), []);
+	
+	treePermissionObj = $.fn.zTree.getZTreeObj("permission_menu_tv");
+}
+
+function saveAction(){
+	
+	var form=$('form[name="permissionForm"]');
+    $.ajax({
+        type: 'post',
+        url: '/sys/permission-edit.json',
+        data: form.serialize(),
+        beforeSend: function() {
+           
+        	var pid=form.find('input[name="pid"]');
+        	var name=form.find('input[name="name"]');
+        	var uri=form.find('input[name="uri"]');
+        	
+        	var type=form.find('input:radio[name="type"]:checked').val();
+        	
+        	var systemId=$("#systemId").val();
+        	
+        	if (systemId == '') {
+        		
+        		msgbox('请选择左侧系统');
+                return false;
+            }
+        	
+        	if (pid.val() == '') {
+        		pid.focus();
+                
+        		msgbox('请选择上一级');
+                return false;
+            }
+        	
+        	if (name.val() == '') {
+        		name.focus();
+                
+        		msgbox('名称不能为空');
+                return false;
+            }
+        	
+        	if (type == null) {
+        		
+        		msgbox('请选择类型');
+                return false;
+            }
+        	
+            if (type!="1"&&uri.val() == '' ) {
+            	uri.focus();
+
+            	msgbox('路径不能为空');
+            	return false;
+            }
+        },
+        success: function(resp) {
+
+			if (resp.result != 1) {
+				
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: resp.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				
+			} else {
+				
+				permission_dlg.close();
+				$table.bootstrapTable('refresh');
+				
+			}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: textStatus,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
+					}
+				}
+			});
+        }
+    });
+}
+function closeAction(){
+	
+	permission_dlg.close();
+}
+
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

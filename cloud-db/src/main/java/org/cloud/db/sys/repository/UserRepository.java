@@ -10,4 +10,6 @@ import org.cloud.db.sys.entity.SysUser;
 public interface UserRepository extends CrudRepository<SysUser, Long> ,JpaSpecificationExecutor<SysUser> {
 
 	SysUser findByUsername(String username);
+	
+	SysUser findByPhone(String mobile);
 }

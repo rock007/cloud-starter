@@ -1,17 +1,19 @@
 package org.cloud.backend.controller.sys;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.cloud.core.base.BaseController;
 import org.cloud.core.model.JsonBody;
+import org.cloud.db.sys.entity.Organization;
 import org.cloud.db.sys.entity.Permission;
 import org.cloud.db.sys.entity.RolePermission;
 import org.cloud.db.sys.service.PermissionService;
+import org.cloud.db.sys.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +29,32 @@ public class PermissionController  extends BaseController {
 	@Autowired
 	private PermissionService permissionService;
 
+	@Autowired
+	private SystemService systemService;
+	
 	@RequestMapping("/permission-list.html")
-	public String permission_list() {
+	public String permission_list(Model model) {
 		
+		model.addAttribute("systems", systemService.getAll());
 		return "pages/permission/permission-list";
 	}
+	
+	@RequestMapping("/permission-edit.html")
+	public String permission_edit(Model model,Long id) {
+		
+		Permission m=new Permission();
+		if(!(id==null||id==0)) {
 			
+			m= permissionService.findById(id);
+			
+		}else {
+			model.addAttribute("err", "记录不存在");
+		}
+		model.addAttribute("m", m==null?new Organization():m);
+		model.addAttribute("systems", systemService.getAll());
+		return "pages/permission/permission-edit";
+	}
+	
 	@GetMapping("/permission-list.json")
 	public @ResponseBody JsonBody<Page<Permission>> get_permission_list(Permission permission,
 			@RequestParam(value="pageNo",required=false,defaultValue="0")  int pageIndex,
@@ -62,7 +84,7 @@ public class PermissionController  extends BaseController {
 				return new JsonBody<>(-1, "记录不存在或被删除！");
 			}
 			permission.setCtime(existOne.getCtime());
-			permission.setSystem_id(existOne.getSystem_id());
+			//permission.setSystemId(existOne.getSystemId());
 
 			// 排除非更新字段
 			// BeanUtils.copyProperties(existOne,permission,new String[]
@@ -71,7 +93,7 @@ public class PermissionController  extends BaseController {
 		} else {
 			// 添加
 			permission.setCtime(new Date().getTime());
-			permission.setSystem_id(1L);
+			//permission.setSystemId(1L);
 		}
 
 		permissionService.save(permission);
@@ -80,7 +102,7 @@ public class PermissionController  extends BaseController {
 	}
 
 	@GetMapping("/get-permission.json")
-	public @ResponseBody  Permission get_permission(final Integer mtype,final Integer status) {
+	public @ResponseBody  Permission get_permission(final Long systemId, final Integer mtype,final Integer status) {
 	
 		Permission root=new Permission();
 		if(mtype==null||mtype==0){
@@ -92,27 +114,18 @@ public class PermissionController  extends BaseController {
 		root.setName("root");
 		root.setPid(-1L);
 		
-		initChild(root, mtype, status);
+		initChild(root,systemId, mtype);
 		
 		return root;
 	}
 	
-	private void  initChild(Permission m,final Integer mtype,final Integer status){
+	private void  initChild(Permission m,final Long systemId,final Integer mtype){
 		
-		List<Permission> childs= new ArrayList<>();
-		
-		if(status!=null){
-			
-			childs= permissionService.findByPidAndTypeAndStatus(m.getPermissionId(),mtype,status);
-			
-		}else{
-			childs= permissionService.findByPidAndType(m.getPermissionId(),mtype);
-			
-		}
+		List<Permission>	childs= permissionService.findBySystemIdAndPidAndType(systemId,m.getPermissionId(),mtype);
 		
 		for(Permission c:childs){
 			
-			initChild(c, mtype, status);
+			initChild(c,systemId, mtype);
 		}
 		
 		m.setChild(childs);
@@ -154,4 +167,29 @@ public class PermissionController  extends BaseController {
 		
 		return new JsonBody<>(1,"操作成功！");
 	} 
+	
+	@RequestMapping(value="/permission-rm.json",method=RequestMethod.POST)
+	public @ResponseBody  JsonBody<String> delete_org( Long id) {
+	
+		if(id==null){
+			
+			return new JsonBody<>(-1,"id不能为空");
+		}
+		Permission one= permissionService.findById(id);
+		
+		if(one==null){
+			return new JsonBody<>(-2,"记录不存在");
+		}
+		
+		/**
+		List<OrgUser> users= orgService.getUsersByOrgId(id);
+		
+		if(users.size()>0){
+			return new JsonBody<>(-2,"该组织存在用户关联，不能删除");
+		}
+		***/
+		permissionService.delete(id);
+		
+		return new JsonBody<>(1,"操作成功");
+	}
 }

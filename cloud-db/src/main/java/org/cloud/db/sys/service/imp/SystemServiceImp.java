@@ -33,5 +33,34 @@ public class SystemServiceImp implements SystemService{
 
 		return systemRepository.findOne(id);
 	}
+
+	
+	
+	@Override
+	public void deleteSystem(Long systemId) {
+		
+		systemRepository.delete(systemId);
+	}
+
+	@Override
+	public SysSystem getSystemByName(String name) {
+		
+		List<SysSystem> list= systemRepository.findByName(name);
+		
+		if(list.size()>0) return list.get(0);
+		
+		return null;
+	}
+
+	@Override
+	public SysSystem getSystemBySecDomain(String secdomain) {
+		
+		List<SysSystem> list= systemRepository.findBysecDomain(secdomain);
+		
+		if(list.size()>0) return list.get(0);
+		
+		return null;
+	}
+	
 	
 }

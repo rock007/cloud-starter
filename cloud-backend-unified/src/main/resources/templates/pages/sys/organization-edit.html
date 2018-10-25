@@ -1,0 +1,185 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>组织机构编辑</title>
+	<link rel="stylesheet" href="/plugins/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+</head>
+<body>
+
+<div layout:fragment="content" >
+	<div id="toolbar2">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="saveAction()"><i class="zmdi zmdi-plus"></i>保存</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="closeAction()"><i class="zmdi zmdi-close"></i>取消</a>
+	</div>
+	<div class="col-xs-4">
+		<ul id="org_menu_tv" class="ztree"></ul>
+	</div>
+	<div   class="col-xs-8">
+		<form name="organizationForm">
+			<input type="hidden" name="id" />
+			<input type="hidden" name="pid" id="pid" th:value="${m.pid}" />
+			<div class="form-group">
+				<label>所属上级</label>
+				
+				<p id="pid_text" class="form-control">(请选择左侧组织机构)</p>
+
+			</div>
+			<div class="form-group">
+				<label >名称</label>
+				<input name="name" type="text"  th:value="${m.name}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >描述</label>
+				<textarea name="description" rows="3" cols="3"  th:text="${m.description}" class="form-control"></textarea>
+			</div>
+		</form>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+<script type="text/javascript" src="/plugins/zTree_v3/js/jquery.ztree.all.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var treeOrgObj;
+var pid=[[${m.pid}]];
+
+var orgSetting = {
+		async: {
+			enable: true,
+			type:'get',
+			url: '/sys/get-organization.json' ,
+			autoParam:["id=pid", "name=n", "level=lv"],
+			dataFilter:function(treeId, parentNode, resp){
+
+			    var list=resp.data;
+			    for(var i=0;i<list.length;i++){
+			    	
+			    	list[i].id=list[i].organizationId;
+			    	list[i].isParent=true;
+			    }
+			    
+			    if(parentNode==null){
+			    	
+			    	return {
+			    		name:'全部',
+						id:0,
+						isParent:true,
+						children:list,
+						open:true
+			    	}
+			    }
+			    return list;
+			}		
+		},
+		view: {
+			showIcon: true
+		},
+		callback: {
+			onAsyncSuccess: function(event, treeId, treeNode, msg){
+				
+				if(pid!=null){
+				
+					var nodeSel = treeObj.getNodesByParam("id", pid, null)
+					if (nodeSel.length > 0) {
+						treeOrgObj.selectNode(nodeSel[0]);
+						$('#pid_text').text(nodeSel[0].name);
+					}
+				}
+				
+			},
+			onClick:function(event, treeId, treeNode){
+				
+				$('#pid').val(treeNode.organizationId);
+				$('#pid_text').text(treeNode.name);
+				
+			}
+		  }
+		};
+		
+function saveAction(){
+	
+	var form=$('form[name="organizationForm"]');
+    $.ajax({
+        type: 'post',
+        url: '/sys/organization-edit.json',
+        data: form.serialize(),
+        beforeSend: function() {
+           
+        	var name=form.find('input[name="name"]');
+        	var title=form.find('input[name="title"]');
+        	
+        	if (name.val() == '') {
+        		name.focus();
+                
+        		msgbox('名称不能为空');
+                return false;
+            }
+        	
+            if (title.val() == '' ) {
+            	title.focus();
+
+            	msgbox('标题不能为空');
+            	return false;
+            }
+        },
+        success: function(resp) {
+
+			if (resp.result != 1) {
+				
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: resp.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				
+			} else {
+				
+				org_dlg.close();
+				$table.bootstrapTable('refresh');
+				
+			}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: textStatus,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
+					}
+				}
+			});
+        }
+    });
+}
+function closeAction(){
+	
+	org_dlg.close();
+}
+	
+$(function(){
+	
+	$.fn.zTree.init($("#org_menu_tv"), orgSetting, []);
+	
+	treeOrgObj = $.fn.zTree.getZTreeObj("org_menu_tv");
+	
+})
+
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

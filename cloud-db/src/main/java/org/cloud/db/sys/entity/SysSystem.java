@@ -18,6 +18,9 @@ public class SysSystem {
 	
 	private String name;
 	
+	@Column(name = "sec_domain")
+	private String secDomain;
+	
 	private String host;
 	
 	private Integer status;
@@ -73,5 +76,14 @@ public class SysSystem {
 	public void setBasepath(String basepath) {
 		this.basepath = basepath;
 	}
+
+	public String getSecDomain() {
+		return secDomain;
+	}
+
+	public void setSecDomain(String secDomain) {
+		this.secDomain = secDomain;
+	}
+	
 	
 }

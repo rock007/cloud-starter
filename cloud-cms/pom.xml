@@ -3,11 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>cloud</groupId>
-    <artifactId>com.scarecrow.cloud</artifactId>
+    <groupId>com.scarecrow.cloud</groupId>
+    <artifactId>cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>cloud-cms</groupId>
   <artifactId>cloud-cms</artifactId>
   <name>cloud-cms</name>
 
@@ -55,7 +54,7 @@
               <artifactId>reactor-spring-messaging</artifactId>
           </dependency>
           <dependency>
-			<groupId>cloud-db</groupId>
+			<groupId>com.scarecrow.cloud</groupId>
 			<artifactId>cloud-db</artifactId>
 			<version>${project.version}</version>
 		</dependency>

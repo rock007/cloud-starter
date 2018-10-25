@@ -4,11 +4,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>cloud</groupId>
+    <groupId>com.scarecrow.cloud</groupId>
     <artifactId>cloud-unified-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>cloud-unified-service-core</groupId>
+
   <artifactId>cloud-unified-service-core</artifactId>
       <dependencies>
       
@@ -38,12 +38,12 @@
         </dependency>
 
         <dependency>
-			<groupId>cloud-db</groupId>
+			<groupId>com.scarecrow.cloud</groupId>
 			<artifactId>cloud-db</artifactId>
 			<version>${project.version}</version>
 		</dependency>
           <dependency>
-              <groupId>cloud-unified-service-api</groupId>
+              <groupId>com.scarecrow.cloud</groupId>
               <artifactId>cloud-unified-service-api</artifactId>
               <version>${project.version}</version>
           </dependency>

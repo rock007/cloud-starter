@@ -1,7 +1,7 @@
 package org.cloud.backend.receiver;
 
 import org.cloud.core.model.ActLogModel;
-import org.cloud.db.sys.entity.ActLog;
+import org.cloud.db.sys.entity.ActErrLog;
 import org.cloud.db.sys.service.ActLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class LogReceiver implements Consumer<Event<ActLogModel>> {
 			ActLogModel oneLog= ev.getData();
 			if(oneLog!=null) {
 				
-				ActLog log=new ActLog();
+				ActErrLog log=new ActErrLog();
 				BeanUtils.copyProperties(oneLog,log);
 				
 				actLogService.saveLog(log);

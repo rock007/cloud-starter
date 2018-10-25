@@ -1,0 +1,126 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>系统编辑</title>
+
+</head>
+<body>
+
+<div layout:fragment="content" >
+	<div id="toolbar2">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="SaveAction()"><i class="zmdi zmdi-plus"></i>保存</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="closeAction()"><i class="zmdi zmdi-close"></i>取消</a>
+	</div>
+	<div   class="col-xs-12">
+		<form name="systemForm" action="/sys/system-edit.json" method="post">
+			<input type="hidden" name="systemId"  th:value="${m.systemId}"/>
+			<div class="form-group">
+				<label >名称<span class="red">*</span></label>
+				<input name="name" type="text" th:value="${m.name}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >二级域名<span class="red">*</span></label>
+				<input name="secDomain" type="text"  th:value="${m.secDomain}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >地址<span class="red">*</span></label>
+				<input name="host" type="text"  th:value="${m.host}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >本地路径<span class="red">*</span></label>
+				<input name="basepath" type="text"  th:value="${m.basepath}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >描述</label>
+				<textarea name="description" rows="3" cols="3"  th:text="${m.description}" class="form-control"></textarea>
+			</div>
+		</form>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+function SaveAction(){
+	
+	var form=$('form[name="systemForm"]');
+    $.ajax({
+        type: 'post',
+        url: '/sys/system-edit.json',
+        data: form.serialize(),
+        beforeSend: function() {
+           
+        	var name=form.find('input[name="name"]');
+        	/**
+        	if (form.find('input[name="name"]').val() == '') {
+        		form.find('input[name="name"]').focus();
+                
+                showMsg('名称不能为空');
+                return false;
+            }
+        	
+            if (parentSelect.val() == '' ) {
+            	parentSelect.focus();
+
+            	showMsg('请选择左边组织机构');
+            	return false;
+            }
+            
+            form.find('.alert-danger').hide();
+            ***/
+        },
+        success: function(resp) {
+
+			if (resp.result != 1) {
+				
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: resp.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				
+			} else {
+				
+				system_dlg.close();
+				$table.bootstrapTable('refresh');
+				
+			}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: textStatus,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
+					}
+				}
+			});
+        }
+    });
+}
+function closeAction(){
+	
+	system_dlg.close();
+}
+	
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

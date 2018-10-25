@@ -7,7 +7,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.cloud.db.sys.entity.ActLog;
+import org.cloud.db.sys.entity.ActErrLog;
 import org.cloud.db.sys.entity.Permission;
 import org.cloud.db.sys.repository.ActLogRepository;
 import org.cloud.db.sys.service.ActLogService;
@@ -27,23 +27,23 @@ public class ActlogServiceImp implements ActLogService {
 	private ActLogRepository actLogRepository;
 	
 	@Override
-	public void saveLog(ActLog log) {
+	public void saveLog(ActErrLog log) {
 		
 		actLogRepository.save(log);
 	}
 
 	@Override
-	public List<ActLog> getActLogByOrder(long orderId) {
+	public List<ActErrLog> getActLogByOrder(long orderId) {
 	
 		return null;		
 		//return actLogRepository.findAll(ids);
 	}
 
 	@Override
-	public Page<ActLog> search(ActLog m, int page, int pageSize) {
+	public Page<ActErrLog> search(ActErrLog m, int page, int pageSize) {
 		
-		return actLogRepository.findAll(new Specification<ActLog>() {
-			public Predicate toPredicate(Root<ActLog> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		return actLogRepository.findAll(new Specification<ActErrLog>() {
+			public Predicate toPredicate(Root<ActErrLog> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				
 				String title = m.getTitle();
 

@@ -1,7 +1,7 @@
 package org.cloud.db.sys.repository;
 
 import org.springframework.data.repository.CrudRepository;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.cloud.db.sys.entity.RolePermission;
 
 import java.util.List;
@@ -15,4 +15,6 @@ public interface RolePermissionRepository extends CrudRepository<RolePermission,
 
     public RolePermission findRolePermissionByRoleIdAndPermissionId(Long roldId,Long permissionId);
 
+    @Transactional
+    public Long deleteByPermissionId(Long permissionId);
 }

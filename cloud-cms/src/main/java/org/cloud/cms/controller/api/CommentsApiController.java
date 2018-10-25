@@ -103,7 +103,7 @@ public class CommentsApiController extends JsonBaseController{
 	 	comment.setRefId(ref_id);
 	 	comment.setRefType(ref_type);
 	 	comment.setCreate_date(new Date());
-	 	comment.setFromUser(getCurUserId());
+	 	comment.setFromUser(getLoginUid());
 	 	comment.setCreate_ip(request.getRemoteAddr());
 	 	
 	 	articleService.post_comment(comment);

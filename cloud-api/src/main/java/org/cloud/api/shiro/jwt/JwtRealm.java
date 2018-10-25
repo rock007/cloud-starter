@@ -48,7 +48,7 @@ public class JwtRealm extends AuthorizingRealm {
 		}
 
 		// 当前用户所有权限
-		List<Permission> userPermissions = userService.findPermissionsByUserId(curUser.getUserId());
+		List<Permission> userPermissions = userService.findPermissionsByUserId(1L,curUser.getUserId());
 		Set<String> permissions = new HashSet<>();
 		for (Permission p : userPermissions) {
 			if (StringUtils.isNotBlank(p.getPermission_value())) {

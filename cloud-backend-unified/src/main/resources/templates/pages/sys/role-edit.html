@@ -1,0 +1,119 @@
+﻿<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/pop_layout">
+<head>
+	<title>角色编辑</title>
+</head>
+<body>
+
+<div layout:fragment="content" >
+	<div id="toolbar2">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="SaveAction()"><i class="zmdi zmdi-plus"></i>保存</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="closeAction()"><i class="zmdi zmdi-close"></i>取消</a>
+	</div>
+	<div   class="col-xs-12">
+		<form name="roleForm">
+			<input type="hidden" name="roleId" th:value="${m.roleId}"/>
+			<div class="form-group">
+				<label >名称<span class="red">*</span></label>
+				<input name="name" type="text" th:value="${m.name}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >标题<span class="red">*</span></label>
+				<input name="title" type="text" th:value="${m.title}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >描述</label>
+				<input name="description" type="text" th:value="${m.description}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<label >排序</label>
+				<input name="orders" type="number" th:value="${m.orders}" class="form-control"/>
+			</div>
+		</form>
+	</div>
+	
+</div>
+<th:block layout:fragment="script">
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+function SaveAction(){
+	
+	var form=$('form[name="roleForm"]');
+    $.ajax({
+        type: 'post',
+        url: '/sys/role-edit.json',
+        data: form.serialize(),
+        beforeSend: function() {
+           
+        	var name=form.find('input[name="name"]');
+        	var title=form.find('input[name="title"]');
+        	
+        	if (name.val() == '') {
+        		name.focus();
+                
+        		msgbox('名称不能为空');
+                return false;
+            }
+        	
+            if (title.val() == '' ) {
+            	title.focus();
+
+            	msgbox('标题不能为空');
+            	return false;
+            }
+        },
+        success: function(resp) {
+
+			if (resp.result != 1) {
+				
+				$.confirm({
+					theme: 'dark',
+					animation: 'rotateX',
+					closeAnimation: 'rotateX',
+					title: false,
+					content: resp.msg,
+					buttons: {
+						confirm: {
+							text: '确认',
+							btnClass: 'waves-effect waves-button waves-light'
+						}
+					}
+				});
+				
+			} else {
+				
+				role_dlg.close();
+				$table.bootstrapTable('refresh');
+				
+			}
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+			$.confirm({
+				theme: 'dark',
+				animation: 'rotateX',
+				closeAnimation: 'rotateX',
+				title: false,
+				content: textStatus,
+				buttons: {
+					confirm: {
+						text: '确认',
+						btnClass: 'waves-effect waves-button waves-light'
+					}
+				}
+			});
+        }
+    });
+}
+function closeAction(){
+	
+	role_dlg.close();
+}
+	
+/*]]>*/
+</script>
+</th:block>
+</body>
+</html>

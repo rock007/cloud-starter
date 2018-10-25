@@ -4,13 +4,16 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cloud.core.base.BaseController;
 import org.cloud.core.model.JsonBody;
 import org.cloud.db.sys.entity.Organization;
+import org.cloud.db.sys.entity.SysSystem;
 import org.cloud.db.sys.service.OrganizationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value="/sys")
-public class OrganizationController {
+public class OrganizationController  extends BaseController{
 
 	@Autowired
 	private OrganizationService organizationService;
@@ -30,6 +33,23 @@ public class OrganizationController {
 		
 		return "pages/sys/organization-list";
 	}
+	
+	@RequestMapping("/organization-edit.html")
+	public String organization_edit(Model model,Long id) {
+		
+		Organization m=new Organization();
+		if(!(id==null||id==0)) {
+			
+			m= organizationService.get(id);
+			
+		}else {
+			model.addAttribute("err", "记录不存在");
+		}
+		model.addAttribute("m", m==null?new Organization():m);
+		
+		return "pages/sys/organization-edit";
+	}
+	
 	
 	@GetMapping("/get-organization.json")
 	public @ResponseBody JsonBody<List<Organization>> get_organiztion_list(Long pid){
@@ -52,7 +72,7 @@ public class OrganizationController {
 		return new JsonBody<>(1,"success",page);
 	}
 	
-	@RequestMapping(value="/submit-organization.json",method=RequestMethod.POST)
+	@RequestMapping(value="/organization-edit.json",method=RequestMethod.POST)
 	public @ResponseBody  JsonBody<Organization> submit_org(@ModelAttribute Organization m) {
 		
 		Organization saveOne=null;
@@ -62,7 +82,7 @@ public class OrganizationController {
 			return new JsonBody<>(-1,"标题 不能为空");
 		}
 	  
-		if(m.getPid()!=null){
+		if(m.getPid()==null||m.getPid()<=0){
 			
 			return new JsonBody<>(-1,"上级不能为空");
 		}
@@ -71,7 +91,7 @@ public class OrganizationController {
 			
 			Organization existOne=organizationService.get(m.getOrganizationId());
 			if(existOne!=null){
-				 BeanUtils.copyProperties(m,existOne,"CreateDate");
+				 BeanUtils.copyProperties(m,existOne,"ctime");
 			}else{
 				return new JsonBody<>(-2,"参数错误，信息不存在");	
 			}
@@ -88,7 +108,7 @@ public class OrganizationController {
 		return new JsonBody<>(1,"操作成功",saveOne);
 	}
 	
-	@RequestMapping(value="/delete-organization.json",method=RequestMethod.POST)
+	@RequestMapping(value="/organization-rm.json",method=RequestMethod.POST)
 	public @ResponseBody  JsonBody<String> delete_org( Long id) {
 	
 		if(id==null){

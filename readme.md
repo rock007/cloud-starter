@@ -25,4 +25,4 @@ cloud-db    数据层
 
 ==20180522 项目名称改为  统一后台管理平台，功能包含帐号、CMS、商城、IM
 ==20181012 用户认证加入token,单个项目分为backend/api/front/mobile,BaseController修改
-
+==20181017 pom.xml项目名修改

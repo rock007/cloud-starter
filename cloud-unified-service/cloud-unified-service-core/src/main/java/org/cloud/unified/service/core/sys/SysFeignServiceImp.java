@@ -2,6 +2,7 @@ package org.cloud.unified.service.core.sys;
 
 import org.cloud.db.sys.entity.Permission;
 import org.cloud.db.sys.entity.SysUser;
+import org.cloud.db.sys.service.PermissionService;
 import org.cloud.db.sys.service.UserService;
 import org.cloud.unified.service.api.sys.SysFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class SysFeignServiceImp implements SysFeignService {
 
     @Autowired
     private UserService userService;
-
+    
     @Override
     public SysUser findUserByName(String username) {
         return userService.findUserByName(username);
@@ -27,7 +28,7 @@ public class SysFeignServiceImp implements SysFeignService {
     }
 
     @Override
-    public List<Permission> findPermissionsByUserId(Long userId) {
-        return userService.findPermissionsByUserId(userId);
+    public List<Permission> findPermissionsByUserId(Long systemId,Long userId) {
+        return userService.findPermissionsByUserId(systemId,userId);
     }
 }
