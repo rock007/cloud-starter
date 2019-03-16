@@ -1,6 +1,5 @@
 package org.cloud.core.shiro.session;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
@@ -24,7 +23,7 @@ public class SystemSessionDao extends EnterpriseCacheSessionDAO {
 
 	private static Logger logger = LoggerFactory.getLogger(SystemSessionDao.class);
     
-    @Resource
+	@Resource 
     private RedisTemplate<String, Session> redisTemplate;
 
 	@Autowired

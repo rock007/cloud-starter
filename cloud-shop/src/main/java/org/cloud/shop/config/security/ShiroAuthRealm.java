@@ -14,7 +14,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.cloud.db.sys.entity.SysUser;
-import org.cloud.unified.service.api.sys.SysFeignService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +35,8 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 
 	private static final Logger logger = LoggerFactory.getLogger(ShiroAuthRealm.class);
 	
-	@Autowired
-	private SysFeignService sysFeignService;
+	//@Autowired
+	//private SysFeignService sysFeignService;
 
 	/**
 	 * 授权：验证权限时调用
@@ -66,7 +66,7 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 		logger.debug("Auth, password:" + password);
 
 		// 查询用户信息
-		SysUser upmsUser = sysFeignService.findUserByName(username);
+		SysUser upmsUser =null; //sysFeignService.findUserByName(username);
 
 		if (null == upmsUser) {
 			throw new UnknownAccountException();

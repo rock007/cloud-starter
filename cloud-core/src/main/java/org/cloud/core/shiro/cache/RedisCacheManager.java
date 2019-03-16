@@ -13,11 +13,13 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.util.Destroyable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 public class RedisCacheManager implements CacheManager , Destroyable{
 	
 	private String cacheKeyPrefix="cache";
+	
 	@Resource
     private RedisTemplate<String, Object> redisTemplate;
 

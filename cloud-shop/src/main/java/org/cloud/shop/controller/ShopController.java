@@ -1,7 +1,7 @@
 package org.cloud.shop.controller;
 
 import org.cloud.core.base.BaseController;
-import org.cloud.unified.service.api.shop.OrderFeignService;
+//import org.cloud.unified.service.api.shop.OrderFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +14,8 @@ import java.util.Map;
 @Controller
 public class ShopController extends BaseController {
 
-    @Autowired
-    OrderFeignService orderFeignService;
+    //@Autowired
+    //OrderFeignService orderFeignService;
 
 	@RequestMapping("/")
 	public String backend(Map<String, Object> model){
@@ -38,7 +38,7 @@ public class ShopController extends BaseController {
 	@GetMapping(value = "/doTest")
 	public @ResponseBody  String hello(){
 
-        String m1= orderFeignService.submitOrder("4444444");
+        String m1=""; //orderFeignService.submitOrder("4444444");
 
         return m1;
     }

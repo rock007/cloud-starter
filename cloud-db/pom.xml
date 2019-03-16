@@ -25,7 +25,7 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 	
-			<dependency>
+		<dependency>
 			<groupId>com.scarecrow.cloud</groupId>
 			<artifactId>cloud-core</artifactId>
 			<version>${project.version}</version>
