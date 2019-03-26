@@ -64,7 +64,7 @@ public class OrderServiceImpl  implements OrderService {
 			result = "save";
 		}else {
 			//Dealer dealer = em.find(Dealer.class, m.getId());
-			dealer = dealerRepository.findOne(m.getId());
+			dealer = dealerRepository.findById(m.getId()).orElseThrow();
 			dealer.setName(m.getName());
 			dealer.setAddress(m.getAddress());
 			dealer.setArea(m.getArea());
@@ -245,13 +245,13 @@ public class OrderServiceImpl  implements OrderService {
 	@Override
 	public Dealer findOrderProductOwer(Long id){
 		
-		Order oneOrder= orderRepository.findOne(id);
+		Order oneOrder= orderRepository.findById(id).orElse(null);
 		Dealer oneDealer = null;
 		if(oneOrder!=null){
 			
 			Long delaerId=  oneOrder.getOrderProduct().getDealer_id();
 			
-			oneDealer=dealerRepository.findOne(delaerId);
+			oneDealer=dealerRepository.findById(delaerId).orElse(null);
 		}
 		
 		return oneDealer;

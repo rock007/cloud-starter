@@ -133,7 +133,7 @@ public class WebAppController {
 		model.put("list", list);
 		
 		if(StringUtils.isNotEmpty(id)){
-			editAddress= addressRepository.findOne(Long.valueOf(id));
+			editAddress= addressRepository.findById(Long.valueOf(id)).orElse(null);
 		}
 		model.put("edit", editAddress);
 		
@@ -201,7 +201,7 @@ public class WebAppController {
 			
 			return "shop/login";
 		}
-		Order one= orderRepository.findOne(id);
+		Order one= orderRepository.findById(id).orElse(null);
 		GoodsPackage goodsPackage;
 		
 		if(one!=null){
@@ -263,7 +263,7 @@ public class WebAppController {
 				return "shop/login";
 			}
 			
-			Order one= orderRepository.findOne(orderid);
+			Order one= orderRepository.findById(orderid).orElse(null);
 			
 			model.put("order", one);
 			
@@ -288,7 +288,7 @@ public class WebAppController {
 		}
 		
 		//经销商
-		Dealer oneDealer=dealerRepository.findOne(m.getDealerId());
+		Dealer oneDealer=dealerRepository.findById(m.getDealerId()).orElse(null);
 		model.put("dealer", oneDealer);
 		
 		return "shop/product";
@@ -349,7 +349,7 @@ public class WebAppController {
 					
 					Long addressId=(Long)session.getAttribute(ShopApplication.CON_SESSION_PAY_ADDRESS);
 					
-					Address oneAddress=addressRepository.findOne(addressId);
+					Address oneAddress=addressRepository.findById(addressId).orElse(null);
 					
 					if(oneAddress!=null){
 						
@@ -402,7 +402,7 @@ public class WebAppController {
 	public  String dealer(@PathVariable Long id,Map<String, Object> model){
 	
 		//经销商
-		Dealer oneDealer=dealerRepository.findOne(id);
+		Dealer oneDealer=dealerRepository.findById(id).orElse(null);
 		model.put("dealer", oneDealer);
 		return "shop/dealer-shop";
 	}

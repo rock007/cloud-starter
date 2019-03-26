@@ -53,7 +53,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public void delete(Long id) {
 
-		userRepository.delete(id);
+		userRepository.deleteById(id);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public SysUser findUserById(Long user_id){
-        return userRepository.findOne(user_id);
+        return userRepository.findById(user_id).orElse(null);
     }
    
     @Override
@@ -144,7 +144,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public SysRole findRoleById(Long roleId) {
 		
-		return roleRepository.findOne(roleId);
+		return roleRepository.findById(roleId).orElse(null);
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public void deleteRole(Long roleId) {
 
-		roleRepository.delete(roleId);
+		roleRepository.deleteById(roleId);
 	}
     
 	

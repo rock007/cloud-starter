@@ -22,7 +22,7 @@ public class SysMenuServiceImp implements SysMenuService{
 	@Override
 	public void delete(Long id) {
 
-		sysMenuRepository.delete(id);
+		sysMenuRepository.deleteById(id);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class SysMenuServiceImp implements SysMenuService{
 	@Override
 	public SysMenu findById(Long id) {
 
-		return sysMenuRepository.findOne(id);
+		return sysMenuRepository.findById(id).orElse(null);
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class SysMenuServiceImp implements SysMenuService{
 	@Override
 	public void deleteRoleMenu(Long id) {
 
-		roleMenuRepository.delete(id);
+		roleMenuRepository.deleteById(id);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class SysMenuServiceImp implements SysMenuService{
 	@Override
 	public RoleMenu findRoleMenuById(Long id) {
 		
-		return roleMenuRepository.findOne(id);
+		return roleMenuRepository.findById(id).orElse(null);
 	}
 
 	@Override

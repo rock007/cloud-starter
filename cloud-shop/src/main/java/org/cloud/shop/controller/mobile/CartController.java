@@ -73,7 +73,7 @@ public class CartController {
 		for(String c:carts){
 			
 			if(StringUtils.isNotEmpty(c)){
-				cartRepository.delete(Long.valueOf(c.trim()));
+				cartRepository.deleteById(Long.valueOf(c.trim()));
 			}
 		}
 		result=new JsonBody<String>(1,"购物车删除产品成功","ajax/shop-cart.html");
@@ -94,7 +94,7 @@ public class CartController {
 		for(String c:carts){
 			
 			if(StringUtils.isNotEmpty(c)){
-				Cart one= cartRepository.findOne(Long.valueOf(c));
+				Cart one= cartRepository.findById(Long.valueOf(c)).orElse(null);
 				
 				if(one!=null)
 					pay_carts.add(one);

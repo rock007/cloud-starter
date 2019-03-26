@@ -47,7 +47,7 @@ public class PermissionServiceImp implements PermissionService {
 		
 		rolePermissionRepository.deleteByPermissionId(id);
 		
-		permissionRepository.delete(id);
+		permissionRepository.deleteById(id);
 	}
 
 	@Override
@@ -58,13 +58,20 @@ public class PermissionServiceImp implements PermissionService {
 
 	@Override
 	public Permission findById(Long id) {
-		return permissionRepository.findOne(id);
+		return permissionRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public Page<Permission> search(Permission m, int page, int pageSize) {
 		
 		return permissionRepository.findAll(new Specification<Permission>() {
+			
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 7462403267832228994L;
+
 			public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				
 				String name = m.getName();
@@ -114,7 +121,7 @@ public class PermissionServiceImp implements PermissionService {
 				
 			    return null;
 			}
-		}, new PageRequest(page, pageSize));
+		},  PageRequest.of(page, pageSize));
 	}
 	
 	@Override
@@ -126,7 +133,7 @@ public class PermissionServiceImp implements PermissionService {
 	@Override
 	public void deleteRolePermission(Long id) {
 		
-		rolePermissionRepository.delete(id);
+		rolePermissionRepository.deleteById(id);
 	}
 
 	@Override
@@ -138,7 +145,7 @@ public class PermissionServiceImp implements PermissionService {
 	@Override
 	public RolePermission findRolePermissionById(Long id) {
 		
-		return rolePermissionRepository.findOne(id);
+		return rolePermissionRepository.findById(id).orElse(null);
 	}
 	
 	@Override
@@ -156,7 +163,7 @@ public class PermissionServiceImp implements PermissionService {
 	@Override
 	public void deleteUserPermission(Long id) {
 	
-		rolePermissionRepository.delete(id);
+		rolePermissionRepository.deleteById(id);
 	}
 
 	@Override
@@ -168,7 +175,7 @@ public class PermissionServiceImp implements PermissionService {
 	@Override
 	public UserPermission findUserPermissionById(Long id) {
 	
-		return userPermissionRepository.findOne(id);
+		return userPermissionRepository.findById(id).orElse(null);
 	}
 
 	@Override

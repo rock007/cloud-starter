@@ -11,7 +11,6 @@ import org.cloud.db.cms.entity.Article;
 public interface ArticleRepository extends CrudRepository<Article, Long>,
 											JpaSpecificationExecutor<Article> {
 	
-	Article findById(Long id);
 	
 	Page<Article> findByStatusOrderByIdDesc(Integer status, Pageable pageable);
 	

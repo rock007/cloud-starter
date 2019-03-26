@@ -50,7 +50,7 @@ public class SmsServiceImp implements SmsService {
     @Override
     public void deleteTemplate(long id) {
 
-        smsTemplateRepository.delete(id);
+        smsTemplateRepository.deleteById(id);
     }
 
     @Override
@@ -60,13 +60,18 @@ public class SmsServiceImp implements SmsService {
     
     @Override
     public SmsTemplate getTemplateById(long id){
-    	return smsTemplateRepository.findOne(id);
+    	return smsTemplateRepository.findById(id).orElse(null);
     }
     
     @Override
 	public Page<SmsTemplate> searchTemplatesBy(final SmsTemplate m,int page,int pageSize){
     	
     	return smsTemplateRepository.findAll(new Specification<SmsTemplate>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 6597901249985054984L;
 
 			public Predicate toPredicate(Root<SmsTemplate> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -96,7 +101,7 @@ public class SmsServiceImp implements SmsService {
 				return null;
 			}
 
-		}, new PageRequest(page, pageSize));
+		},  PageRequest.of(page, pageSize));
 	}
     
     @Override
@@ -256,13 +261,13 @@ public class SmsServiceImp implements SmsService {
 	@Override
 	public void deleteReceiveResp(long id) {
 		
-		smsReceiveRespRepository.delete(id);
+		smsReceiveRespRepository.deleteById(id);
 	}
 
 	@Override
 	public SmsReceiveResp getReceiveRespById(long id) {
 		
-		return smsReceiveRespRepository.findOne(id);
+		return smsReceiveRespRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -320,7 +325,7 @@ public class SmsServiceImp implements SmsService {
 	@Override
     public SmsSendLog getSendLogById(long id){
     
-		return smsSendLogRepository.findOne(id);
+		return smsSendLogRepository.findById(id).orElse(null);
     }
     
     

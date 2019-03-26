@@ -7,5 +7,4 @@ import org.cloud.db.sys.entity.ActErrLog;
 
 public interface ActLogRepository extends CrudRepository<ActErrLog, Long> ,JpaSpecificationExecutor<ActErrLog> {
 	
-	ActErrLog findById(Long id);
 }

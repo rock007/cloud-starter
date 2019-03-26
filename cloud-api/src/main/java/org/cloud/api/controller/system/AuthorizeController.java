@@ -1,7 +1,12 @@
 package org.cloud.api.controller.system;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 import org.cloud.api.shiro.jwt.JwtToken;
 import org.cloud.api.shiro.jwt.TokenProvider;
@@ -10,9 +15,7 @@ import org.cloud.db.sys.entity.SysUser;
 import org.cloud.db.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
@@ -38,12 +41,12 @@ public class AuthorizeController {
 	@ApiOperation(value="获得用户鉴权", notes="获得用户token")
     @PostMapping("/token")
     public @ResponseBody
-    JsonBody<Map<String,Object>> token(String username, String password, HttpServletRequest request, HttpServletResponse response, Device device) throws IOException {
+    JsonBody<Map<String,Object>> token(String username, String password, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Map<String,Object> result=new HashMap<>();
         String err="";
         // 验证用户名密码成功后生成token
-        String token = tokenUtil.generateToken(username,password, device);
+        String token = tokenUtil.generateToken(username,password, "app");
         // 构建JwtToken
         JwtToken jwtToken = new JwtToken(username,password,token);
 

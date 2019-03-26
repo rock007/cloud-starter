@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product save(Product m) {
 
-		Product oldOne=productRepository.findOne(m.getId());
+		Product oldOne=productRepository.findById(m.getId()).orElse(null);
 		if(oldOne!=null){
 			//编辑
 			//oldOne.setCateName(cateName);
@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductAttr saveAttr(ProductAttr m){
 		
 		if(m.getId()!=null){
-			ProductAttr oldOne=productAttrRepository.findOne(m.getId());
+			ProductAttr oldOne=productAttrRepository.findById(m.getId()).orElseThrow();
 			
 			oldOne.setAttr_name(m.getAttr_name());
 			oldOne.setAttr_value(m.getAttr_value());
@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	public void delAttr(Long id){
 		
-		productAttrRepository.delete(id);
+		productAttrRepository.deleteById(id);
 	}
 	
 	@Override
@@ -170,7 +170,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	public void delArg(Long id){
 		
-		productArgRepository.delete(id);
+		productArgRepository.deleteById(id);
 	}
 	
 	public List<ProductArg> get_product_args(Long productId){
@@ -200,7 +200,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	public void delImage(Long id){
 	
-		productImageRepository.delete(id);
+		productImageRepository.deleteById(id);
 	}
 	
 	public ProductImage saveImage(ProductImage m){
@@ -208,6 +208,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	public Product getProductById(Long id){
-		return productRepository.findOne(id);
+		return productRepository.findById(id).orElse(null);
 	}
 }

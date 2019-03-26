@@ -2,7 +2,6 @@ package org.cloud.api.shiro.jwt;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,11 +16,6 @@ public class TokenProvider {
     static final String CLAIM_KEY_CREATED = "created";
     static final String CLAIM_KEY_PASSWORD="password";
     
-    private static final String AUDIENCE_UNKNOWN = "unknown";
-    private static final String AUDIENCE_WEB = "web";
-    private static final String AUDIENCE_MOBILE = "mobile";
-    private static final String AUDIENCE_TABLET = "tablet";
-
     @Value("${jwt.token.secret}")
     private String secret;
 
@@ -65,11 +59,11 @@ public class TokenProvider {
      * @param device  org.springframework.mobile.device 设备判断对象
      * @return
      */
-    public String generateToken(String username,String password, Device device) {
+    public String generateToken(String username,String password, String where) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, username);
         claims.put(CLAIM_KEY_PASSWORD, password);
-        claims.put(CLAIM_KEY_AUDIENCE, generateAudience(device));
+        claims.put(CLAIM_KEY_AUDIENCE, where);
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
@@ -88,23 +82,6 @@ public class TokenProvider {
      */
     private Date generateExpirationDate() {
         return new Date(System.currentTimeMillis() + expiration * 1000);
-    }
-
-    /**
-     * 通过spring-mobile-device的device检测访问主体
-     * @param device
-     * @return
-     */
-    private  String generateAudience(Device device) {
-        String audience = AUDIENCE_UNKNOWN;
-        if (device.isNormal()) {
-            audience = AUDIENCE_WEB;//PC端
-        } else if (device.isTablet()) {
-            audience = AUDIENCE_TABLET;//平板
-        } else if (device.isMobile()) {
-            audience = AUDIENCE_MOBILE;//手机
-        }
-        return audience;
     }
 
     /**

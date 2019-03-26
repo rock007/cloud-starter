@@ -48,7 +48,7 @@ public class AddressController {
 			saveAddress=addressRepository.save(m);
 			
 		}else{
-			Address oldOne=addressRepository.findOne(m.getId());
+			Address oldOne=addressRepository.findById(m.getId()).orElse(null);
 			
 			oldOne.setRec_address(m.getRec_address());
 			oldOne.setArea(m.getArea());
@@ -83,7 +83,7 @@ public class AddressController {
 		for(String c:carts){
 			
 			if(StringUtils.isNotEmpty(c)){
-				addressRepository.delete(Long.valueOf(c.trim()));
+				addressRepository.deleteById(Long.valueOf(c.trim()));
 			}
 		}
 		result=new JsonBody<String>(1,"删除送货地址成功","ajax/address.html");

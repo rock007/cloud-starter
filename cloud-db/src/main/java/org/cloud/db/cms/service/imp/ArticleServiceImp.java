@@ -43,13 +43,13 @@ public class ArticleServiceImp implements ArticleService{
 	@Override
 	public void delete(Long id) {
 
-		articleRepository.delete(id);
+		articleRepository.deleteById(id);
 	}
 
 	@Override
 	public Article findById(Long id) {
 		
-		return articleRepository.findById(id);
+		return articleRepository.findById(id).orElse(null);
 		
 	}
 
@@ -127,7 +127,7 @@ public class ArticleServiceImp implements ArticleService{
 	@Override
 	public void del_comment(Long cid) {
 
-		commentRepository.delete(cid);
+		commentRepository.deleteById(cid);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class ArticleServiceImp implements ArticleService{
 
 	@Override
 	public void del_artileImage(Long id) {
-		articleImageRepository.delete(id);;
+		articleImageRepository.deleteById(id);;
 	}
 
 	@Override
@@ -156,6 +156,6 @@ public class ArticleServiceImp implements ArticleService{
 	@Override
 	public ArticleImage get_articleImage(Long artileimage_id){
 		
-		return articleImageRepository.findOne(artileimage_id);
+		return articleImageRepository.findById(artileimage_id).orElse(null);
 	}
 }

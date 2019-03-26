@@ -5,12 +5,16 @@
 */
 package org.cloud.shop.config;
 
+import java.time.Duration;
+
 import org.cloud.core.utils.RedisObjectSerializer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -19,14 +23,16 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableCaching
 public class RedisConfig {
 
-
 	@Bean
-	public CacheManager cacheManager(RedisTemplate<Object, Object> redisTemplate) {
-	    RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
-	    cacheManager.setDefaultExpiration(30*60*60);
-	    return cacheManager;
+	public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+		
+	    RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofHours(1)); // 设置缓存有效期一小时
+        return RedisCacheManager
+                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
+                .cacheDefaults(redisCacheConfiguration).build();
 	}
-	  
+	
     @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();

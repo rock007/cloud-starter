@@ -9,21 +9,13 @@ import org.cloud.core.model.ActLogModel;
 import org.cloud.core.model.JsonBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.client.RestTemplate;
-
 import com.google.gson.Gson;
-
-import reactor.bus.Event;
-import reactor.bus.EventBus;
-
 import java.util.Date;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,8 +31,8 @@ public abstract class BaseController {
     @Value("${sso.server.url}")
 	private String server_url;
     
-	@Autowired
-	private EventBus eventBus;
+	//@Autowired
+	//private EventBus eventBus;
 	
     /**
      * 统一异常处理
@@ -109,7 +101,7 @@ public abstract class BaseController {
     protected void addLog(String title,String msg,String content,String error,String create_user,String  create_ip){
 		
     	ActLogModel log=new ActLogModel(title,msg,content,error,create_user,create_ip);
-		eventBus.notify("quotes", Event.wrap(log));
+		//eventBus.notify("quotes", Event.wrap(log));
 	}
 
     /***

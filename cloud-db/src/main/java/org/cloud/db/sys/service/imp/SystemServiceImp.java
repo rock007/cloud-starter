@@ -31,7 +31,7 @@ public class SystemServiceImp implements SystemService{
 	@Override
 	public SysSystem getSystemById(long id) {
 
-		return systemRepository.findOne(id);
+		return systemRepository.findById(id).orElse(null);
 	}
 
 	
@@ -39,7 +39,7 @@ public class SystemServiceImp implements SystemService{
 	@Override
 	public void deleteSystem(Long systemId) {
 		
-		systemRepository.delete(systemId);
+		systemRepository.deleteById(systemId);
 	}
 
 	@Override

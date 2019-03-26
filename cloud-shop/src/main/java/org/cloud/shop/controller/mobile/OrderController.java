@@ -166,7 +166,7 @@ public class OrderController {
 			if(m.getCartId()!=null){
 				
 				//删除购物车里生成订单等商品
-				cartRepository.delete(m.getCartId());
+				cartRepository.deleteById(m.getCartId());
 			}
 			/***
 			if(pay_it_later!=1){
@@ -222,7 +222,7 @@ public class OrderController {
 		//定义支付
 		Pay onePay=payRepository.findByOrderId(m.getOrderId());;
 		
-		Order mOrder= orderRepository.findOne(m.getOrderId());
+		Order mOrder= orderRepository.findById(m.getOrderId()).orElse(null);
 		if(onePay==null){
 		
 			onePay=new Pay();

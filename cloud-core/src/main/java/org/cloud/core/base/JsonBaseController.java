@@ -7,12 +7,8 @@ import org.cloud.core.model.JsonBody;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import reactor.bus.Event;
-import reactor.bus.EventBus;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,8 +16,8 @@ public abstract class  JsonBaseController {
 
     protected static final Logger logger = LoggerFactory.getLogger(JsonBaseController.class);
 
-    @Autowired
-	private EventBus eventBus;
+    //@Autowired
+	//private EventBus eventBus;
 	
 	@ExceptionHandler
 	public @ResponseBody  JsonBody<String> handleException(HttpServletRequest request, Exception ex){
@@ -41,7 +37,7 @@ public abstract class  JsonBaseController {
 	protected void addLog(String title,String msg,String content,String error,String create_user,String  create_ip){
 		
 		ActLogModel log=new ActLogModel(title,msg,content,error,create_user,create_ip);
-		eventBus.notify("quotes", Event.wrap(log));
+		//eventBus.notify("quotes", Event.wrap(log));
 	}
 	
 	public Long getCurUserId() {

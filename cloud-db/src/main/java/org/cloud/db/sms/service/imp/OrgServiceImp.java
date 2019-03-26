@@ -38,7 +38,7 @@ public class OrgServiceImp implements OrgService {
 
     @Override
     public void deleteGroup(long id) {
-        orgGroupRepository.delete(id);
+        orgGroupRepository.deleteById(id);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class OrgServiceImp implements OrgService {
 
     @Override
     public void deleteUser(long id) {
-        orgUserRepository.delete(id);
+        orgUserRepository.deleteById(id);
     }
 
     @Override
@@ -65,13 +65,13 @@ public class OrgServiceImp implements OrgService {
 	@Override
 	public OrgGroup getGroupById(long id) {
 	
-		return orgGroupRepository.findOne(id);
+		return orgGroupRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public OrgUser getUserById(long userId) {
 		
-		return orgUserRepository.findOne(userId);
+		return orgUserRepository.findById(userId).orElse(null);
 	}
     
 	 @Override

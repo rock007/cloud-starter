@@ -35,24 +35,7 @@
 		  <!-- in idea war -->
             <scope>provided</scope>
       </dependency>
-      	<dependency>
-                <groupId>io.projectreactor.spring</groupId>
-                <artifactId>reactor-spring-core</artifactId>
-          </dependency>
-          <dependency>
-              <groupId>io.projectreactor.spring</groupId>
-              <artifactId>reactor-spring-context</artifactId>
-
-          </dependency>
-          <dependency>
-              <groupId>io.projectreactor.spring</groupId>
-              <artifactId>reactor-spring-webmvc</artifactId>
-          </dependency>
-
-          <dependency>
-              <groupId>io.projectreactor.spring</groupId>
-              <artifactId>reactor-spring-messaging</artifactId>
-          </dependency>
+      	
           <dependency>
 			<groupId>com.scarecrow.cloud</groupId>
 			<artifactId>cloud-db</artifactId>

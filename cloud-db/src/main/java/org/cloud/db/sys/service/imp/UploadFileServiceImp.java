@@ -40,7 +40,7 @@ public class UploadFileServiceImp implements UploadFileService{
 
 	@Override
 	public void delete(String id) {
-		uploadFileRepository.delete(id);
+		uploadFileRepository.deleteById(id);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class UploadFileServiceImp implements UploadFileService{
 	@Override
 	public UploadFile findById(String id) {
 
-		return uploadFileRepository.findOne(id);
+		return uploadFileRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -64,14 +64,14 @@ public class UploadFileServiceImp implements UploadFileService{
 	@Override
 	public void deleteRelate(Long id) {
 		
-		uploadFileRelateRepository.delete(id);
+		uploadFileRelateRepository.deleteById(id);
 		
 	}
 	
 	@Override
 	public UploadFileRelate findRelateById(Long id) {
 
-		return uploadFileRelateRepository.findOne(id);
+		return uploadFileRelateRepository.findById(id).orElse(null);
 	}
 	
 	@Override

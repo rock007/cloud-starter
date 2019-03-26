@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.cloud.core.base.BaseController;
 import org.cloud.core.model.JsonBody;
-import org.cloud.db.sys.entity.Permission;
-import org.cloud.db.sys.entity.SysSystem;
 import org.cloud.db.sys.entity.SysUser;
 import org.cloud.db.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

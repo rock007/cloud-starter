@@ -38,7 +38,7 @@ public class OrganizationServiceImp implements OrganizationService{
 	@Override
 	public Organization get(Long id) {
 
-		return organizationRepository.findOne(id);
+		return organizationRepository.findById(id).orElse(null);
 	}
 	
 	@Override
@@ -79,12 +79,12 @@ public class OrganizationServiceImp implements OrganizationService{
 				
 			    return null;
 			}
-		}, new PageRequest(page, pageSize));
+		},  PageRequest.of(page, pageSize));
 	}
 	
 	@Override
 	public void delete(Long id) {
-		organizationRepository.delete(id);		
+		organizationRepository.deleteById(id);		
 	}
 
 	@Override
@@ -96,13 +96,13 @@ public class OrganizationServiceImp implements OrganizationService{
 	@Override
 	public UserOrganization getUserOrganization(Long id) {
 		
-		return userOrganizationRepository.findOne(id);
+		return userOrganizationRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public void deleteUserOrganization(Long id) {
 		
-		userOrganizationRepository.delete(id);
+		userOrganizationRepository.deleteById(id);
 	}
 	
 	

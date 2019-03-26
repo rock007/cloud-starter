@@ -36,7 +36,7 @@ public class AdPostionServiceImp implements AdPostionService {
 	@Override
 	public void delete(Long id){
 		
-		adPostionRepository.delete(id);
+		adPostionRepository.deleteById(id);
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class AdPostionServiceImp implements AdPostionService {
 	@Override
 	public AdPostion findById(Long id){
 		
-		return adPostionRepository.findOne(id);
+		return adPostionRepository.findById(id).orElse(null);
 	}
 	
 	public Page<AdPostion> search( String  postionlike,int page,int pageSize){

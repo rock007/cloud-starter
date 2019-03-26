@@ -35,7 +35,7 @@ public class CommServiceImp implements CommService{
 	@Override
 	public SysDic getDictById(long id){
 		
-		return sysDictRepository.findOne(id);
+		return sysDictRepository.findById(id).orElse(null);
 	}
 }
 
