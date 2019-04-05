@@ -10,23 +10,22 @@
 	<modules>
 		<!-- 
 		<module>cloud-config</module>
+		-->
 		<module>cloud-discovery</module>
 		<module>cloud-gateway</module>
-		 -->
+		 
 		<module>cloud-front</module>
+      	<module>cloud-core</module>
       	<module>cloud-api</module>
       	<module>cloud-db</module>
-      	<!-- 
+      	 
       	<module>cloud-unified-service</module>
-    	 -->
     	<module>cloud-backend-unified</module>
-		<!-- 
+		 
 		<module>cloud-backend-system</module>
-		 -->
-		<module>cloud-core</module>
+		
 		<module>cloud-shop</module>
 		<module>cloud-cms</module>
-		
   </modules>
 
 	<parent>
@@ -34,7 +33,6 @@
     	<artifactId>spring-boot-starter-parent</artifactId>
     	<version>2.1.3.RELEASE</version>
 	</parent>
-
     <properties>
      	<maven.compiler.source>11</maven.compiler.source>
     	<maven.compiler.target>11</maven.compiler.target>
@@ -42,6 +40,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <docker.plugin.version>0.4.13</docker.plugin.version>
+        <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
     </properties>
     <dependencies>
     
@@ -76,50 +75,40 @@
        	<dependency>
      		<groupId>com.alibaba</groupId>
      		<artifactId>fastjson</artifactId>
-     		<version>1.2.21</version>
+     		<version>1.2.37</version>
 		</dependency>
+		 <!-- jdk8之前支持的包    start -->
+        <dependency>
+            <groupId>com.sun.istack</groupId>
+            <artifactId>istack-commons-runtime</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.24.1-GA</version>
+        </dependency>
+        <!-- jdk8之前支持的包    end -->
+        
     </dependencies>
-
-<!--  
     <dependencyManagement>
         <dependencies>
         	<dependency>
-            	<groupId>org.springframework.cloud</groupId>
-            	<artifactId>spring-cloud-dependencies</artifactId>
-            	<version>Edgware.RELEASE</version>
-            	<type>pom</type>
-            	<scope>import</scope>
-        	</dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
--->
-   <repositories>
-    <repository>
-        <id>spring-snapshots</id>
-        <name>Spring Snapshots</name>
-        <url>https://repo.spring.io/libs-snapshot</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
-	</repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>http://repo.spring.io/libs-snapshot-local</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/libs-milestone-local</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

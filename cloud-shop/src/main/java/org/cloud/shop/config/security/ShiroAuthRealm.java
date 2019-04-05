@@ -1,12 +1,4 @@
-/**  
- * @Title ShiroAuthRealm.java
- * @date 2013-11-2 下午3:52:21
- * @Copyright: 2013 
- */
 package org.cloud.shop.config.security;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -14,29 +6,18 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.cloud.db.sys.entity.SysUser;
-
+import org.cloud.unified.service.api.sys.SysFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class ShiroAuthRealm extends AuthorizingRealm{
 
 	private static final Logger logger = LoggerFactory.getLogger(ShiroAuthRealm.class);
 	
-	//@Autowired
-	//private SysFeignService sysFeignService;
+	@Autowired
+	private SysFeignService sysFeignService;
 
 	/**
 	 * 授权：验证权限时调用
@@ -66,7 +47,7 @@ public class ShiroAuthRealm extends AuthorizingRealm{
 		logger.debug("Auth, password:" + password);
 
 		// 查询用户信息
-		SysUser upmsUser =null; //sysFeignService.findUserByName(username);
+		SysUser upmsUser =sysFeignService.findUserByName(username);
 
 		if (null == upmsUser) {
 			throw new UnknownAccountException();

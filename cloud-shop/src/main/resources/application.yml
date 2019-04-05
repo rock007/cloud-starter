@@ -24,22 +24,16 @@ spring:
     database: 3
     host: 219.138.150.224
     password: 
-    pool:
-      max-active: 8  
-      max-idle: 8  
-      max-wait: -1  
-      min-idle: 0  
     port: 10015 
-    timeout: 0  
+    timeout: 0      jedis:      pool:        min-idle: 0        max-wait: -1        max-idle: 8
     
   thymeleaf:
     cache: false
     check-template-location: true
-    content-type: text/html
     encoding: UTF-8
     mode: HTML5
     prefix: classpath:/templates/
-    suffix: .html
+    suffix: .html    servlet:      content-type: text/html
     
       
 eureka:
@@ -68,13 +62,13 @@ logging:
     root: DEBUG
     
 server:
-  context-path: /shop
+  servlet:    context-path: /shop
+    session:      timeout: 3600
   error:
     whitelabel:
       enabled: false
   port: 20014
-  session:
-    timeout: 3600
+
       
 sso:
   appID: shop

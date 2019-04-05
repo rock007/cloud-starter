@@ -1,0 +1,10 @@
+
+bb24b8473711c915
+http://sam100.free.ngrok.cc
+
+
+./ngrok authtoken 6ibfZYZKR2hRq7eDjoXD6_6mGTTA7xmkVuyep4tq6fQ
+
+./ngrok http 10000
+
+http://2a95651f.ngrok.io

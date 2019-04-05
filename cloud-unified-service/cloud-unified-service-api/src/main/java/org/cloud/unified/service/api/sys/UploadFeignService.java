@@ -2,7 +2,7 @@ package org.cloud.unified.service.api.sys;
 
 
 import org.cloud.core.model.JsonBody;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

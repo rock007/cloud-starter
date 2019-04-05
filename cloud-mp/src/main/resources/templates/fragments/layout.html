@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">新干县城市管理局</title>
+    
+    <link href="/mp/plugins/bootstrap/bootstrap.css" rel="stylesheet" />
+	<link href="/mp/css/site.css" rel="stylesheet" /> 
+  </head>
+  <body>
+      <div class="container body-content" layout:fragment="content">
+        	这是母版内容页
+      </div>
+      
+    <div class="footer hide">
+        <p>
+            </p><ol class="list-inline">
+
+            </ol>
+        <p></p>
+        <p>© 2015 - 科技</p>
+        <p>
+            <a href="#top">Back to top</a>
+        </p>
+    </div>
+    
+    <script src="/mp/plugins/jquery/jquery.min.js"></script>
+	<script src="/mp/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script src="/mp/js/site.js"></script>    
+   
+    <th:block layout:fragment="script"></th:block>
+
+  </body>
+</html>

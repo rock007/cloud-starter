@@ -1,0 +1,40 @@
+
+server:  
+  port: 10000 
+  session:
+    timeout: 30
+  context-path: /mp
+    
+spring:
+  profiles:
+    active: prod
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gan_chenguan?autoReconnect=true&amp;characterEncoding=UTF-8&amp;useUnicode=true
+    username: root
+    password: 123456
+    
+  mvc:
+    date-format : yyyy-MM-dd
+  jackson:
+    date-format:  yyyy-MM-dd HH:mm:ss
+    time-zone:  Asia/Shanghai
+
+  jpa:
+    show-sql: true
+    database: MYSQL
+    
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.gan.mp: DEBUG
+
+setting:
+  submit_case_url: http://119.97.224.99:8088/SCEXCH/xgx/reportcase.htm
+
+wechat:
+  mp:
+    appId:  wxcd6eca1a921ce112
+    secret: 047a7ae17e68eefdfba99aecfb714c9d
+    token:  wechat 
+    aesKey: u0j8LlMPnYv9ihDOnEVyPDUikIzBFeyuOP5tb9vhhIn 

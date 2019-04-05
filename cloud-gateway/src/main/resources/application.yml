@@ -1,31 +1,46 @@
 server:
   port: 20003
 
-#可用外部语言
-#sidecar:
-#  port: 8000
-#  home-page-uri: http://localhost:${sidecar.port}/
-#  health-uri: http://localhost:${sidecar.port}/health
-  
-endpoints:
-  restart:
-    enabled: true
-  shutdown:
-    enabled: true
-  health:
-    sensitive: false
+spring:
+  application:
+    name: gateway
+  main:
+    allow-bean-definition-overriding: true
+
+# 服务管理配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"        #暴漏的接口，"*"表示所有web监控接口
+        exclude:            #不暴漏的接口
+      base-path: /actuator  #监控根路径
+  endpoint:
+    health:
+      show-details: ALWAYS
 
 eureka:
-  instance:
-    hostname: gateway
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:20000/eureka/
-      
+      defaultZone: http://localhost:20000/eureka
+  instance:
+      hostname: gateway
+      prefer-ip-address: true
+      instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}  
 
 zuul:
+  ignoredServices: '*' # 安全起见，屏蔽所有服务，自定义暴漏服务
   routes:
     api-a-url.path: /api-a-url/*
     api-a-url.url:  http://localhost:8080/
+    
+# info接口返回值
+info:
+  app:
+    name: ${spring.application.name}
+    version: 1.0.0
+  java:
+    version: ${java.version}
+   

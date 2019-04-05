@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="fragments/layout">
+<head>
+	<title>案件上报</title>	
+	<!-- 
+	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&amp;key=J7MBZ-4F334-YCNUR-DAE7O-EBO73-KIFL2"></script>
+	 -->
+	<script type="text/javascript" src="https://apis.map.qq.com/tools/geolocation/min?key=J7MBZ-4F334-YCNUR-DAE7O-EBO73-KIFL2&amp;referer=gan"></script>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<br/><br/>
+	<div class="row">
+	
+	<div class="col-xs-12">
+	
+	<div th:if="${isSuccessful==false}" class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <strong>信息!</strong> <p th:text="${message}"> Better check yourself, you're not looking too good.</p>
+    </div>
+    
+    <div  th:if="${isSuccessful==true}"  class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <strong>信息!</strong>提交案件成功
+    </div>
+    
+	<form id="form1" method="post" action="/mp/buss/case-submit.html" enctype="multipart/form-data">
+	<input type="hidden" name="lng" id="lng"/>
+	<input type="hidden" name="lat" id="lat"/>
+  
+  <div class="form-group">
+    <label for="link_name">案件地址</label>
+    <input type="text" class="form-control" id="address" name="address" placeholder="案件地址"/>
+  </div>
+  <div class="form-group">
+    <label for="file_upload">现场图片</label>
+    <input type="file" id="file_1" name="upload_files"/><br/>
+    <input type="file" id="file_2" name="upload_files"/><br/>
+    <input type="file" id="file_3" name="upload_files"/>
+    <p class="help-block">上传图片不能超过5M,最多上传三张图片.</p>
+  </div>
+
+  <div class="form-group">
+   	<textarea class="form-control" rows="3" id="desc" name="desc"></textarea>
+    <p class="help-block">文字描述不能超过512字</p>
+  </div>  
+  
+  <div class="form-group" style="text-align:center;">
+  	<button type="submit" class="btn btn-primary">立即上报</button>
+  </div>
+</form>
+
+	</div>
+	
+	</div>
+    
+</div>
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+/*<![CDATA[*/
+     
+    wx.config({
+        debug: true, 
+        appId: 'wxcd6eca1a921ce112', 
+        timestamp: [[${timestamp}]] , 
+        nonceStr: [[${nonceStr}]], // 必填，生成签名的随机串
+        signature: [[${sign}]],// 必填，签名
+        jsApiList: ['checkJsApi',
+                    'uploadImage','chooseImage','previewImage','getLocalImgData',
+                    'openLocation'] // 必填，需要使用的JS接口列表
+    });
+  
+    wx.error(function(res){
+    	
+       	console.log("wx.error:"+JSON.stringify(res));
+       	alert("wx.error:"+JSON.stringify(res));
+    });
+    wx.ready(function(){
+    	
+    	console.log('wx.ready');
+    	
+    	wx.getLocation({
+    		type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+    		success: function (res) {
+    		
+    			var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+    		
+    			var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+    		
+    			var speed = res.speed; // 速度，以米/每秒计
+    		
+    			var accuracy = res.accuracy; // 位置精度
+    			
+    			$('#lat').val(latitude);
+    			$('#lng').val(longitude);
+    			alert('latitude:'+latitude+',longitude:'+longitude);
+    			
+    			console.log('wx.getLocation:'+JSON.stringify(res));
+    		}
+    	});
+    });
+    
+/*]]>*/
+</script>
+</th:block>
+
+</body>
+</html>
